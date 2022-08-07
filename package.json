@@ -1,7 +1,14 @@
 {
   "name": "linka",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "author": {
+    "name": "mingshi",
+    "email": "cmsax@live.com",
+    "url": "https://unoiou.com"
+  },
+  "description": "linkding quick search spa & pwa",
+  "license": "MIT",
   "dependencies": {
     "@chakra-ui/react": "^2.2.6",
     "@emotion/react": "^11.10.0",
@@ -9,11 +16,12 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/flexsearch": "^0.7.3",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "axios": "^0.27.2",
+    "flexsearch": "^0.7.21",
     "framer-motion": "^7.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
