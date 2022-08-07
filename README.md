@@ -6,7 +6,7 @@ A smooth linkding quick search app.
 
 ## Demo
 
-[Linka! demo web app](https://bing.com)
+[Linka! demo web app](https://linka.unoiou.com)
 
 ## Development Prerequisite
 
