@@ -5,7 +5,7 @@ A smooth linkding quick search app.
 ## Features
 
 - full text search
-- multi keywords, substract keywords support
+- multi keywords, substract keywords support (WIP)
 - instantly open search results
 - search on type
 
