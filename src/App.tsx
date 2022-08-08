@@ -5,6 +5,7 @@ import {
   Center,
   ChakraProvider,
   Container,
+  Divider,
   Flex,
   Heading,
   HStack,
@@ -14,6 +15,7 @@ import {
   Link,
   Spacer,
   Spinner,
+  Text,
   Tooltip,
   useToast,
   VStack,
@@ -150,8 +152,15 @@ function App() {
     <ChakraProvider>
       {ready ? (
         // serach main page
-        <VStack marginTop="60px" marginBottom="60px">
-          <Container minW="md" maxW="4xl">
+        <VStack marginBottom="60px">
+          <Container
+            position="fixed"
+            minW="md"
+            maxW="4xl"
+            paddingTop="20px"
+            paddingBottom="20px"
+            backgroundColor="white"
+          >
             <Flex>
               <InputGroup>
                 <Input
@@ -176,8 +185,8 @@ function App() {
               <Spacer />
             </Flex>
           </Container>
-          <Container minW="md" maxW="4xl">
-            <Flex wrap={"wrap"} flexDir="column">
+          <Container minW="md" maxW="4xl" paddingTop="80px">
+            <Flex wrap={"wrap"} flexDir="column" paddingBottom="40px">
               {results.length > 0
                 ? results.map((val) => (
                     <Item
@@ -189,6 +198,19 @@ function App() {
                     <Item item={val} key={val.url}></Item>
                   ))}
             </Flex>
+            <Spacer />
+            <Divider></Divider>
+            <Center>
+              <Link
+                size="xs"
+                href="https://github.com/cmsax/linka"
+                target="_blank"
+              >
+                <Text size="xs" fontSize="10">
+                  Linka! on GitHub
+                </Text>
+              </Link>
+            </Center>
           </Container>
         </VStack>
       ) : (
