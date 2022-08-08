@@ -81,7 +81,31 @@ function App() {
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    setResults(index.search(e.target.value));
+
+    let positive: IndexSearchResult[] = [];
+    let negative: IndexSearchResult[] = [];
+    const segs = e.target.value.split(" ").filter((v) => v.length > 0);
+    if (segs.length === 0) {
+      setResults([]);
+      return;
+    }
+
+    segs.forEach((q) => {
+      if (q.startsWith("!")) {
+        negative.push(index.search(q.replace("!", "")));
+      } else {
+        positive.push(index.search(q));
+      }
+    });
+    let posResult = positive.reduce((prev, cur) => {
+      return prev.filter((v) => cur.includes(v));
+    });
+    if (negative.length > 0) {
+      let negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
+      setResults(posResult.filter((v) => !negaResult.includes(v)));
+    } else {
+      setResults(posResult);
+    }
   };
 
   const handleSetToken = () => {
@@ -140,7 +164,7 @@ function App() {
                   pr="6.5rem"
                 />
                 <InputRightElement width="6.5rem" h="3rem">
-                  <Tooltip label="type `Enter` to open hits in new tabs">
+                  <Tooltip label="type `Enter` to open hits in new tabs. keywords with `!` prefix to exclude">
                     <Button size="sm">
                       {results.length > 0
                         ? `${results.length} hits`
