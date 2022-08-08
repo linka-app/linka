@@ -2,9 +2,16 @@
 
 A smooth linkding quick search app.
 
-![demo](./screenshot/demo.gif)
+## Features
+
+- full text search
+- multi keywords, substract keywords support
+- instantly open search results
+- search on type
 
 ## Demo
+
+![demo](./screenshot/demo.gif)
 
 [Linka! demo web app](https://linka.unoiou.com)
 
