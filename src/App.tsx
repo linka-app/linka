@@ -216,7 +216,10 @@ function App() {
       ) : (
         // setup setting page
         <Center marginTop={100}>
-          <Flex flexDir="column" minW="md">
+          <Flex flexDir="column" minW="xs" maxWidth="md">
+            <Heading as="h2" paddingLeft="1" paddingBottom="5">
+              Linka!
+            </Heading>
             <Input
               marginBottom={5}
               placeholder="linkding site base url"
@@ -225,6 +228,7 @@ function App() {
                 setBaseURL(e.target.value);
               }}
               size="lg"
+              autoFocus
             />
             <Input
               marginBottom={5}
@@ -241,8 +245,9 @@ function App() {
                   size="md"
                   onClick={handleSetToken}
                   disabled={submitting}
+                  colorScheme="blue"
                 >
-                  Go
+                  Go!
                 </Button>
                 {submitting ? <Spinner /> : <></>}
               </HStack>
