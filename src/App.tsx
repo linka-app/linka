@@ -199,7 +199,7 @@ function App() {
                   ))}
             </Flex>
             <Spacer />
-            <Divider></Divider>
+            <Divider marginBottom="20px"></Divider>
             <Center>
               <Link
                 size="xs"
