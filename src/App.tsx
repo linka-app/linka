@@ -155,7 +155,7 @@ function App() {
         <VStack marginBottom="60px">
           <Container
             position="fixed"
-            minW="md"
+            minW="xs"
             maxW="4xl"
             paddingTop="20px"
             paddingBottom="20px"
@@ -185,7 +185,7 @@ function App() {
               <Spacer />
             </Flex>
           </Container>
-          <Container minW="md" maxW="4xl" paddingTop="80px">
+          <Container minW="xs" maxW="4xl" paddingTop="80px">
             <Flex wrap={"wrap"} flexDir="column" paddingBottom="40px">
               {results.length > 0
                 ? results.map((val) => (
