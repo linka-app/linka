@@ -21,7 +21,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Index, IndexSearchResult } from "flexsearch";
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState, useRef } from "react";
 import { getBookmarks } from "../api";
 import { shortenURL } from "../utils/url";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
@@ -42,6 +42,8 @@ interface Res {
 
 function Linka() {
   const { colorMode } = useColorMode();
+  const inputRef = useRef(null);
+
   const defaultBookmarks: BookmarkItem[] = [];
   const [ready, setReady] = useState(false);
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
@@ -58,6 +60,27 @@ function Linka() {
   const toast = useToast();
 
   useEffect(() => {
+    // handle hotkeys
+    const pressed = new Map<string, boolean>();
+    window.addEventListener("keydown", (e) => {
+      pressed.set(e.key, true);
+      if (!pressed.has("Meta")) {
+        return;
+      }
+      // focus input
+      if (e.key === "l" || e.key === "k") {
+        e.preventDefault();
+        if (inputRef.current === null) {
+          return;
+        }
+        (inputRef.current as HTMLInputElement).focus();
+        return;
+      }
+    });
+    window.addEventListener("keyup", (e) => {
+      pressed.delete(e.key);
+    });
+
     const token = localStorage.getItem("token");
     const url = localStorage.getItem("url");
     if (token != null && url != null) {
@@ -171,6 +194,7 @@ function Linka() {
                   value={query}
                   onChange={onQueryUpdate}
                   onKeyDown={onEnterPressed}
+                  ref={inputRef}
                   pr="6.5rem"
                 />
                 <InputRightElement width="6.5rem" h="3rem">
