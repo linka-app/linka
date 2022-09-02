@@ -9,6 +9,7 @@ A smooth linkding quick search app.
 - instantly open search results
 - search on type
 - dark/light mode
+- hotkeys
 
 ## Demo
 
@@ -24,6 +25,10 @@ A smooth linkding quick search app.
 - type any keywords, seperated by space, results will be **intersection**
 - use keywords start with `!` to **exclude**
 - type `Enter` to open search results in new tabs
+
+### Hotkeys
+
+- `cmd+l` to focus on the search box
 
 ## Development Prerequisite
 

@@ -68,7 +68,7 @@ function Linka() {
         return;
       }
       // focus input
-      if (e.key === "l" || e.key === "k") {
+      if (e.key === "l") {
         e.preventDefault();
         if (inputRef.current === null) {
           return;
