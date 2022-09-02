@@ -40,7 +40,11 @@ interface Res {
   results: BookmarkItem[];
 }
 
-function Linka() {
+interface Props {
+  version: string;
+}
+
+function Linka(props: Props) {
   const { colorMode } = useColorMode();
   const inputRef = useRef(null);
 
@@ -232,7 +236,7 @@ function Linka() {
                 target="_blank"
               >
                 <Text size="xs" fontSize="10">
-                  Linka! on GitHub
+                  Linka! on GitHub, current version {props.version}
                 </Text>
               </Link>
             </Center>
@@ -280,7 +284,7 @@ function Linka() {
           </Flex>
         </Center>
       )}
-      <Container>
+      <Container marginBottom="20px">
         <Center>
           <ColorModeSwitcher></ColorModeSwitcher>
         </Center>
