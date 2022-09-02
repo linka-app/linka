@@ -8,6 +8,7 @@ A smooth linkding quick search app.
 - multi keywords, substract keywords support
 - instantly open search results
 - search on type
+- dark/light mode
 
 ## Demo
 
