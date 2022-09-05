@@ -28,7 +28,7 @@ A smooth linkding quick search app.
 
 ### Hotkeys
 
-- `cmd+l` to focus on the search box
+- `cmd+l` or `ctrl+l` to focus on the search box
 
 ## Development Prerequisite
 

@@ -68,7 +68,7 @@ function Linka(props: Props) {
     const pressed = new Map<string, boolean>();
     window.addEventListener("keydown", (e) => {
       pressed.set(e.key, true);
-      if (!pressed.has("Meta")) {
+      if (!(pressed.has("Meta") || pressed.has("Control"))) {
         return;
       }
       // focus input
