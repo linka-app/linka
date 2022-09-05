@@ -1,4 +1,4 @@
-![logo copy from benthos](build/logo192.png)
+![logo copy from benthos](./build/logo192.png)
 
 # Linka!
 
