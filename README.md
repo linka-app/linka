@@ -33,3 +33,11 @@ A smooth linkding quick search app.
 ## Development Prerequisite
 
 Install `nodejs` and `yarn`, then run `yarn install` & `yarn start` to start up.
+
+## Backend Prerequisite
+
+- Enable `CORS` in backend by adding following headers to response:
+  - `Access-Control-Allow-Origin: *`
+  - `Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE`
+  - `Access-Control-Allow-Headers: *`
+  - `Access-Control-Max-Age: 1000000`
