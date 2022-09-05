@@ -1,4 +1,4 @@
-![logo copy from benthos](./build/logo192.png)
+![logo copy from benthos](https://raw.githubusercontent.com/cmsax/linka/main/public/logo192.png)
 
 # Linka!
 
