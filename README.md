@@ -1,3 +1,5 @@
+![logo copy from benthos](build/logo192.png)
+
 # Linka!
 
 A smooth linkding quick search app.
