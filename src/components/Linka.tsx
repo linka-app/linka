@@ -236,7 +236,7 @@ function Linka(props: Props) {
                 target="_blank"
               >
                 <Text size="xs" fontSize="10">
-                  Linka! on GitHub, current version {props.version}
+                  Linka! by cmsax on GitHub, current version {props.version}
                 </Text>
               </Link>
             </Center>
