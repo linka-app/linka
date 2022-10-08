@@ -1,4 +1,4 @@
-![logo copy from benthos](https://raw.githubusercontent.com/cmsax/linka/main/public/logo192.png | width=100)
+<img src="https://raw.githubusercontent.com/cmsax/linka/main/public/logo192.png" width="150">
 
 # Linka!
 
