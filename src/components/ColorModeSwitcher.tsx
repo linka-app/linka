@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import { useTheme } from '@mui/material/styles';
+import { Box, IconButton, useTheme } from '@mui/material';
 import { ColorModeContext } from '../contexts/ColorModeContext';
 
 export const ColorModeSwitcher: React.FC = () => {
@@ -21,8 +19,9 @@ export const ColorModeSwitcher: React.FC = () => {
         bgcolor: 'background.default',
         color: 'text.primary',
         borderRadius: 1,
-        p: 3,
       }}
+      pt={3}
+      pb={0}
     >
       {theme.palette.mode} mode
       <IconButton
