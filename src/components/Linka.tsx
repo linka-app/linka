@@ -3,28 +3,31 @@ import {
   Box,
   Button,
   Center,
-  Container,
   Divider,
   Flex,
   Heading,
-  HStack,
   Input,
   InputGroup,
   InputRightElement,
   Link,
   Spacer,
-  Spinner,
   Text,
   Tooltip,
-  useColorMode,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
-import { Index, IndexSearchResult } from "flexsearch";
-import { ChangeEvent, KeyboardEvent, useEffect, useState, useRef } from "react";
-import { getBookmarks } from "../api";
-import { shortenURL } from "../utils/url";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
+} from '@chakra-ui/react';
+import { LoadingButton } from '@mui/lab';
+import { Container, Stack, TextField, Typography } from '@mui/material';
+import { Index, IndexSearchResult } from 'flexsearch';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { getBookmarks } from '../api';
+import { ToastContext } from '../contexts/ToastContext';
+import { shortenURL } from '../utils/url';
+import { ColorModeSwitcher } from './ColorModeSwitcher';
 
 interface BookmarkItem {
   title: string;
@@ -45,34 +48,33 @@ interface Props {
 }
 
 function Linka(props: Props) {
-  const { colorMode } = useColorMode();
   const inputRef = useRef(null);
 
   const defaultBookmarks: BookmarkItem[] = [];
   const [ready, setReady] = useState(false);
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
-  const [index, setIndex] = useState(new Index({ tokenize: "full" }));
-  const [query, setQuery] = useState("");
+  const [index, setIndex] = useState(new Index({ tokenize: 'full' }));
+  const [query, setQuery] = useState('');
 
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
 
-  const [token, setToken] = useState("");
-  const [baseURL, setBaseURL] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const { doToast } = React.useContext(ToastContext);
 
-  const toast = useToast();
+  const [token, setToken] = useState('');
+  const [baseURL, setBaseURL] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     // handle hotkeys
     const pressed = new Map<string, boolean>();
-    window.addEventListener("keydown", (e) => {
+    window.addEventListener('keydown', (e) => {
       pressed.set(e.key, true);
-      if (!(pressed.has("Meta") || pressed.has("Control"))) {
+      if (!(pressed.has('Meta') || pressed.has('Control'))) {
         return;
       }
       // focus input
-      if (e.key === "l") {
+      if (e.key === 'l') {
         e.preventDefault();
         if (inputRef.current === null) {
           return;
@@ -81,12 +83,12 @@ function Linka(props: Props) {
         return;
       }
     });
-    window.addEventListener("keyup", (e) => {
+    window.addEventListener('keyup', (e) => {
       pressed.delete(e.key);
     });
 
-    const token = localStorage.getItem("token");
-    const url = localStorage.getItem("url");
+    const token = localStorage.getItem('token');
+    const url = localStorage.getItem('url');
     if (token != null && url != null) {
       getBookmarks({ token, url })
         .then((res: Res) => {
@@ -95,7 +97,7 @@ function Linka(props: Props) {
             setIndex(
               index.add(
                 idx,
-                [v.title, v.description, v.url, v.tag_names.join(" ")].join(" ")
+                [v.title, v.description, v.url, v.tag_names.join(' ')].join(' ')
               )
             );
           });
@@ -103,7 +105,7 @@ function Linka(props: Props) {
           setReady(true);
         })
         .catch((reason) => {
-          console.log("reason: ", reason);
+          console.log('reason: ', reason);
           setReady(false);
         });
     }
@@ -114,15 +116,15 @@ function Linka(props: Props) {
 
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
-    const segs = e.target.value.split(" ").filter((v) => v.length > 0);
+    const segs = e.target.value.split(' ').filter((v) => v.length > 0);
     if (segs.length === 0) {
       setResults([]);
       return;
     }
 
     segs.forEach((q) => {
-      if (q.startsWith("!")) {
-        negative.push(index.search(q.replace("!", "")));
+      if (q.startsWith('!')) {
+        negative.push(index.search(q.replace('!', '')));
       } else {
         positive.push(index.search(q));
       }
@@ -147,21 +149,22 @@ function Linka(props: Props) {
           setIndex(
             index.add(
               idx,
-              [v.title, v.description, v.url, v.tag_names.join(" ")].join(" ")
+              [v.title, v.description, v.url, v.tag_names.join(' ')].join(' ')
             )
           );
         });
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("url", baseURL);
+        localStorage.setItem('token', token);
+        localStorage.setItem('url', baseURL);
         setReady(true);
         setSubmitting(false);
       })
       .catch((reason) => {
         console.log(reason);
-        toast({
-          title: "Failed to load bookmarks.",
-          description: "detail: " + reason,
+        doToast({
+          open: true,
+          title: 'Failed to load bookmarks.',
+          description: 'detail: ' + reason,
         });
         setReady(false);
         setSubmitting(false);
@@ -169,7 +172,7 @@ function Linka(props: Props) {
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       results.forEach((v) => {
         window.open(bookmarks[Number(v.toString())].url);
       });
@@ -177,17 +180,22 @@ function Linka(props: Props) {
   };
 
   return (
-    <>
+    <Container>
       {ready ? (
-        // serach main page
-        <VStack marginBottom="20px">
+        // search main page
+        <Stack
+          mb={2}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Container
             position="fixed"
             minW="xs"
             maxW="4xl"
             paddingTop="20px"
             paddingBottom="20px"
-            backgroundColor={colorMode === "light" ? "white" : "#1a202c"}
+            backgroundColor={colorMode === 'light' ? 'white' : '#1a202c'}
           >
             <Flex>
               <InputGroup>
@@ -215,7 +223,7 @@ function Linka(props: Props) {
             </Flex>
           </Container>
           <Container minW="xs" maxW="4xl" paddingTop="80px">
-            <Flex wrap={"wrap"} flexDir="column" paddingBottom="40px">
+            <Flex wrap={'wrap'} flexDir="column" paddingBottom="40px">
               {results.length > 0
                 ? results.map((val) => (
                     <Item
@@ -241,55 +249,53 @@ function Linka(props: Props) {
               </Link>
             </Center>
           </Container>
-        </VStack>
+        </Stack>
       ) : (
         // setup setting page
-        <Center marginTop={100}>
-          <Flex flexDir="column" minW="xs" maxWidth="md">
-            <Heading as="h2" paddingLeft="1" paddingBottom="5">
+        <Container maxWidth="md">
+          <Stack mt={5} spacing={2}>
+            <Typography variant="h2" pl={1}>
               Linka!
-            </Heading>
-            <Input
-              marginBottom={5}
-              placeholder="linkding site base url"
+            </Typography>
+            <TextField
+              label="linkding site base url"
               value={baseURL}
+              variant="outlined"
+              fullWidth
               onChange={(e) => {
                 setBaseURL(e.target.value);
               }}
-              size="lg"
               autoFocus
             />
-            <Input
-              marginBottom={5}
-              placeholder="token"
+            <TextField
+              label="Token"
               value={token}
+              variant="outlined"
+              fullWidth
               onChange={(e) => {
                 setToken(e.target.value);
               }}
-              size="lg"
-            ></Input>
-            <Box>
-              <HStack>
-                <Button
-                  size="md"
-                  onClick={handleSetToken}
-                  disabled={submitting}
-                  colorScheme="blue"
-                >
-                  Go!
-                </Button>
-                {submitting ? <Spinner /> : <></>}
-              </HStack>
-            </Box>
-          </Flex>
-        </Center>
+              autoFocus
+            />
+            <LoadingButton
+              loading={submitting}
+              variant="contained"
+              onClick={handleSetToken}
+            >
+              Go!
+            </LoadingButton>
+          </Stack>
+        </Container>
       )}
-      <Container marginBottom="20px">
-        <Center>
-          <ColorModeSwitcher></ColorModeSwitcher>
-        </Center>
-      </Container>
-    </>
+      <Stack
+        mb={2}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <ColorModeSwitcher />
+      </Stack>
+    </Container>
   );
 }
 
@@ -302,8 +308,8 @@ function Item(props: { item: BookmarkItem; key: string }) {
       pl="1"
       pr="1"
       _hover={{
-        borderBottom: "1px solid",
-        paddingBottom: "1px",
+        borderBottom: '1px solid',
+        paddingBottom: '1px',
       }}
       key={props.item.id}
     >
@@ -319,7 +325,7 @@ function Item(props: { item: BookmarkItem; key: string }) {
         <Center>
           <Box>
             {props.item.tag_names.map((e) => (
-              <Badge color={"green"} marginLeft="1">
+              <Badge color={'green'} marginLeft="1">
                 {e}
               </Badge>
             ))}
