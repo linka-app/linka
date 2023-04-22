@@ -42,6 +42,32 @@ function Linka(props: Props) {
   const [baseURL, setBaseURL] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const getTheBookmarks = async () => {
+    const token = localStorage.getItem('token');
+    const url = localStorage.getItem('url');
+    setReady(false);
+    if (token != null && url != null) {
+      getBookmarks({ token, url })
+        .then((res: Res) => {
+          setBookmarks(res.results);
+          res.results.forEach((v, idx) => {
+            setIndex(
+              index.add(
+                idx,
+                [v.title, v.description, v.url, v.tag_names.join(' ')].join(' ')
+              )
+            );
+          });
+
+          setReady(true);
+        })
+        .catch((reason) => {
+          console.log('reason: ', reason);
+          setReady(false);
+        });
+    }
+  };
+
   useEffect(() => {
     // handle hotkeys
     const pressed = new Map<string, boolean>();
@@ -64,28 +90,7 @@ function Linka(props: Props) {
       pressed.delete(e.key);
     });
 
-    const token = localStorage.getItem('token');
-    const url = localStorage.getItem('url');
-    if (token != null && url != null) {
-      getBookmarks({ token, url })
-        .then((res: Res) => {
-          setBookmarks(res.results);
-          res.results.forEach((v, idx) => {
-            setIndex(
-              index.add(
-                idx,
-                [v.title, v.description, v.url, v.tag_names.join(' ')].join(' ')
-              )
-            );
-          });
-
-          setReady(true);
-        })
-        .catch((reason) => {
-          console.log('reason: ', reason);
-          setReady(false);
-        });
-    }
+    getTheBookmarks();
   }, [index, baseURL, token]);
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -118,38 +123,7 @@ function Linka(props: Props) {
   };
 
   const onItemUpdate = () => {
-    if (inputRef.current === null) {
-      return;
-    }
-
-    //@ts-ignore
-    setQuery(inputRef.current.value);
-
-    let positive: IndexSearchResult[] = [];
-    let negative: IndexSearchResult[] = [];
-    //@ts-ignore
-    const segs = inputRef.current.value.split(' ').filter((v) => v.length > 0);
-    if (segs.length === 0) {
-      setResults([]);
-      return;
-    }
-
-    segs.forEach((q) => {
-      if (q.startsWith('!')) {
-        negative.push(index.search(q.replace('!', '')));
-      } else {
-        positive.push(index.search(q));
-      }
-    });
-    let posResult = positive.reduce((prev, cur) => {
-      return prev.filter((v) => cur.includes(v));
-    });
-    if (negative.length > 0) {
-      let negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
-      setResults(posResult.filter((v) => !negaResult.includes(v)));
-    } else {
-      setResults(posResult);
-    }
+    getTheBookmarks();
   };
 
   const handleSetToken = () => {
