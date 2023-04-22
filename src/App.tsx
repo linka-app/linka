@@ -1,14 +1,14 @@
 import './App.css';
-import { AppFrame } from './components/AppFrame';
-import Linka from './components/Linka';
+import { Linka } from './components/Linka';
+import Router from './components/Router';
 
 function App() {
-  const version = '1.3.0';
+  const version = '2.0.0';
 
   return (
-    <AppFrame>
-      <Linka version={version}></Linka>
-    </AppFrame>
+    <Linka version={version}>
+      <Router />
+    </Linka>
   );
 }
 
