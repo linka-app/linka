@@ -20,6 +20,8 @@ import { ColorModeContext } from '../contexts/ColorModeContext';
 import { DrawerContext, IDrawer } from '../contexts/DrawerContext';
 import { IToast, ToastContext } from '../contexts/ToastContext';
 import LinkaLogo from '../images/logo192.png';
+import { getAuth } from '../utils/getAuth';
+import { AddBookmark } from './AddBookmark';
 import { Credits } from './Credits';
 
 export const AppFrame: React.FC<{
@@ -51,6 +53,13 @@ export const AppFrame: React.FC<{
 
   const doDrawer = (drawerMessage: IDrawer) => {
     setDrawer({ open: false, ...drawerMessage });
+  };
+
+  const handleAddBookmark = () => {
+    setDrawer({
+      open: true,
+      children: <AddBookmark onItemUpdate={handleDrawerClose} />,
+    });
   };
 
   const getInitialMode = () => {
@@ -102,8 +111,8 @@ export const AppFrame: React.FC<{
                   </IconButton>
                 )}
                 <Box sx={{ flexGrow: 1 }}></Box>
-                {localStorage.getItem('token') != null && (
-                  <IconButton edge="end" onClick={handleDrawerClose}>
+                {getAuth() && (
+                  <IconButton edge="end" onClick={handleAddBookmark}>
                     <AddCircleSharpIcon />
                   </IconButton>
                 )}
