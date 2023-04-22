@@ -1,4 +1,5 @@
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
+import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import {
   Alert,
   AlertTitle,
@@ -24,7 +25,7 @@ import { Credits } from './Credits';
 export const AppFrame: React.FC<{
   children: ReactNode;
 }> = (props) => {
-  const version = '1.3.0';
+  const version = '2.0.0';
   const [toast, setToast] = React.useState<IToast>({
     open: false,
     title: '',
@@ -97,7 +98,13 @@ export const AppFrame: React.FC<{
                   <Avatar src={LinkaLogo} alt="linka!" />
                 ) : (
                   <IconButton edge="end" onClick={handleDrawerClose}>
-                    <KeyboardArrowLeftOutlinedIcon />
+                    <KeyboardArrowLeftSharpIcon />
+                  </IconButton>
+                )}
+                <Box sx={{ flexGrow: 1 }}></Box>
+                {localStorage.getItem('token') != null && (
+                  <IconButton edge="end" onClick={handleDrawerClose}>
+                    <AddCircleSharpIcon />
                   </IconButton>
                 )}
               </Toolbar>

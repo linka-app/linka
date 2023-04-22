@@ -47,7 +47,7 @@ function Linka(props: Props) {
     const url = localStorage.getItem('url');
     setReady(false);
     if (token != null && url != null) {
-      getBookmarks({ token, url })
+      getBookmarks({})
         .then((res: Res) => {
           setBookmarks(res.results);
           res.results.forEach((v, idx) => {
@@ -128,7 +128,9 @@ function Linka(props: Props) {
 
   const handleSetToken = () => {
     setSubmitting(true);
-    getBookmarks({ token, url: baseURL })
+    localStorage.setItem('token', token);
+    localStorage.setItem('url', baseURL);
+    getBookmarks({})
       .then((res: Res) => {
         setBookmarks(res.results);
         res.results.forEach((v, idx) => {
@@ -146,6 +148,8 @@ function Linka(props: Props) {
         setSubmitting(false);
       })
       .catch((reason) => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('url');
         console.log(reason);
         doToast({
           open: true,
