@@ -30,3 +30,18 @@ export interface Res {
 export interface Props {
   version: string;
 }
+
+export type queryBookmarkArgs = {
+  q?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export type doArgs = {
+  id: number;
+};
+
+export type bookmarkArgs = {
+  id: number;
+  payload: BookmarkItem;
+};
