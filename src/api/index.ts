@@ -1,4 +1,5 @@
 export { default as doArchive } from './doArchive';
+export { default as doAuth } from './doAuth';
 export { default as doCreate } from './doCreate';
 export { default as doDelete } from './doDelete';
 export { default as doUpdate } from './doUpdate';

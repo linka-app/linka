@@ -11,6 +11,7 @@ import {
   Drawer,
   IconButton,
   Snackbar,
+  Stack,
   ThemeProvider,
   Toolbar,
   createTheme,
@@ -22,6 +23,7 @@ import { IToast, ToastContext } from '../contexts/ToastContext';
 import LinkaLogo from '../images/logo192.png';
 import { getAuth } from '../utils/getAuth';
 import { AddBookmark } from './AddBookmark';
+import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Credits } from './Credits';
 
 export const AppFrame: React.FC<{
@@ -140,7 +142,16 @@ export const AppFrame: React.FC<{
             <Container fixed>
               <Box mt={'75px'} mb={2}>
                 {props.children}
-                <Credits version={version} />
+
+                <Stack
+                  mb={2}
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <ColorModeSwitcher />
+                  <Credits version={version} />
+                </Stack>
               </Box>
             </Container>
           </ThemeProvider>
