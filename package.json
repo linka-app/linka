@@ -1,13 +1,13 @@
 {
   "name": "linka",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "private": true,
   "author": {
     "name": "mingshi",
     "email": "cmsax@live.com",
     "url": "https://unoiou.com"
   },
-  "description": "linkding quick search spa & pwa",
+  "description": "Linkding alternative front-end, speciallly optimized for quick search and quick open bookmarks, shipped with spa & pwa.",
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -60,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "vite-plugin-pwa": "^0.14.7"
   }
 }
