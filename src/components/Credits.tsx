@@ -18,7 +18,7 @@ export const Credits: React.FC<{ version: string }> = (props) => {
         underline="hover"
       >
         <Typography variant="caption">
-          Linka! by cmsax on GitHub, current version {props.version}
+          Linka! by cmsax & greg on GitHub, version {props.version}
         </Typography>
       </Link>
     </Box>
