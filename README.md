@@ -2,7 +2,9 @@
 
 # Linka!
 
-A smooth linkding quick search app.
+A smooth bookmarks management web app, shipped with special optimization for quick-search & quick-open, which will boost your productivity.
+
+Currently it supports `linkding`, we are planning to make `Linka` a more flexible app to support other popular backends.
 
 ## Features
 
