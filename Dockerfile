@@ -20,10 +20,7 @@ RUN yarn run build
 FROM nginx:alpine
 
 # Copy the built artifacts to Nginx's default web root directory
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy the Nginx server configuration to the image
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80 for the container
 EXPOSE 80
