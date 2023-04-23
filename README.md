@@ -22,7 +22,7 @@ A smooth linkding quick search app.
 - `demo linkding base url`: https://link.unoiou.com
 - `demo token`(restricted): `a6816f654f87197545cd66bfd2f8e294c40f1ee4`
 
-## How-To
+## How-To use
 
 - type any keywords, seperated by space, results will be **intersection**
 - use keywords start with `!` to **exclude**
@@ -68,7 +68,7 @@ docker build -t my-webapp .
 docker run --name my-webapp-container -p 80:80 -d my-webapp
 ```
 
-## Backend Prerequisite
+## `Linkding` Backend Prerequisite
 
 - Enable `CORS` in backend by adding following headers to response:
   - `Access-Control-Allow-Origin: *`
