@@ -2,7 +2,7 @@ import { getAuth } from '../utils/getAuth';
 
 export async function getTags() {
   const auth = getAuth();
-  if (auth) {
+  if (auth.token && auth.url) {
     const endpoint = `${auth.url}/api/tags/`;
     let url = new URL(endpoint);
 

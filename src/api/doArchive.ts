@@ -3,7 +3,7 @@ import { getAuth } from '../utils/getAuth';
 
 export async function doArchive(args: doArgs) {
   const auth = getAuth();
-  if (auth) {
+  if (auth.token && auth.url) {
     const endpoint = `${auth.url}/api/bookmarks/${args.id}/archive/`;
     let url = new URL(endpoint);
 

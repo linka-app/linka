@@ -1,5 +1,6 @@
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
+import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import {
   Alert,
   AlertTitle,
@@ -23,8 +24,8 @@ import { IToast, ToastContext } from '../contexts/ToastContext';
 import LinkaLogo from '../images/logo192.png';
 import { getAuth } from '../utils/getAuth';
 import { AddBookmark } from './AddBookmark';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Credits } from './Credits';
+import { Settings } from './Settings';
 
 export const Linka: React.FC<{
   version: string;
@@ -61,6 +62,13 @@ export const Linka: React.FC<{
     setDrawer({
       open: true,
       children: <AddBookmark onItemUpdate={handleDrawerClose} />,
+    });
+  };
+
+  const handleViewSettings = () => {
+    setDrawer({
+      open: true,
+      children: <Settings />,
     });
   };
 
@@ -113,11 +121,16 @@ export const Linka: React.FC<{
                   </IconButton>
                 )}
                 <Box sx={{ flexGrow: 1 }}></Box>
-                {getAuth() && (
-                  <IconButton edge="end" onClick={handleAddBookmark}>
-                    <AddCircleSharpIcon />
+                <Stack direction={'row'} spacing={2}>
+                  {getAuth() && (
+                    <IconButton edge="end" onClick={handleAddBookmark}>
+                      <AddCircleSharpIcon />
+                    </IconButton>
+                  )}
+                  <IconButton edge="end" onClick={handleViewSettings}>
+                    <SettingsSharpIcon />
                   </IconButton>
-                )}
+                </Stack>
               </Toolbar>
             </AppBar>
             <Drawer anchor={'right'} open={drawer.open}>
@@ -148,7 +161,6 @@ export const Linka: React.FC<{
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <ColorModeSwitcher />
                   <Credits version={props.version} />
                 </Stack>
               </Box>

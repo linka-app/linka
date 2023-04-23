@@ -45,3 +45,10 @@ export type bookmarkArgs = {
   id: number;
   payload: BookmarkItem;
 };
+
+export interface LinkaSettings {
+  token: string | null;
+  url: string | null;
+  openaiToken?: string | null;
+  browserlessToken?: string | null;
+}

@@ -4,7 +4,7 @@ import { getAuth } from '../utils/getAuth';
 export async function doUpdate(args: bookmarkArgs) {
   const auth = getAuth();
 
-  if (auth) {
+  if (auth.token && auth.url) {
     const endpoint = `${auth.url}/api/bookmarks/${args.id}/`;
     let url = new URL(endpoint);
 
