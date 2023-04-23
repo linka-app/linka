@@ -3,6 +3,8 @@ import _ from 'lodash';
 import * as React from 'react';
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
 import { doAuth } from '../../api';
+import { browserlessDoAuth } from '../../api/browserless';
+import { openaiDoAuth } from '../../api/openai';
 import { ToastContext } from '../../contexts/ToastContext';
 import { LinkaSettings } from '../../types';
 import { getAuth } from '../../utils/getAuth';
@@ -35,8 +37,43 @@ export const LinkdingSettingsForm: React.FC = () => {
         type: 'error',
         title: 'Failed URL and Token is required.',
       });
+      setValidating(false);
       return false;
     }
+
+    if (data.browserlessToken) {
+      await browserlessDoAuth({ token: data.browserlessToken })
+        .then((res) => {
+          localStorage.setItem(
+            'browserlessToken',
+            _.get(data, 'browserlessToken')
+          );
+        })
+        .catch((reason) => {
+          doToast({
+            open: true,
+            type: 'error',
+            title: 'Failed to autheticate Browserless.',
+            description: 'detail: ' + reason,
+          });
+        });
+    }
+
+    if (data.openaiToken) {
+      await openaiDoAuth({ token: data.openaiToken })
+        .then((res) => {
+          localStorage.setItem('openaiToken', _.get(data, 'openaiToken'));
+        })
+        .catch((reason) => {
+          doToast({
+            open: true,
+            type: 'error',
+            title: 'Failed to autheticate Open AI.',
+            description: 'detail: ' + reason,
+          });
+        });
+    }
+    setValidating(false);
   };
 
   return (

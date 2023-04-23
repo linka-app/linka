@@ -11,12 +11,12 @@ function getAuth(): LinkaSettings {
         ? localStorage.getItem('url')
         : undefined,
     openaiToken:
-      localStorage.getItem('openai_token') != null
-        ? localStorage.getItem('openai_token')
+      localStorage.getItem('openaiToken') != null
+        ? localStorage.getItem('openaiToken')
         : undefined,
     browserlessToken:
-      localStorage.getItem('browserless_token') != null
-        ? localStorage.getItem('browserless_token')
+      localStorage.getItem('browserlessToken') != null
+        ? localStorage.getItem('browserlessToken')
         : undefined,
   } as LinkaSettings;
 

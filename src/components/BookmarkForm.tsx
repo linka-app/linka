@@ -8,6 +8,7 @@ import {
 } from 'react-hook-form-mui';
 import { getTags } from '../api';
 import { TagItem, Tags } from '../types';
+import { BookmarkFormFillButton } from './BookmarkFormFillButton';
 
 export const BookmarkForm: React.FC<{
   loading: boolean;
@@ -41,7 +42,10 @@ export const BookmarkForm: React.FC<{
         <Box sx={{ flexGrow: 1 }}></Box>
         {props.actions}
       </Stack>
-      <TextFieldElement name="url" label="Url" fullWidth required />
+      <Stack spacing={2} direction={'row'}>
+        <TextFieldElement name="url" label="Url" fullWidth required />
+        <BookmarkFormFillButton />
+      </Stack>
       <TextFieldElement name="title" label="Title" fullWidth />
       <TextareaAutosizeElement
         name="description"
