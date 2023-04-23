@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-form
 import { browserlessDoScrape } from '../api/browserless';
 import { doDescArticle } from '../api/openai';
+import { ToastContext } from '../contexts/ToastContext';
 
 export const BookmarkFormFillButton: React.FC = () => {
-  const { watch, setValue, getValues } = useFormContext();
+  const { watch, setValue } = useFormContext();
   const theUrl = watch('url', false);
-
+  const { doToast } = React.useContext(ToastContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {}, []);
@@ -16,12 +17,10 @@ export const BookmarkFormFillButton: React.FC = () => {
   const doFill = () => {
     setLoading(true);
     if (theUrl != null) {
-      console.log(theUrl);
       browserlessDoScrape({ url: theUrl }).then((res: string) => {
         if (res.length > 0) {
-          doDescArticle({ message: res }).then(
-            (res: { title: string; desc: string; tags: string[] }) => {
-              console.log(res);
+          doDescArticle({ message: res })
+            .then((res: { title: string; desc: string; tags: string[] }) => {
               setValue('title', res.title);
               setValue('description', res.desc);
               setValue(
@@ -31,11 +30,24 @@ export const BookmarkFormFillButton: React.FC = () => {
                 })
               );
               setLoading(false);
-            }
-          );
+            })
+            .catch((err: any) => {
+              console.log(err);
+              doToast({
+                open: true,
+                type: 'error',
+                title: 'Failed',
+              });
+              setLoading(false);
+            });
         }
       });
     } else {
+      doToast({
+        open: true,
+        type: 'error',
+        title: 'A URL is required.',
+      });
       setLoading(false);
     }
   };

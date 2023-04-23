@@ -17,16 +17,12 @@ export const BookmarkForm: React.FC<{
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const url = localStorage.getItem('url');
-    if (token != null && url != null) {
-      getTags().then((res: Tags) => {
-        const theTags = res.results.map((hit: TagItem) => {
-          return hit.name;
-        });
-        setTags(theTags);
+    getTags().then((res: Tags) => {
+      const theTags = res.results.map((hit: TagItem) => {
+        return hit.name;
       });
-    }
+      setTags(theTags);
+    });
   }, []);
 
   return (
