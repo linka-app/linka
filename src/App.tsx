@@ -1,14 +1,14 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import "./App.css";
-import Linka from "./components/Linka";
+import './App.css';
+import { Linka } from './components/Linka';
+import Router from './components/Router';
 
 function App() {
-  const version = "1.3.0";
+  const version = '2.0.0';
+
   return (
-    <ChakraProvider>
-      {/* to use colormode, must be a sub component of a ChakraProvider */}
-      <Linka version={version}></Linka>
-    </ChakraProvider>
+    <Linka version={version}>
+      <Router />
+    </Linka>
   );
 }
 
