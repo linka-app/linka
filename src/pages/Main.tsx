@@ -81,7 +81,6 @@ export const Main: React.FC<{}> = (props) => {
     window.addEventListener('keyup', (e) => {
       pressed.delete(e.key);
     });
-
     getTheBookmarks();
   }, [index]);
 
@@ -166,14 +165,14 @@ export const Main: React.FC<{}> = (props) => {
                 ? results.map((val) => (
                     <LinkaItem
                       item={bookmarks[Number(val.toString())]}
-                      key={bookmarks[Number(val.toString())].url}
+                      key={bookmarks[Number(val.toString())].url + val}
                       onItemUpdate={onItemUpdate}
                     />
                   ))
                 : bookmarks.map((val) => (
                     <LinkaItem
                       item={val}
-                      key={val.url}
+                      key={val.url + val.id}
                       onItemUpdate={onItemUpdate}
                     />
                   ))}
