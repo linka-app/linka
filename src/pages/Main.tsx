@@ -126,7 +126,7 @@ export const Main: React.FC<{}> = (props) => {
         <Grid container spacing={2}>
           <Grid xs={12}>
             <TextField
-              label="any text in url, title, description or tags"
+              label="Search"
               variant="outlined"
               value={query}
               onChange={onQueryUpdate}
