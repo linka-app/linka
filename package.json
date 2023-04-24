@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "vite-plugin-pwa": "^0.14.7"
   }
 }
