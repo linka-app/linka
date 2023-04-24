@@ -14,6 +14,9 @@ export async function getBookmarks(args: queryBookmarkArgs) {
         url.searchParams.append(k, v.toString());
       }
     });
+
+    url.searchParams.append('limit', '10000');
+
     const res = await fetch(url, {
       headers: {
         Authorization: `Token ${auth.token}`,

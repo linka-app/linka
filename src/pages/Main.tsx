@@ -40,7 +40,14 @@ export const Main: React.FC<{}> = (props) => {
           setIndex(
             index.add(
               idx,
-              [v.title, v.description, v.url, v.tag_names.join(' ')].join(' ')
+              [
+                v.title,
+                v.description,
+                v.website_title,
+                v.website_description,
+                v.url,
+                v.tag_names.join(' '),
+              ].join(' ')
             )
           );
         });
