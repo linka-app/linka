@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-f
 import { browserlessDoScrape } from '../api/browserless';
 import { doDescArticle } from '../api/openai';
 import { ToastContext } from '../contexts/ToastContext';
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 
 export const BookmarkFormFillButton: React.FC = () => {
   const { watch, setValue } = useFormContext();
@@ -14,7 +14,7 @@ export const BookmarkFormFillButton: React.FC = () => {
   const { doToast } = React.useContext(ToastContext);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const auth = getAuth();
+  const config = getConfig();
 
   const doFill = () => {
     console.log(theUrl);
@@ -58,7 +58,7 @@ export const BookmarkFormFillButton: React.FC = () => {
   return (
     <LoadingButton
       disabled={
-        !auth.browserlessToken || !auth.openaiToken || _.isEmpty(theUrl)
+        !config.browserlessToken || !config.openaiToken || _.isEmpty(theUrl)
       }
       loading={loading}
       startIcon={<PsychologySharpIcon />}

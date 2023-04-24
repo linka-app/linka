@@ -1,10 +1,10 @@
 import { queryBookmarkArgs } from '../types';
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 
 export async function getBookmarks(args: queryBookmarkArgs) {
-  const auth = getAuth();
-  if (auth.token && auth.url) {
-    const endpoint = `${auth.url}/api/bookmarks`;
+  const config = getConfig();
+  if (config.token && config.url) {
+    const endpoint = `${config.url}/api/bookmarks`;
     let url = new URL(endpoint);
     Object.entries(args).forEach(([k, v], idx) => {
       if (k === 'token' || k === 'url') {
@@ -19,7 +19,7 @@ export async function getBookmarks(args: queryBookmarkArgs) {
 
     const res = await fetch(url, {
       headers: {
-        Authorization: `Token ${auth.token}`,
+        Authorization: `Token ${config.token}`,
       },
     });
     if (res.ok) {

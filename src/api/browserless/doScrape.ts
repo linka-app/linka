@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { getAuth } from '../../utils/getAuth';
+import { getConfig } from '../../utils/getConfig';
 
 export async function doScrape(args: { url: string }) {
-  const auth = getAuth();
+  const config = getConfig();
 
-  if (auth.browserlessToken) {
+  if (config.browserlessToken) {
     const endpoint = `https://chrome.browserless.io/scrape`;
     let url = new URL(endpoint);
-    url.searchParams.append('token', auth.browserlessToken);
+    url.searchParams.append('token', config.browserlessToken);
     const res = await fetch(url, {
       method: 'POST',
       headers: {

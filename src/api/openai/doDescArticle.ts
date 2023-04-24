@@ -4,14 +4,17 @@ import {
   Configuration,
   OpenAIApi,
 } from 'openai';
-import { getAuth } from '../../utils/getAuth';
+import { I18nLocals, i18n } from '../../i18n';
+import { getConfig } from '../../utils/getConfig';
 
 export async function doDescArticle(args: { message: string }) {
-  const auth = getAuth();
+  const config = getConfig();
 
-  if (auth.openaiToken) {
+  const translation = i18n[(config?.language as I18nLocals) || 'en'];
+
+  if (config.openaiToken) {
     const configuration = new Configuration({
-      apiKey: auth.openaiToken,
+      apiKey: config.openaiToken,
     });
     const openai = new OpenAIApi(configuration);
 

@@ -1,16 +1,16 @@
 import { doArgs } from '../types';
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 
 export async function doShare(args: doArgs) {
-  const auth = getAuth();
-  if (auth.token && auth.url) {
-    const endpoint = `${auth.url}/api/bookmarks/${args.id}/`;
+  const config = getConfig();
+  if (config.token && config.url) {
+    const endpoint = `${config.url}/api/bookmarks/${args.id}/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
       method: 'PATCH',
       headers: {
-        Authorization: `Token ${auth.token}`,
+        Authorization: `Token ${config.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ shared: true }),

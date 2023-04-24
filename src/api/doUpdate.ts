@@ -1,17 +1,17 @@
 import { bookmarkArgs } from '../types';
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 
 export async function doUpdate(args: bookmarkArgs) {
-  const auth = getAuth();
+  const config = getConfig();
 
-  if (auth.token && auth.url) {
-    const endpoint = `${auth.url}/api/bookmarks/${args.id}/`;
+  if (config.token && config.url) {
+    const endpoint = `${config.url}/api/bookmarks/${args.id}/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
       method: 'PUT',
       headers: {
-        Authorization: `Token ${auth.token}`,
+        Authorization: `Token ${config.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(args.payload),

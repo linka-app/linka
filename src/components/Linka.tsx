@@ -22,7 +22,7 @@ import { ColorModeContext } from '../contexts/ColorModeContext';
 import { DrawerContext, IDrawer } from '../contexts/DrawerContext';
 import { IToast, ToastContext } from '../contexts/ToastContext';
 import LinkaLogo from '../images/logo192.png';
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 import { AddBookmark } from './AddBookmark';
 import { Credits } from './Credits';
 import { Settings } from './Settings';
@@ -122,7 +122,7 @@ export const Linka: React.FC<{
                 )}
                 <Box sx={{ flexGrow: 1 }}></Box>
                 <Stack direction={'row'} spacing={2}>
-                  {getAuth().token && (
+                  {getConfig().token && (
                     <IconButton edge="end" onClick={handleAddBookmark}>
                       <AddCircleSharpIcon />
                     </IconButton>

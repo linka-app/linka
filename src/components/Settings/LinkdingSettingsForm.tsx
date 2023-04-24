@@ -1,29 +1,37 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import * as React from 'react';
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
+import {
+  FormContainer,
+  SelectElement,
+  TextFieldElement,
+} from 'react-hook-form-mui';
 import { doAuth } from '../../api';
 import { browserlessDoAuth } from '../../api/browserless';
 import { openaiDoAuth } from '../../api/openai';
 import { ToastContext } from '../../contexts/ToastContext';
 import { LinkaSettings } from '../../types';
-import { getAuth } from '../../utils/getAuth';
+import { getConfig } from '../../utils/getConfig';
+import { setConfig } from '../../utils/setConfig';
 
 export const LinkdingSettingsForm: React.FC = () => {
-  const auth = getAuth();
+  const config = getConfig();
   const [validating, setValidating] = React.useState(false);
   const { doToast } = React.useContext(ToastContext);
 
   const validateSettings = async (data: LinkaSettings) => {
-    console.log(data);
     setValidating(true);
 
     // linkding settings
+    if (data.language) {
+      setConfig({
+        language: _.get(data, 'language'),
+      });
+    }
     if (data.token && data.url) {
       await doAuth({ token: data.token, url: data.url })
         .then((res) => {
-          localStorage.setItem('token', _.get(data, 'token'));
-          localStorage.setItem('url', _.get(data, 'url'));
+          setConfig({ token: _.get(data, 'token'), url: _.get(data, 'url') });
         })
         .catch((reason) => {
           doToast({
@@ -48,10 +56,7 @@ export const LinkdingSettingsForm: React.FC = () => {
     if (data.browserlessToken) {
       await browserlessDoAuth({ token: data.browserlessToken })
         .then((res) => {
-          localStorage.setItem(
-            'browserlessToken',
-            _.get(data, 'browserlessToken')
-          );
+          setConfig({ browserlessToken: _.get(data, 'browserlessToken') });
         })
         .catch((reason) => {
           doToast({
@@ -67,7 +72,7 @@ export const LinkdingSettingsForm: React.FC = () => {
     if (data.openaiToken) {
       await openaiDoAuth({ token: data.openaiToken })
         .then((res) => {
-          localStorage.setItem('openaiToken', _.get(data, 'openaiToken'));
+          setConfig({ openaiToken: _.get(data, 'openaiToken') });
         })
         .catch((reason) => {
           doToast({
@@ -92,8 +97,23 @@ export const LinkdingSettingsForm: React.FC = () => {
         width: '100%',
       }}
     >
-      <FormContainer defaultValues={auth} onSuccess={validateSettings}>
+      <FormContainer defaultValues={config} onSuccess={validateSettings}>
         <Stack spacing={2}>
+          <SelectElement
+            name="language"
+            label="Language"
+            options={[
+              {
+                id: 'en',
+                label: 'English',
+              },
+              {
+                id: 'zh_CN',
+                label: 'Chinese',
+              },
+            ]}
+            fullWidth
+          />
           <Typography variant="h5">Linkding Settings</Typography>
           <TextFieldElement
             name="url"

@@ -1,14 +1,14 @@
-import { getAuth } from '../utils/getAuth';
+import { getConfig } from '../utils/getConfig';
 
 export async function getTags() {
-  const auth = getAuth();
-  if (auth.token && auth.url) {
-    const endpoint = `${auth.url}/api/tags/`;
+  const config = getConfig();
+  if (config.token && config.url) {
+    const endpoint = `${config.url}/api/tags/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
       headers: {
-        Authorization: `Token ${auth.token}`,
+        Authorization: `Token ${config.token}`,
       },
     });
     if (res.ok) {

@@ -47,8 +47,12 @@ export type bookmarkArgs = {
 };
 
 export interface LinkaSettings {
+  language: string | null;
+  theme: string | null;
   token: string | null;
   url: string | null;
   openaiToken?: string | null;
   browserlessToken?: string | null;
 }
+
+export interface LinkaPartialSettings extends Partial<LinkaSettings> {}
