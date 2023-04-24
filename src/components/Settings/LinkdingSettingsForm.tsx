@@ -17,6 +17,8 @@ export const LinkdingSettingsForm: React.FC = () => {
   const validateSettings = async (data: LinkaSettings) => {
     console.log(data);
     setValidating(true);
+
+    // linkding settings
     if (data.token && data.url) {
       await doAuth({ token: data.token, url: data.url })
         .then((res) => {
@@ -41,6 +43,8 @@ export const LinkdingSettingsForm: React.FC = () => {
       return false;
     }
 
+    // optional settings
+    let valid = true;
     if (data.browserlessToken) {
       await browserlessDoAuth({ token: data.browserlessToken })
         .then((res) => {
@@ -56,6 +60,7 @@ export const LinkdingSettingsForm: React.FC = () => {
             title: 'Failed to autheticate Browserless.',
             description: 'detail: ' + reason,
           });
+          valid = false;
         });
     }
 
@@ -71,7 +76,12 @@ export const LinkdingSettingsForm: React.FC = () => {
             title: 'Failed to autheticate Open AI.',
             description: 'detail: ' + reason,
           });
+          valid = false;
         });
+    }
+
+    if (valid) {
+      doToast({ title: 'Update success!' });
     }
     setValidating(false);
   };
