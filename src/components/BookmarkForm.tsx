@@ -38,9 +38,20 @@ export const BookmarkForm: React.FC<{
         <Box sx={{ flexGrow: 1 }}></Box>
         {props.actions}
       </Stack>
-      <TextFieldElement name="url" label="Url" fullWidth required />
+      <TextFieldElement
+        name="url"
+        label="Url"
+        fullWidth
+        required
+        autoComplete="off"
+      />
       <BookmarkFormFillButton />
-      <TextFieldElement name="title" label="Title" fullWidth />
+      <TextFieldElement
+        name="title"
+        label="Title"
+        fullWidth
+        autoComplete="off"
+      />
       <TextareaAutosizeElement
         name="description"
         label="Description"
@@ -57,8 +68,14 @@ export const BookmarkForm: React.FC<{
           freeSolo: true,
         }}
       />
-      <TextFieldElement name="website_title" label="Website Title" fullWidth />
+      <TextFieldElement
+        name="website_title"
+        label="Website Title"
+        autoComplete="off"
+        fullWidth
+      />
       <TextareaAutosizeElement
+        autoComplete="off"
         name="website_description"
         label="Website Description"
         fullWidth
