@@ -25,13 +25,11 @@ export const LinkaItem: React.FC<{
 }> = (props) => {
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const token = localStorage.getItem('token');
-  const url = localStorage.getItem('url');
   const { doToast } = React.useContext(ToastContext);
   const { doDrawer } = React.useContext(DrawerContext);
 
   const getDrawerData = async () => {
-    if (token != null && url != null && props.item.id != null) {
+    if (props.item.id != null) {
       const deleteBookmark = async () => {
         doDelete({
           id: props.item.id as number,
@@ -164,6 +162,13 @@ export const LinkaItem: React.FC<{
       <ListItemButton component="a" href={props.item.url} target="_blank" dense>
         <ListItemText
           primary={props.item.title || shortenURL(props.item.url)}
+          primaryTypographyProps={{
+            sx: {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            },
+          }}
           secondary={
             props.item.tag_names &&
             props.item.tag_names.map((e, index) => (
@@ -172,6 +177,13 @@ export const LinkaItem: React.FC<{
               </Typography>
             ))
           }
+          secondaryTypographyProps={{
+            sx: {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            },
+          }}
         />
       </ListItemButton>
     </ListItem>
