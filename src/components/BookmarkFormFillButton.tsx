@@ -54,13 +54,13 @@ export const BookmarkFormFillButton: React.FC = () => {
 
   return (
     <LoadingButton
-      sx={{ width: '25%' }}
       loading={loading}
       startIcon={<PsychologySharpIcon />}
-      variant="contained"
+      variant="outlined"
       onClick={doFill}
+      fullWidth
     >
-      Fill with GPT
+      Fill with Chat GPT
     </LoadingButton>
   );
 };

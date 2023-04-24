@@ -38,10 +38,8 @@ export const BookmarkForm: React.FC<{
         <Box sx={{ flexGrow: 1 }}></Box>
         {props.actions}
       </Stack>
-      <Stack spacing={2} direction={'row'}>
-        <TextFieldElement name="url" label="Url" fullWidth required />
-        <BookmarkFormFillButton />
-      </Stack>
+      <TextFieldElement name="url" label="Url" fullWidth required />
+      <BookmarkFormFillButton />
       <TextFieldElement name="title" label="Title" fullWidth />
       <TextareaAutosizeElement
         name="description"

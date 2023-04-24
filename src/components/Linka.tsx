@@ -122,7 +122,7 @@ export const Linka: React.FC<{
                 )}
                 <Box sx={{ flexGrow: 1 }}></Box>
                 <Stack direction={'row'} spacing={2}>
-                  {getAuth() && (
+                  {getAuth().token && (
                     <IconButton edge="end" onClick={handleAddBookmark}>
                       <AddCircleSharpIcon />
                     </IconButton>
