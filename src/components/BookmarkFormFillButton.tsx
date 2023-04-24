@@ -1,10 +1,12 @@
 import PsychologySharpIcon from '@mui/icons-material/PsychologySharp';
 import { LoadingButton } from '@mui/lab';
-import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-form
 import { browserlessDoScrape } from '../api/browserless';
 import { doDescArticle } from '../api/openai';
 import { ToastContext } from '../contexts/ToastContext';
+import { getAuth } from '../utils/getAuth';
 
 export const BookmarkFormFillButton: React.FC = () => {
   const { watch, setValue } = useFormContext();
@@ -12,9 +14,10 @@ export const BookmarkFormFillButton: React.FC = () => {
   const { doToast } = React.useContext(ToastContext);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {}, []);
+  const auth = getAuth();
 
   const doFill = () => {
+    console.log(theUrl);
     setLoading(true);
     if (theUrl != null) {
       browserlessDoScrape({ url: theUrl }).then((res: string) => {
@@ -54,6 +57,9 @@ export const BookmarkFormFillButton: React.FC = () => {
 
   return (
     <LoadingButton
+      disabled={
+        !auth.browserlessToken || !auth.openaiToken || _.isEmpty(theUrl)
+      }
       loading={loading}
       startIcon={<PsychologySharpIcon />}
       variant="outlined"
