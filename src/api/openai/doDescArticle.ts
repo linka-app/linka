@@ -60,7 +60,11 @@ oc`,
           },
           {
             role: ChatCompletionRequestMessageRoleEnum.Assistant,
-            content: `{\"title\": \"OpenCommit: GPT CLI to Auto-Generate Impressive Commits in 1 Second\", \n\"desc\": \"OpenCommit is a GPT CLI tool that generates impressive commit messages in seconds, using OpenAI's ChatGPT model. It allows you to preface commits with emojis, postface them with descriptions of changes, and supports internationalization. It can also be used as a Git hook and ignores files to prevent uploading artifacts and large files.\", \n\"tags\": [\"opencommit\", \"gpt\", \"cli\", \"git\", \"commit messages\"]}`,
+            content: JSON.stringify({
+              title: translation.promptTags,
+              desc: translation.promptDesc,
+              tags: translation.promptTags,
+            }),
           },
           {
             role: ChatCompletionRequestMessageRoleEnum.User,
