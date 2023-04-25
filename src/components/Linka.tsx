@@ -21,7 +21,7 @@ import React, { ReactNode } from 'react';
 import { ColorModeContext } from '../contexts/ColorModeContext';
 import { DrawerContext, IDrawer } from '../contexts/DrawerContext';
 import { IToast, ToastContext } from '../contexts/ToastContext';
-import LinkaLogo from '../images/logo192.png';
+import LinkaLogo from '../images/logo.svg';
 import { getConfig } from '../utils/getConfig';
 import { AddBookmark } from './AddBookmark';
 import { Credits } from './Credits';
