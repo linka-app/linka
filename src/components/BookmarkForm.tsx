@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Button, Unstable_Grid2 as Grid, Stack } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 import {
   AutocompleteElement,
@@ -26,18 +26,39 @@ export const BookmarkForm: React.FC<{
   }, []);
 
   return (
-    <Stack spacing={2}>
-      <Stack direction={'row'} spacing={1} sx={{ display: 'flex' }}>
-        <SwitchElement label="Unread" labelPlacement="start" name="unread" />
-        <SwitchElement
-          label="Archived"
-          labelPlacement="start"
-          name="is_archived"
-        />
-        <SwitchElement label="Shared" labelPlacement="start" name="shared" />
-        <Box sx={{ flexGrow: 1 }}></Box>
-        {props.actions}
-      </Stack>
+    <Stack spacing={2} pb={2}>
+      <Grid container spacing={0}>
+        <Grid xs={8}>
+          <Stack direction={'row'} spacing={1}>
+            <SwitchElement
+              label="Unread"
+              labelPlacement="start"
+              name="unread"
+            />
+            <SwitchElement
+              label="Archived"
+              labelPlacement="start"
+              name="is_archived"
+            />
+            <SwitchElement
+              label="Shared"
+              labelPlacement="start"
+              name="shared"
+            />
+          </Stack>
+        </Grid>
+        <Grid
+          xs={12}
+          md={4}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {props.actions}
+        </Grid>
+      </Grid>
+
       <TextFieldElement
         name="url"
         label="Url"
