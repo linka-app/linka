@@ -1,9 +1,9 @@
+import Auth from '@/pages/Auth';
+import Main from '@/pages/Main';
+import { getConfig } from '@/utils/getConfig';
 import { useEffect, useState } from 'react';
-import Auth from '../pages/Auth';
-import Main from '../pages/Main';
-import { getConfig } from '../utils/getConfig';
 
-function Router() {
+export const Router: React.FC = () => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -24,6 +24,6 @@ function Router() {
       )}
     </>
   );
-}
+};
 
 export default Router;

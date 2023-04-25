@@ -1,3 +1,6 @@
+import { getTags } from '@/api/getTags';
+import { BookmarkFormFillButton } from '@/components/BookmarkFormFillButton';
+import { TagItem, Tags } from '@/types';
 import { Button, Unstable_Grid2 as Grid, Stack } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 import {
@@ -6,9 +9,6 @@ import {
   TextFieldElement,
   TextareaAutosizeElement,
 } from 'react-hook-form-mui';
-import { getTags } from '../api';
-import { TagItem, Tags } from '../types';
-import { BookmarkFormFillButton } from './BookmarkFormFillButton';
 
 export const BookmarkForm: React.FC<{
   loading: boolean;
@@ -114,3 +114,5 @@ export const BookmarkForm: React.FC<{
     </Stack>
   );
 };
+
+export default BookmarkForm;

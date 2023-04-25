@@ -1,5 +1,5 @@
+import { getConfig } from '@/utils/getConfig';
 import _ from 'lodash';
-import { getConfig } from '../../utils/getConfig';
 
 export async function doScrape(args: { url: string }) {
   const config = getConfig();

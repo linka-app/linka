@@ -1,3 +1,6 @@
+import { getBookmarks } from '@/api';
+import { LinkaItem } from '@/components/LinkaItem';
+import { BookmarkItem, Res } from '@/types';
 import {
   Box,
   Chip,
@@ -16,11 +19,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { getBookmarks } from '../api';
-import { LinkaItem } from '../components/LinkaItem';
-import { BookmarkItem, Res } from '../types';
 
-export const Main: React.FC<{}> = (props) => {
+export const Main: React.FC = () => {
   const inputRef = useRef(null);
 
   const defaultBookmarks: BookmarkItem[] = [];

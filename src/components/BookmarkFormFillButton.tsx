@@ -1,12 +1,12 @@
+import { browserlessDoScrape } from '@/api/browserless';
+import { doDescArticle } from '@/api/openai';
+import { ToastContext } from '@/contexts/ToastContext';
+import { getConfig } from '@/utils/getConfig';
 import PsychologySharpIcon from '@mui/icons-material/PsychologySharp';
 import { LoadingButton } from '@mui/lab';
 import _ from 'lodash';
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-form
-import { browserlessDoScrape } from '../api/browserless';
-import { doDescArticle } from '../api/openai';
-import { ToastContext } from '../contexts/ToastContext';
-import { getConfig } from '../utils/getConfig';
 
 export const BookmarkFormFillButton: React.FC = () => {
   const { watch, setValue } = useFormContext();
@@ -70,3 +70,5 @@ export const BookmarkFormFillButton: React.FC = () => {
     </LoadingButton>
   );
 };
+
+export default BookmarkFormFillButton;

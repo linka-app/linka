@@ -1,6 +1,5 @@
-import * as React from 'react';
-
 import { Divider, Stack } from '@mui/material';
+import * as React from 'react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { LinkdingSettingsForm } from './LinkdingSettingsForm';
 

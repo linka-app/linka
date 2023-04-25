@@ -1,5 +1,5 @@
-import { queryBookmarkArgs } from '../types';
-import { getConfig } from '../utils/getConfig';
+import { queryBookmarkArgs } from '@/types';
+import { getConfig } from '@/utils/getConfig';
 
 export async function getBookmarks(args: queryBookmarkArgs) {
   const config = getConfig();

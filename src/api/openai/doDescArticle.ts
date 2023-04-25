@@ -1,11 +1,11 @@
+import { I18nLocals, i18n } from '@/i18n';
+import { getConfig } from '@/utils/getConfig';
 import _ from 'lodash';
 import {
   ChatCompletionRequestMessageRoleEnum,
   Configuration,
   OpenAIApi,
 } from 'openai';
-import { I18nLocals, i18n } from '../../i18n';
-import { getConfig } from '../../utils/getConfig';
 
 export async function doDescArticle(args: { message: string }) {
   const config = getConfig();
@@ -75,9 +75,6 @@ oc`,
         top_p: 0.1,
         max_tokens: 196,
       });
-
-      console.log(_.get(data, 'choices.0.message.content'));
-      console.log(typeof _.get(data, 'choices.0.message.content'));
 
       const message = JSON.parse(_.get(data, 'choices.0.message.content'));
       return message;

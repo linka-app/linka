@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { LinkaSettings } from '../types';
+import { LinkaSettings } from '@/types';
 
 function getConfig(): LinkaSettings {
   const configObject = _.merge(

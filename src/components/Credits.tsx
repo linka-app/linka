@@ -24,3 +24,5 @@ export const Credits: React.FC<{ version: string }> = (props) => {
     </Box>
   );
 };
+
+export default Credits;

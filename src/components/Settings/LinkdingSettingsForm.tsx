@@ -1,3 +1,9 @@
+import { browserlessDoAuth } from '@/api/browserless';
+import { doAuth } from '@/api/doAuth';
+import { openaiDoAuth } from '@/api/openai';
+import { ToastContext } from '@/contexts/ToastContext';
+import { LinkaSettings } from '@/types';
+import { getConfig, setConfig } from '@/utils';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import * as React from 'react';
@@ -6,13 +12,6 @@ import {
   SelectElement,
   TextFieldElement,
 } from 'react-hook-form-mui';
-import { doAuth } from '../../api';
-import { browserlessDoAuth } from '../../api/browserless';
-import { openaiDoAuth } from '../../api/openai';
-import { ToastContext } from '../../contexts/ToastContext';
-import { LinkaSettings } from '../../types';
-import { getConfig } from '../../utils/getConfig';
-import { setConfig } from '../../utils/setConfig';
 
 export const LinkdingSettingsForm: React.FC = () => {
   const config = getConfig();

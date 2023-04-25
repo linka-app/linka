@@ -1,4 +1,4 @@
-import { getConfig } from '../utils/getConfig';
+import { getConfig } from '@/utils/getConfig';
 
 export async function getTags() {
   const config = getConfig();

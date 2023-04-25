@@ -1,5 +1,5 @@
-import { doArgs } from '../types';
-import { getConfig } from '../utils/getConfig';
+import { doArgs } from '@/types';
+import { getConfig } from '@/utils/getConfig';
 
 export async function doArchive(args: doArgs) {
   const config = getConfig();

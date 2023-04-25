@@ -7,3 +7,5 @@ export const LoadingIcon: React.FC<{
 }> = (props) => {
   return <>{!props.loading ? props.icon : <CircularProgress size={24} />}</>;
 };
+
+export default LoadingIcon;

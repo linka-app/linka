@@ -1,3 +1,11 @@
+import { AddBookmark } from '@/components/AddBookmark';
+import { Credits } from '@/components/Credits';
+import { Settings } from '@/components/Settings';
+import { ColorModeContext } from '@/contexts/ColorModeContext';
+import { DrawerContext, IDrawer } from '@/contexts/DrawerContext';
+import { IToast, ToastContext } from '@/contexts/ToastContext';
+import LinkaLogo from '@/images/logo.svg';
+import { getConfig } from '@/utils/getConfig';
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
@@ -18,14 +26,6 @@ import {
   createTheme,
 } from '@mui/material';
 import React, { ReactNode } from 'react';
-import { ColorModeContext } from '../contexts/ColorModeContext';
-import { DrawerContext, IDrawer } from '../contexts/DrawerContext';
-import { IToast, ToastContext } from '../contexts/ToastContext';
-import LinkaLogo from '../images/logo.svg';
-import { getConfig } from '../utils/getConfig';
-import { AddBookmark } from './AddBookmark';
-import { Credits } from './Credits';
-import { Settings } from './Settings';
 
 export const Linka: React.FC<{
   version: string;
@@ -171,3 +171,5 @@ export const Linka: React.FC<{
     </ToastContext.Provider>
   );
 };
+
+export default Linka;

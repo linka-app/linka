@@ -1,5 +1,5 @@
-import { bookmarkArgs } from '../types';
-import { getConfig } from '../utils/getConfig';
+import { bookmarkArgs } from '@/types';
+import { getConfig } from '@/utils/getConfig';
 
 export async function doUpdate(args: bookmarkArgs) {
   const config = getConfig();

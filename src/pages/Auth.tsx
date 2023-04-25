@@ -1,8 +1,8 @@
+import { doAuth } from '@/api';
+import { ToastContext } from '@/contexts/ToastContext';
 import { LoadingButton } from '@mui/lab';
 import { Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { doAuth } from '../api';
-import { ToastContext } from '../contexts/ToastContext';
 
 export const Auth: React.FC<{ setReady: (e: any) => void }> = (props) => {
   const { doToast } = React.useContext(ToastContext);
