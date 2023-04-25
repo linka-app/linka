@@ -18,7 +18,7 @@ export async function doScrape(args: { url: string }) {
         url: args.url,
         elements: [
           {
-            selector: 'h1, h2, h3, h4, h5, h6, p, code, ul',
+            selector: 'title,meta[name="description"],h1,p,h2,h3,main ul',
           },
         ],
       }),

@@ -9,7 +9,6 @@ import { getConfig } from '../../utils/getConfig';
 
 export async function doDescArticle(args: { message: string }) {
   const config = getConfig();
-
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
 
   if (config.openaiToken) {
@@ -18,17 +17,54 @@ export async function doDescArticle(args: { message: string }) {
     });
     const openai = new OpenAIApi(configuration);
 
+    const prompt = [
+      `You are to act as the author of a website summarizer.`,
+      `Your mission is to create a clean and comprehensive summary of the content I send.`,
+      `I will send you the output of a 'document.querySelectorAll('title,meta[name="description"],h1,h2,h3,p,main ul') command'`,
+      `you will convert it into an JSON object that has 'title', 'desc', and 'tags' attributes.`,
+      `Use the present tense.`,
+      `The 'desc' should be no longer than 40 words,`,
+      `the 'tags' should be all lowercase and in a 'slug' format and there should be no more then 5 tags.`,
+      `Your Response should always be this Populated JSON object:`,
+      `{"title": "", "desc": "", and "tags": []}`,
+      `Respond with only one JSON Object, so no explnation, and nothing extra.`,
+      `Use ${translation.localLanguage} to answer.`,
+    ].join('\n');
+
     try {
       const { data } = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [
           {
             role: ChatCompletionRequestMessageRoleEnum.System,
-            content: `You are to act as the author of a website summarizer. Your mission is to create a clean and comprehensive summary of the content I send. I will send you the output of a 'document.querySelectorAll('h1,h2,h3,h4,h5,h6,p,ul') command', and you will convert it into an JSON object that has 'title', 'desc', and 'tags' attributes. Use the present tense. The 'desc' should be no longer than 40 words, the 'tags' should be all lowercase and in a 'slug' format and there should be no more then 5 tags. The final JSON object should always fit in to this object {"title": "", "desc": "", and "tags": []}. I only want you to respond in JSON that has been stringified (JSON.stringify()). Use en to answer.`,
+            content: prompt,
           },
           {
             role: ChatCompletionRequestMessageRoleEnum.User,
-            content: args.message.substring(0, 3450),
+            content: `Title: di-sukharev/opencommit: GPT CLI to auto-generate impressive commits in 1 second 🤯🔫
+Description: GPT CLI to auto-generate impressive commits in 1 second 🤯🔫 - di-sukharev/opencommit: GPT CLI to auto-generate impressive commits in 1 second 🤯🔫
+Site Content:
+GPT CLI to auto-generate impressive commits in 1 second
+Killing lame commits with AI
+All the commits in this repo are done with OpenCommit — look into the commits to see how OpenCommit works. Emoji and long commit description text is configurable.
+Setup
+Install OpenCommit globally to use in any repository:
+Get your API key from OpenAI. Make sure you add payment details, so API works.
+Set the key to OpenCommit config:
+Your api key is stored locally in ~/.opencommit config file.
+~/.opencommit
+Usage
+You can call OpenCommit directly to generate a commit message for your staged changes:
+You can also use the oc shortcut:
+oc`,
+          },
+          {
+            role: ChatCompletionRequestMessageRoleEnum.Assistant,
+            content: `{\"title\": \"OpenCommit: GPT CLI to Auto-Generate Impressive Commits in 1 Second\", \n\"desc\": \"OpenCommit is a GPT CLI tool that generates impressive commit messages in seconds, using OpenAI's ChatGPT model. It allows you to preface commits with emojis, postface them with descriptions of changes, and supports internationalization. It can also be used as a Git hook and ignores files to prevent uploading artifacts and large files.\", \n\"tags\": [\"opencommit\", \"gpt\", \"cli\", \"git\", \"commit messages\"]}`,
+          },
+          {
+            role: ChatCompletionRequestMessageRoleEnum.User,
+            content: args.message.substring(0, 5000 - 1000 - prompt.length),
           },
         ],
         temperature: 0,
