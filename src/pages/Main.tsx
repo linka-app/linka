@@ -3,6 +3,7 @@ import {
   Chip,
   Unstable_Grid2 as Grid,
   InputAdornment,
+  LinearProgress,
   List,
   TextField,
   Tooltip,
@@ -33,6 +34,7 @@ export const Main: React.FC<{}> = (props) => {
   const [results, setResults] = useState(defaultSearchResults);
 
   const getTheBookmarks = async () => {
+    isLoading(true);
     getBookmarks({})
       .then((res: Res) => {
         setBookmarks(res.results);
@@ -52,7 +54,7 @@ export const Main: React.FC<{}> = (props) => {
           );
         });
 
-        isLoading(true);
+        isLoading(false);
       })
       .catch((reason) => {
         console.log('reason: ', reason);
@@ -127,7 +129,6 @@ export const Main: React.FC<{}> = (props) => {
 
   return (
     <>
-      {loading}
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid xs={12}>
@@ -160,6 +161,11 @@ export const Main: React.FC<{}> = (props) => {
             />
           </Grid>
           <Grid xs={12}>
+            {loading && (
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress />
+              </Box>
+            )}
             <List sx={{ width: '100%' }}>
               {results.length > 0
                 ? results.map((val) => (
