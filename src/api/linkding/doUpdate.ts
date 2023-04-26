@@ -1,18 +1,22 @@
-import { doArgs } from '@/types';
-import { getConfig } from '@/utils/getConfig';
+import { bookmarkArgs } from '@/types';
+import { getConfig } from '@/utils/getConfig/getConfig';
 
-export async function doDelete(args: doArgs) {
+export async function doUpdate(args: bookmarkArgs) {
   const config = getConfig();
+
   if (config.token && config.url) {
     const endpoint = `${config.url}/api/bookmarks/${args.id}/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
-      method: 'DELETE',
+      method: 'PUT',
       headers: {
         Authorization: `Token ${config.token}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(args.payload),
     });
+    console.log(res);
     if (res.ok) {
       return true;
     }
@@ -22,4 +26,4 @@ export async function doDelete(args: doArgs) {
   }
 }
 
-export default doDelete;
+export default doUpdate;

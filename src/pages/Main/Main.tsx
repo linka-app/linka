@@ -1,5 +1,4 @@
-import { LinkaItem } from '@/components/LinkaItem';
-import { useContexts } from '@/hooks';
+import { LinkaItem } from '@/components/LinkaItem/LinkaItem';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import {
   Box,

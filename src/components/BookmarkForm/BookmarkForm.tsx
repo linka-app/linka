@@ -1,5 +1,5 @@
-import { getTags } from '@/api/getTags';
-import { BookmarkFormFillButton } from '@/components/BookmarkFormFillButton';
+import { getTags } from '@/api/linkding/getTags';
+import { BookmarkFormFillButton } from '@/components/BookmarkForm/BookmarkFormFillButton';
 import { TagItem, Tags } from '@/types';
 import { Button, Unstable_Grid2 as Grid, Stack } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';

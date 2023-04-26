@@ -1,18 +1,21 @@
 import { doArgs } from '@/types';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 
-export async function doArchive(args: doArgs) {
+export async function doShare(args: doArgs) {
   const config = getConfig();
   if (config.token && config.url) {
-    const endpoint = `${config.url}/api/bookmarks/${args.id}/archive/`;
+    const endpoint = `${config.url}/api/bookmarks/${args.id}/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         Authorization: `Token ${config.token}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ shared: true }),
     });
+    console.log(res);
     if (res.ok) {
       return true;
     }
@@ -22,4 +25,4 @@ export async function doArchive(args: doArgs) {
   }
 }
 
-export default doArchive;
+export default doShare;

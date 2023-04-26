@@ -1,10 +1,10 @@
-import { doDelete, doUpdate, getBookmark } from '@/api/index';
+import { doDelete, doUpdate, getBookmark } from '@/api/linkding';
 import { BookmarkForm } from '@/components/BookmarkForm';
-import { LoadingIcon } from '@/components/LoadingIcon';
+import { LoadingIcon } from '@/components/LoadingIcon/LoadingIcon';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useContexts } from '@/hooks/useContexts';
 import { BookmarkItem } from '@/types';
-import { shortenURL } from '@/utils/url';
+import { shortenURL } from '@/utils/shortenURL/shortenURL';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import {
   Button,

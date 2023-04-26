@@ -1,4 +1,4 @@
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import _ from 'lodash';
 
 export async function doScrape(args: { url: string }) {

@@ -1,0 +1,1 @@
+export { setConfig } from './setConfig';

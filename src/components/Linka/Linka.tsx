@@ -1,4 +1,4 @@
-import { AddBookmark } from '@/components/AddBookmark';
+import { AddBookmark } from '@/components/AddBookmark/AddBookmark';
 import { Credits } from '@/components/Credits';
 import { Settings } from '@/components/Settings';
 import {
@@ -10,7 +10,7 @@ import LinearProgressContextProvider from '@/contexts/LinearProgressContext/Line
 import ToastContextProvider from '@/contexts/ToastContext/ToastContextProvider';
 import { useContexts } from '@/hooks';
 import LinkaLogo from '@/images/logo.svg';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';

@@ -1,6 +1,6 @@
-import Auth from '@/pages/Auth';
-import Main from '@/pages/Main';
-import { getConfig } from '@/utils/getConfig';
+import Auth from '@/pages/Auth/Auth';
+import Main from '@/pages/Main/Main';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import { useEffect, useState } from 'react';
 
 export const Router: React.FC = () => {

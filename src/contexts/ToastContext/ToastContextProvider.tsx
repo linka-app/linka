@@ -14,6 +14,7 @@ const ToastContextProvider: FC<ContextProviderProps> = ({ children }) => {
 
   const doToast = (toastMessage: IToast) => {
     setToast({
+      open: true,
       type: 'success',
       timeout: 6000,
       ...toastMessage,

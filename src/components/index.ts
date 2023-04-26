@@ -1,8 +1,8 @@
-export { default as AddBookmark } from './AddBookmark';
-export { default as BookmarkForm } from './BookmarkForm';
-export { default as BookmarkFormFillButton } from './BookmarkFormFillButton';
-export { default as Credits } from './Credits';
-export { default as Linka } from './Linka';
-export { default as LinkaItem } from './LinkaItem';
-export { default as LoadingIcon } from './LoadingIcon';
-export { default as Router } from './Router';
+export * from './AddBookmark';
+export * from './BookmarkForm';
+export * from './Credits';
+export * from './Linka';
+export * from './LinkaItem';
+export * from './LoadingIcon';
+export * from './Router';
+export * from './Settings';

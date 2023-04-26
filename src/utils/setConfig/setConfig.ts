@@ -1,5 +1,5 @@
 import { LinkaPartialSettings, LinkaSettings } from '@/types';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import _ from 'lodash';
 
 function setConfig(config: LinkaPartialSettings): void {

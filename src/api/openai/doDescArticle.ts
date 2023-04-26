@@ -1,5 +1,5 @@
 import { I18nLocals, i18n } from '@/i18n';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import _ from 'lodash';
 import {
   ChatCompletionRequestMessageRoleEnum,

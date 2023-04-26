@@ -1,6 +1,6 @@
 import '@/App.css';
-import { Linka } from '@/components/Linka';
-import { Router } from '@/components/Router';
+import { Linka } from '@/components/Linka/Linka';
+import { Router } from '@/components/Router/Router';
 import { ColorModeContextProvider } from './contexts/ColorModeContext';
 
 function App() {

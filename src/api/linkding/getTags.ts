@@ -1,10 +1,9 @@
-import { doArgs } from '@/types';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 
-export async function getBookmark(args: doArgs) {
+export async function getTags() {
   const config = getConfig();
   if (config.token && config.url) {
-    const endpoint = `${config.url}/api/bookmarks/${args.id}/`;
+    const endpoint = `${config.url}/api/tags/`;
     let url = new URL(endpoint);
 
     const res = await fetch(url, {
@@ -21,4 +20,4 @@ export async function getBookmark(args: doArgs) {
   }
 }
 
-export default getBookmark;
+export default getTags;

@@ -1,7 +1,7 @@
 import { browserlessDoAuth } from '@/api/browserless';
-import { doAuth } from '@/api/doAuth';
+import { doAuth } from '@/api/linkding/doAuth';
 import { openaiDoAuth } from '@/api/openai';
-import { ToastContext } from '@/contexts/ToastContext';
+import { useContexts } from '@/hooks';
 import { LinkaSettings } from '@/types';
 import { getConfig, setConfig } from '@/utils';
 import { Box, Button, Stack, Typography } from '@mui/material';
@@ -12,11 +12,12 @@ import {
   SelectElement,
   TextFieldElement,
 } from 'react-hook-form-mui';
+import FormPartLinkdingSettings from './FormPartLinkdingSettings';
 
-export const LinkdingSettingsForm: React.FC = () => {
+export const SettingsForm: React.FC = () => {
   const config = getConfig();
   const [validating, setValidating] = React.useState(false);
-  const { doToast } = React.useContext(ToastContext);
+  const { doToast } = useContexts();
 
   const validateSettings = async (data: LinkaSettings) => {
     setValidating(true);
@@ -114,13 +115,7 @@ export const LinkdingSettingsForm: React.FC = () => {
             fullWidth
           />
           <Typography variant="h5">Linkding Settings</Typography>
-          <TextFieldElement
-            name="url"
-            label="linkding site base url"
-            fullWidth
-            required
-          />
-          <TextFieldElement name="token" label="Token" fullWidth required />
+          <FormPartLinkdingSettings />
           <Typography variant="h5">Optional Settings</Typography>
           <TextFieldElement
             name="browserlessToken"
@@ -150,4 +145,4 @@ export const LinkdingSettingsForm: React.FC = () => {
   );
 };
 
-export default LinkdingSettingsForm;
+export default SettingsForm;

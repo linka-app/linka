@@ -1,4 +1,4 @@
-import { doCreate } from '@/api/doCreate';
+import { doCreate } from '@/api/linkding/doCreate';
 import { BookmarkForm } from '@/components/BookmarkForm';
 import { useContexts } from '@/hooks';
 import { BookmarkItem } from '@/types';

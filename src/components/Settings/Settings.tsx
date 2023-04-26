@@ -1,7 +1,7 @@
 import { Divider, Stack } from '@mui/material';
 import * as React from 'react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { LinkdingSettingsForm } from './LinkdingSettingsForm';
+import { SettingsForm } from './SettingsForm';
 
 export const Settings: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ export const Settings: React.FC = () => {
       divider={<Divider orientation="horizontal" flexItem />}
     >
       <ColorModeSwitcher />
-      <LinkdingSettingsForm />
+      <SettingsForm />
     </Stack>
   );
 };

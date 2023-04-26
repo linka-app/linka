@@ -1,5 +1,5 @@
 import { bookmarkArgs } from '@/types';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 
 export async function doCreate(args: Omit<bookmarkArgs, 'id'>) {
   const config = getConfig();

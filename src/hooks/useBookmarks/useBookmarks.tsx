@@ -1,4 +1,4 @@
-import { getBookmarks } from '@/api';
+import { getBookmarks } from '@/api/linkding';
 import { useContexts } from '@/hooks/useContexts';
 import { BookmarkItem, Res } from '@/types';
 import { Index } from 'flexsearch';

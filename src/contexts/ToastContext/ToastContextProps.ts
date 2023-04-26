@@ -1,7 +1,7 @@
 import { AlertColor } from '@mui/material';
 
 export interface IToast {
-  open: boolean;
+  open?: boolean;
   timeout?: number;
   type?: AlertColor;
   title?: string;

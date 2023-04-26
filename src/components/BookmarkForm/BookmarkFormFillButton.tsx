@@ -1,7 +1,7 @@
 import { browserlessDoScrape } from '@/api/browserless';
 import { doDescArticle } from '@/api/openai';
 import { useContexts } from '@/hooks';
-import { getConfig } from '@/utils/getConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 import PsychologySharpIcon from '@mui/icons-material/PsychologySharp';
 import { LoadingButton } from '@mui/lab';
 import _ from 'lodash';
