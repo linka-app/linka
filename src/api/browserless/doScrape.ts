@@ -28,10 +28,30 @@ export async function doScrape(args: { url: string }) {
       return await res.json().then((data) => {
         const theReturn: string[] = [];
         _.get(data, 'data.0.results', []).forEach(
-          (result: { html: string; text: string }) => {
-            const text = result.text.trim().replace(/(^[ \t]*\n)/gm, '');
-            if (text.length > 0) {
-              theReturn.push(text);
+          (result: {
+            html: string;
+            text?: string;
+            attributes?: { name: string; value: string };
+          }) => {
+            if (result.attributes) {
+              _.forEach(
+                result.attributes,
+                (attribute: { name: string; value: string }) => {
+                  if (attribute.name === 'content') {
+                    const text = attribute.value.replace(/(^[ \t]*\n)/gm, '');
+                    if (text.length > 0) {
+                      theReturn.push(text);
+                    }
+                  }
+                }
+              );
+            } else {
+              if (result.text) {
+                const text = result.text.trim().replace(/(^[ \t]*\n)/gm, '');
+                if (text.length > 0) {
+                  theReturn.push(text);
+                }
+              }
             }
           }
         );
