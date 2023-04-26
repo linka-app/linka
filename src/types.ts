@@ -1,3 +1,5 @@
+import { PaletteMode } from '@mui/material';
+
 export interface BookmarkItem {
   title: string;
   id?: number;
@@ -52,7 +54,7 @@ export type bookmarkArgs = {
 
 export interface LinkaSettings {
   language: string | null;
-  theme: string | null;
+  theme: PaletteMode | null;
   token: string | null;
   url: string | null;
   openaiToken?: string | null;

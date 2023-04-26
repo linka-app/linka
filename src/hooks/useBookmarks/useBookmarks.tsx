@@ -1,10 +1,12 @@
 import { getBookmarks } from '@/api';
+import { useContexts } from '@/hooks/useContexts';
 import { BookmarkItem, Res } from '@/types';
 import { Index } from 'flexsearch';
 import { useState } from 'react';
 
 export const useBookmarks = () => {
   const [loading, isLoading] = useState(false);
+  const { doLoading } = useContexts();
 
   const defaultBookmarks: BookmarkItem[] = [];
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
@@ -12,6 +14,7 @@ export const useBookmarks = () => {
 
   const getTheBookmarks = async () => {
     isLoading(true);
+    doLoading(true);
     getBookmarks({})
       .then((res: Res) => {
         setBookmarks(res.results);
@@ -32,10 +35,12 @@ export const useBookmarks = () => {
         });
 
         isLoading(false);
+        doLoading(false);
       })
       .catch((reason) => {
         console.log('reason: ', reason);
         isLoading(false);
+        doLoading(false);
       });
   };
 

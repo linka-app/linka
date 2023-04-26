@@ -1,11 +1,11 @@
 import { LinkaItem } from '@/components/LinkaItem';
+import { useContexts } from '@/hooks';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import {
   Box,
   Chip,
   Unstable_Grid2 as Grid,
   InputAdornment,
-  LinearProgress,
   List,
   Slide,
   TextField,
@@ -124,11 +124,6 @@ export const Main: React.FC = () => {
             />
           </Grid>
           <Grid xs={12}>
-            {loading && (
-              <Box sx={{ width: '100%' }}>
-                <LinearProgress />
-              </Box>
-            )}{' '}
             <Slide direction="up" in={!loading}>
               <List sx={{ width: '100%' }}>
                 {results.length > 0

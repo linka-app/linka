@@ -1,26 +1,26 @@
 import { AddBookmark } from '@/components/AddBookmark';
 import { Credits } from '@/components/Credits';
 import { Settings } from '@/components/Settings';
-import { ColorModeContext } from '@/contexts/ColorModeContext';
-import { DrawerContext, IDrawer } from '@/contexts/DrawerContext';
+import {
+  ColorModeContext,
+  ColorModeContextType,
+} from '@/contexts/ColorModeContext';
+import { DrawerContextProvider } from '@/contexts/DrawerContext';
 import LinearProgressContextProvider from '@/contexts/LinearProgressContext/LinearProgressContextProvider';
-import { IToast, ToastContext } from '@/contexts/ToastContext';
+import ToastContextProvider from '@/contexts/ToastContext/ToastContextProvider';
+import { useContexts } from '@/hooks';
 import LinkaLogo from '@/images/logo.svg';
 import { getConfig } from '@/utils/getConfig';
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import {
-  Alert,
-  AlertTitle,
   AppBar,
   Avatar,
   Box,
   Container,
   CssBaseline,
-  Drawer,
   IconButton,
-  Snackbar,
   Stack,
   ThemeProvider,
   Toolbar,
@@ -28,150 +28,101 @@ import {
 } from '@mui/material';
 import React, { ReactNode } from 'react';
 
-export const Linka: React.FC<{
+export const InnerComponent: React.FC<{
   version: string;
   children: ReactNode;
 }> = (props) => {
-  const [toast, setToast] = React.useState<IToast>({
-    open: false,
-    title: '',
-    description: '',
-  });
-
-  const [drawer, setDrawer] = React.useState<IDrawer>({
-    open: false,
-    children: <></>,
-  });
-
-  const handleDrawerClose = () => {
-    setDrawer({ open: false, children: <></> });
-  };
-
-  const doToast = (toastMessage: IToast) => {
-    setToast({ open: true, timeout: 6000, ...toastMessage });
-  };
-
-  const handleClose = () => {
-    setToast({ open: false, title: '' });
-  };
-
-  const doDrawer = (drawerMessage: IDrawer) => {
-    setDrawer({ open: false, ...drawerMessage });
-  };
+  const { doDrawer, doDrawerClose, getDrawerState } = useContexts();
 
   const handleAddBookmark = () => {
-    setDrawer({
+    doDrawer({
       open: true,
-      children: <AddBookmark onItemUpdate={handleDrawerClose} />,
+      children: <AddBookmark onItemUpdate={doDrawerClose} />,
     });
   };
 
   const handleViewSettings = () => {
-    setDrawer({
+    doDrawer({
       open: true,
       children: <Settings />,
     });
   };
 
-  const getInitialMode = () => {
-    const savedMode = localStorage.getItem('theme');
-    return savedMode !== null && savedMode === 'dark' ? 'dark' : 'light';
-  };
-
-  const [mode, setMode] = React.useState<'light' | 'dark'>(getInitialMode);
-
-  const toggleColorMode = React.useCallback(() => {
-    setMode((prevMode) => {
-      const newMode = prevMode === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newMode);
-      return newMode;
-    });
-  }, []);
-
-  const colorMode = React.useMemo(
-    () => ({ toggleColorMode }),
-    [toggleColorMode]
+  return (
+    <>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar>
+          {!getDrawerState() ? (
+            <Avatar src={LinkaLogo} alt="linka!" />
+          ) : (
+            <IconButton edge="end" onClick={doDrawerClose}>
+              <KeyboardArrowLeftSharpIcon />
+            </IconButton>
+          )}
+          <Box sx={{ flexGrow: 1 }}></Box>
+          <Stack direction={'row'} spacing={2}>
+            {getConfig().token && (
+              <IconButton edge="end" onClick={handleAddBookmark}>
+                <AddCircleSharpIcon />
+              </IconButton>
+            )}
+            <IconButton edge="end" onClick={handleViewSettings}>
+              <SettingsSharpIcon />
+            </IconButton>
+          </Stack>
+        </Toolbar>
+      </AppBar>
+      <Container fixed>
+        <Box mt={'75px'} mb={2}>
+          {props.children}
+          <Stack
+            mb={2}
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Credits version={props.version} />
+          </Stack>
+        </Box>
+      </Container>
+    </>
   );
+};
+
+export const Linka: React.FC<{
+  version: string;
+  children: ReactNode;
+}> = (props) => {
+  const { colorMode } = React.useContext(
+    ColorModeContext
+  ) as ColorModeContextType;
 
   const theme = React.useMemo(
     () =>
       createTheme({
         palette: {
-          mode,
+          mode: colorMode,
         },
       }),
-    [mode]
+    [colorMode]
   );
 
   return (
-    <ToastContext.Provider value={{ doToast }}>
-      <ColorModeContext.Provider value={colorMode}>
-        <DrawerContext.Provider value={{ doDrawer }}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <LinearProgressContextProvider>
-              <AppBar
-                position="fixed"
-                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              >
-                <Toolbar>
-                  {!drawer.open ? (
-                    <Avatar src={LinkaLogo} alt="linka!" />
-                  ) : (
-                    <IconButton edge="end" onClick={handleDrawerClose}>
-                      <KeyboardArrowLeftSharpIcon />
-                    </IconButton>
-                  )}
-                  <Box sx={{ flexGrow: 1 }}></Box>
-                  <Stack direction={'row'} spacing={2}>
-                    {getConfig().token && (
-                      <IconButton edge="end" onClick={handleAddBookmark}>
-                        <AddCircleSharpIcon />
-                      </IconButton>
-                    )}
-                    <IconButton edge="end" onClick={handleViewSettings}>
-                      <SettingsSharpIcon />
-                    </IconButton>
-                  </Stack>
-                </Toolbar>
-              </AppBar>
-              <Drawer anchor={'right'} open={drawer.open}>
-                <Box sx={{ width: '100vw' }} mt={'75px'} role="presentation">
-                  <Container fixed>{drawer.children}</Container>
-                </Box>
-              </Drawer>
-              <Snackbar
-                open={toast.open}
-                autoHideDuration={toast.timeout}
-                onClose={handleClose}
-              >
-                <Alert
-                  variant="filled"
-                  onClose={handleClose}
-                  severity={toast.type}
-                >
-                  <AlertTitle>{toast.title}</AlertTitle>
-                  {toast.description}
-                </Alert>
-              </Snackbar>
-              <Container fixed>
-                <Box mt={'75px'} mb={2}>
-                  {props.children}
-                  <Stack
-                    mb={2}
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Credits version={props.version} />
-                  </Stack>
-                </Box>
-              </Container>
-            </LinearProgressContextProvider>
-          </ThemeProvider>
-        </DrawerContext.Provider>
-      </ColorModeContext.Provider>
-    </ToastContext.Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <LinearProgressContextProvider>
+        <ToastContextProvider>
+          <DrawerContextProvider>
+            <InnerComponent version={props.version}>
+              {props.children}
+            </InnerComponent>
+          </DrawerContextProvider>
+        </ToastContextProvider>
+      </LinearProgressContextProvider>
+    </ThemeProvider>
   );
 };
 

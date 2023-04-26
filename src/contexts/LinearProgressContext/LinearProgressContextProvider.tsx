@@ -18,18 +18,20 @@ const LinearProgressContextProvider: FC<ContextProviderProps> = ({
 
   return (
     <LinearProgressContext.Provider value={{ doLoading, doLoadingToggle }}>
-      <Box
-        sx={{
-          width: '100%',
-          zIndex: (theme) => theme.zIndex.drawer + 2,
-          position: 'absolute',
-          top: 0,
-        }}
-      >
-        <Box sx={{ width: '100%' }}>
-          <LinearProgress />
+      {state && (
+        <Box
+          sx={{
+            width: '100%',
+            zIndex: (theme) => theme.zIndex.drawer + 2,
+            position: 'absolute',
+            top: 0,
+          }}
+        >
+          <Box sx={{ width: '100%' }}>
+            <LinearProgress />
+          </Box>
         </Box>
-      </Box>
+      )}
       {children}
     </LinearProgressContext.Provider>
   );

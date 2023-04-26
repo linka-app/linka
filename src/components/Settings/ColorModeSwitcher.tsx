@@ -1,4 +1,4 @@
-import { ColorModeContext } from '@/contexts/ColorModeContext';
+import { useContexts } from '@/hooks';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Box, Button, useTheme } from '@mui/material';
@@ -6,7 +6,7 @@ import * as React from 'react';
 
 export const ColorModeSwitcher: React.FC = () => {
   const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
+  const { toggleColorMode } = useContexts();
 
   return (
     <Box
@@ -27,7 +27,7 @@ export const ColorModeSwitcher: React.FC = () => {
             <Brightness4Icon />
           )
         }
-        onClick={colorMode.toggleColorMode}
+        onClick={toggleColorMode}
         color="inherit"
       >
         {theme.palette.mode} mode
