@@ -10,6 +10,7 @@ import {
   Button,
   IconButton,
   ListItem,
+  ListItemAvatar,
   ListItemButton,
   ListItemText,
   Stack,
@@ -21,6 +22,7 @@ import { FormContainer } from 'react-hook-form-mui';
 export const LinkaItem: React.FC<{
   item: BookmarkItem;
   key: string;
+  selected: boolean;
 }> = (props) => {
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,6 +161,9 @@ export const LinkaItem: React.FC<{
       }
     >
       <ListItemButton component="a" href={props.item.url} target="_blank" dense>
+        <ListItemAvatar>
+          {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
+        </ListItemAvatar>
         <ListItemText
           primary={props.item.title || shortenURL(props.item.url)}
           primaryTypographyProps={{

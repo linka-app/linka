@@ -17,6 +17,7 @@ import React, {
   ChangeEvent,
   KeyboardEvent,
   useEffect,
+  useReducer,
   useRef,
   useState,
 } from 'react';
@@ -37,17 +38,61 @@ const InnerComponent: React.FC = () => {
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
 
+  const initialState = { count: -1 };
+  function reducer(
+    state: { count: number },
+    action: { action: string; bookmarks?: any; results?: any }
+  ) {
+    switch (action.action) {
+      case 'increment':
+        return {
+          count:
+            state.count <= bookmarks.length - 1
+              ? state.count + 1
+              : bookmarks.length,
+        };
+      case 'decrement':
+        return { count: state.count >= -1 ? state.count - 1 : -1 };
+      case 'open':
+        console.log(action.results.length);
+        if (action.results.length > 0) {
+          console.log(action.bookmarks[Number(action.results[state.count])]);
+          window.open(
+            action.bookmarks[Number(action.results[state.count])].url
+          );
+        } else {
+          window.open(action.bookmarks[state.count].url);
+        }
+
+        return { count: state.count };
+      case 'reset':
+        return { count: -1 };
+      default:
+        throw new Error();
+    }
+  }
+
+  const [selectedBookmark, bookmarkDispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
   const { watch } = useFormContext();
   const bookmarksToShow = watch('bookmarksToShow', false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getTheBookmarks(bookmarksToShow);
   }, [bookmarksToShow]);
 
   useEffect(() => {
+    getTheBookmarks();
+  }, []);
+
+  useEffect(() => {
     // handle hotkeys
     const pressed = new Map<string, boolean>();
-    window.addEventListener('keydown', (e) => {
+
+    const handleKeydown = (e) => {
       pressed.set(e.key, true);
       if (!(pressed.has('Meta') || pressed.has('Control'))) {
         return;
@@ -61,12 +106,37 @@ const InnerComponent: React.FC = () => {
         (inputRef.current as HTMLInputElement).focus();
         return;
       }
-    });
-    window.addEventListener('keyup', (e) => {
+
+      // Select the bookmark to open
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        bookmarkDispatch({ action: 'increment' });
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        bookmarkDispatch({ action: 'decrement' });
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        bookmarkDispatch({
+          action: 'open',
+          bookmarks: bookmarks,
+          results: results,
+        });
+      }
+    };
+
+    const handleKeyup = (e) => {
       pressed.delete(e.key);
-    });
-    getTheBookmarks();
-  }, []);
+    };
+
+    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keyup', handleKeyup);
+    return () => {
+      window.removeEventListener('keyup', handleKeyup);
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  }, [bookmarks, results]);
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -95,14 +165,19 @@ const InnerComponent: React.FC = () => {
     } else {
       setResults(posResult);
     }
+    bookmarkDispatch({ action: 'reset' });
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      results.forEach((v) => {
-        window.open(bookmarks[Number(v.toString())].url);
-      });
-    }
+    // if (e.key === 'Enter') {
+    //   if (selectedBookmark.count <= 0) {
+    //     window.open(bookmarks[selectedBookmark.count].url);
+    //   } else {
+    //     results.forEach((v) => {
+    //       window.open(bookmarks[Number(v.toString())].url);
+    //     });
+    //   }
+    // }
   };
 
   return (
@@ -142,6 +217,7 @@ const InnerComponent: React.FC = () => {
           </Grid>
           <Grid xs={12}>
             <TextField
+              autoComplete="off"
               label={translation.mainSearch}
               variant="outlined"
               value={query}
@@ -170,14 +246,19 @@ const InnerComponent: React.FC = () => {
             <Slide direction="up" in={!loading}>
               <List sx={{ width: '100%' }}>
                 {results.length > 0
-                  ? results.map((val) => (
+                  ? results.map((val, index) => (
                       <LinkaItem
                         item={bookmarks[Number(val.toString())]}
                         key={bookmarks[Number(val.toString())].url + val}
+                        selected={index === selectedBookmark.count}
                       />
                     ))
-                  : bookmarks.map((val) => (
-                      <LinkaItem item={val} key={val.url + val.id} />
+                  : bookmarks.map((val, index) => (
+                      <LinkaItem
+                        item={val}
+                        key={val.url + val.id}
+                        selected={index === selectedBookmark.count}
+                      />
                     ))}
               </List>
             </Slide>
