@@ -1,5 +1,7 @@
 import { LinkaItem } from '@/components/LinkaItem/LinkaItem';
 import { useBookmarks } from '@/hooks/useBookmarks';
+import { I18nLocals, i18n } from '@/i18n';
+import { getConfig } from '@/utils';
 import {
   Box,
   Chip,
@@ -25,6 +27,8 @@ import {
 } from 'react-hook-form-mui';
 
 const InnerComponent: React.FC = () => {
+  const config = getConfig();
+  const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
 
   const inputRef = useRef(null);
@@ -123,22 +127,22 @@ const InnerComponent: React.FC = () => {
               options={[
                 {
                   id: '',
-                  label: 'Only Mine',
+                  label: translation.mainBookMarksToShowMine,
                 },
                 {
                   id: 'shared',
-                  label: 'Include Shared',
+                  label: translation.mainBookMarksToShowIncludeShared,
                 },
                 {
                   id: 'archived',
-                  label: 'Archived',
+                  label: translation.mainBookMarksToShowArchived,
                 },
               ]}
             />
           </Grid>
           <Grid xs={12}>
             <TextField
-              label="Search"
+              label={translation.mainSearch}
               variant="outlined"
               value={query}
               onChange={onQueryUpdate}
@@ -148,15 +152,12 @@ const InnerComponent: React.FC = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Tooltip
-                      arrow
-                      title="type `Enter` to open hits in new tabs. keywords with `!` prefix to exclude"
-                    >
+                    <Tooltip arrow title={translation.mainSearchAdornment}>
                       <Chip
                         label={
                           results.length > 0
-                            ? `${results.length} hits`
-                            : `${bookmarks.length} total`
+                            ? `${results.length} ${translation.mainSearchAdornmentHits}`
+                            : `${bookmarks.length} ${translation.mainSearchAdornmentTotal}`
                         }
                       />
                     </Tooltip>
