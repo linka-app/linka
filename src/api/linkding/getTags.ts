@@ -5,7 +5,7 @@ export async function getTags() {
   if (config.token && config.url) {
     const endpoint = `${config.url}/api/tags/`;
     let url = new URL(endpoint);
-
+    url.searchParams.append('limit', '10000');
     const res = await fetch(url, {
       headers: {
         Authorization: `Token ${config.token}`,

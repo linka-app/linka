@@ -18,8 +18,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {
+  FormContainer,
+  ToggleButtonGroupElement,
+  useFormContext,
+} from 'react-hook-form-mui';
 
-export const Main: React.FC = () => {
+const InnerComponent: React.FC = () => {
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
 
   const inputRef = useRef(null);
@@ -27,6 +32,13 @@ export const Main: React.FC = () => {
 
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
+
+  const { watch } = useFormContext();
+  const bookmarksToShow = watch('bookmarksToShow', false);
+
+  React.useEffect(() => {
+    getTheBookmarks(bookmarksToShow);
+  }, [bookmarksToShow]);
 
   useEffect(() => {
     // handle hotkeys
@@ -93,6 +105,37 @@ export const Main: React.FC = () => {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
+          <Grid
+            xs={12}
+            sx={{
+              '.MuiFormControl-root': {
+                width: '100%',
+              },
+            }}
+          >
+            <ToggleButtonGroupElement
+              exclusive
+              fullWidth
+              enforceAtLeastOneSelected
+              size="small"
+              sx={{ width: '100%' }}
+              name="bookmarksToShow"
+              options={[
+                {
+                  id: '',
+                  label: 'Only Mine',
+                },
+                {
+                  id: 'shared',
+                  label: 'Include Shared',
+                },
+                {
+                  id: 'archived',
+                  label: 'Archived',
+                },
+              ]}
+            />
+          </Grid>
           <Grid xs={12}>
             <TextField
               label="Search"
@@ -140,6 +183,16 @@ export const Main: React.FC = () => {
           </Grid>
         </Grid>
       </Box>
+    </>
+  );
+};
+
+export const Main: React.FC = () => {
+  return (
+    <>
+      <FormContainer defaultValues={{ bookmarksToShow: '' }}>
+        <InnerComponent />
+      </FormContainer>
     </>
   );
 };

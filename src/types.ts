@@ -43,6 +43,8 @@ export type queryBookmarkArgs = {
   offset?: number;
 };
 
+export type queryBookmarkToShow = '' | 'shared/' | 'archived/';
+
 export type doArgs = {
   id: number;
 };

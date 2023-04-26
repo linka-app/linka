@@ -1,10 +1,13 @@
-import { queryBookmarkArgs } from '@/types';
+import { queryBookmarkArgs, queryBookmarkToShow } from '@/types';
 import { getConfig } from '@/utils/getConfig/getConfig';
 
-export async function getBookmarks(args: queryBookmarkArgs) {
+export async function getBookmarks(
+  args: queryBookmarkArgs,
+  bookmarksToShow: queryBookmarkToShow = ''
+) {
   const config = getConfig();
   if (config.token && config.url) {
-    const endpoint = `${config.url}/api/bookmarks`;
+    const endpoint = `${config.url}/api/bookmarks/${bookmarksToShow}`;
     let url = new URL(endpoint);
     Object.entries(args).forEach(([k, v], idx) => {
       if (k === 'token' || k === 'url') {
