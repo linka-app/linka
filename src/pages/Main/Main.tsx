@@ -47,16 +47,14 @@ const InnerComponent: React.FC = () => {
       case 'increment':
         return {
           count:
-            state.count <= bookmarks.length - 1
+            state.count <= action.bookmarks.length - 1
               ? state.count + 1
               : bookmarks.length,
         };
       case 'decrement':
         return { count: state.count >= -1 ? state.count - 1 : -1 };
       case 'open':
-        console.log(action.results.length);
         if (action.results.length > 0) {
-          console.log(action.bookmarks[Number(action.results[state.count])]);
           window.open(
             action.bookmarks[Number(action.results[state.count])].url
           );
@@ -110,11 +108,19 @@ const InnerComponent: React.FC = () => {
       // Select the bookmark to open
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        bookmarkDispatch({ action: 'increment' });
+        bookmarkDispatch({
+          action: 'increment',
+          bookmarks: bookmarks,
+          results: results,
+        });
       }
       if (e.key === 'ArrowUp') {
         e.preventDefault();
-        bookmarkDispatch({ action: 'decrement' });
+        bookmarkDispatch({
+          action: 'decrement',
+          bookmarks: bookmarks,
+          results: results,
+        });
       }
       if (e.key === 'Enter') {
         e.preventDefault();
