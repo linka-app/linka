@@ -31,6 +31,10 @@ export interface Props {
   version: string;
 }
 
+export interface ContextProviderProps {
+  children?: React.ReactNode;
+}
+
 export type queryBookmarkArgs = {
   q?: string;
   limit?: number;

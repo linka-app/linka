@@ -3,6 +3,7 @@ import { Credits } from '@/components/Credits';
 import { Settings } from '@/components/Settings';
 import { ColorModeContext } from '@/contexts/ColorModeContext';
 import { DrawerContext, IDrawer } from '@/contexts/DrawerContext';
+import LinearProgressContextProvider from '@/contexts/LinearProgressContext/LinearProgressContextProvider';
 import { IToast, ToastContext } from '@/contexts/ToastContext';
 import LinkaLogo from '@/images/logo.svg';
 import { getConfig } from '@/utils/getConfig';
@@ -108,63 +109,65 @@ export const Linka: React.FC<{
         <DrawerContext.Provider value={{ doDrawer }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AppBar
-              position="fixed"
-              sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            >
-              <Toolbar>
-                {!drawer.open ? (
-                  <Avatar src={LinkaLogo} alt="linka!" />
-                ) : (
-                  <IconButton edge="end" onClick={handleDrawerClose}>
-                    <KeyboardArrowLeftSharpIcon />
-                  </IconButton>
-                )}
-                <Box sx={{ flexGrow: 1 }}></Box>
-                <Stack direction={'row'} spacing={2}>
-                  {getConfig().token && (
-                    <IconButton edge="end" onClick={handleAddBookmark}>
-                      <AddCircleSharpIcon />
+            <LinearProgressContextProvider>
+              <AppBar
+                position="fixed"
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              >
+                <Toolbar>
+                  {!drawer.open ? (
+                    <Avatar src={LinkaLogo} alt="linka!" />
+                  ) : (
+                    <IconButton edge="end" onClick={handleDrawerClose}>
+                      <KeyboardArrowLeftSharpIcon />
                     </IconButton>
                   )}
-                  <IconButton edge="end" onClick={handleViewSettings}>
-                    <SettingsSharpIcon />
-                  </IconButton>
-                </Stack>
-              </Toolbar>
-            </AppBar>
-            <Drawer anchor={'right'} open={drawer.open}>
-              <Box sx={{ width: '100vw' }} mt={'75px'} role="presentation">
-                <Container fixed>{drawer.children}</Container>
-              </Box>
-            </Drawer>
-            <Snackbar
-              open={toast.open}
-              autoHideDuration={toast.timeout}
-              onClose={handleClose}
-            >
-              <Alert
-                variant="filled"
+                  <Box sx={{ flexGrow: 1 }}></Box>
+                  <Stack direction={'row'} spacing={2}>
+                    {getConfig().token && (
+                      <IconButton edge="end" onClick={handleAddBookmark}>
+                        <AddCircleSharpIcon />
+                      </IconButton>
+                    )}
+                    <IconButton edge="end" onClick={handleViewSettings}>
+                      <SettingsSharpIcon />
+                    </IconButton>
+                  </Stack>
+                </Toolbar>
+              </AppBar>
+              <Drawer anchor={'right'} open={drawer.open}>
+                <Box sx={{ width: '100vw' }} mt={'75px'} role="presentation">
+                  <Container fixed>{drawer.children}</Container>
+                </Box>
+              </Drawer>
+              <Snackbar
+                open={toast.open}
+                autoHideDuration={toast.timeout}
                 onClose={handleClose}
-                severity={toast.type}
               >
-                <AlertTitle>{toast.title}</AlertTitle>
-                {toast.description}
-              </Alert>
-            </Snackbar>
-            <Container fixed>
-              <Box mt={'75px'} mb={2}>
-                {props.children}
-                <Stack
-                  mb={2}
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="center"
+                <Alert
+                  variant="filled"
+                  onClose={handleClose}
+                  severity={toast.type}
                 >
-                  <Credits version={props.version} />
-                </Stack>
-              </Box>
-            </Container>
+                  <AlertTitle>{toast.title}</AlertTitle>
+                  {toast.description}
+                </Alert>
+              </Snackbar>
+              <Container fixed>
+                <Box mt={'75px'} mb={2}>
+                  {props.children}
+                  <Stack
+                    mb={2}
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Credits version={props.version} />
+                  </Stack>
+                </Box>
+              </Container>
+            </LinearProgressContextProvider>
           </ThemeProvider>
         </DrawerContext.Provider>
       </ColorModeContext.Provider>

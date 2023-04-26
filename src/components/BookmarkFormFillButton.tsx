@@ -1,6 +1,6 @@
 import { browserlessDoScrape } from '@/api/browserless';
 import { doDescArticle } from '@/api/openai';
-import { ToastContext } from '@/contexts/ToastContext';
+import { useContexts } from '@/hooks';
 import { getConfig } from '@/utils/getConfig';
 import PsychologySharpIcon from '@mui/icons-material/PsychologySharp';
 import { LoadingButton } from '@mui/lab';
@@ -11,7 +11,7 @@ import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-f
 export const BookmarkFormFillButton: React.FC = () => {
   const { watch, setValue } = useFormContext();
   const theUrl = watch('url', false);
-  const { doToast } = React.useContext(ToastContext);
+  const { doToast } = useContexts();
   const [loading, setLoading] = useState<boolean>(false);
 
   const config = getConfig();

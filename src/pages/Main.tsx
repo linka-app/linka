@@ -1,6 +1,5 @@
-import { getBookmarks } from '@/api';
 import { LinkaItem } from '@/components/LinkaItem';
-import { BookmarkItem, Res } from '@/types';
+import { useBookmarks } from '@/hooks/useBookmarks';
 import {
   Box,
   Chip,
@@ -8,10 +7,11 @@ import {
   InputAdornment,
   LinearProgress,
   List,
+  Slide,
   TextField,
   Tooltip,
 } from '@mui/material';
-import { Index, IndexSearchResult } from 'flexsearch';
+import { IndexSearchResult } from 'flexsearch';
 import React, {
   ChangeEvent,
   KeyboardEvent,
@@ -21,46 +21,13 @@ import React, {
 } from 'react';
 
 export const Main: React.FC = () => {
+  const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
+
   const inputRef = useRef(null);
-
-  const defaultBookmarks: BookmarkItem[] = [];
-  const [bookmarks, setBookmarks] = useState(defaultBookmarks);
-  const [index, setIndex] = useState(new Index({ tokenize: 'full' }));
   const [query, setQuery] = useState('');
-
-  const [loading, isLoading] = useState(false);
 
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
-
-  const getTheBookmarks = async () => {
-    isLoading(true);
-    getBookmarks({})
-      .then((res: Res) => {
-        setBookmarks(res.results);
-        res.results.forEach((v, idx) => {
-          setIndex(
-            index.add(
-              idx,
-              [
-                v.title,
-                v.description,
-                v.website_title,
-                v.website_description,
-                v.url,
-                v.tag_names.join(' '),
-              ].join(' ')
-            )
-          );
-        });
-
-        isLoading(false);
-      })
-      .catch((reason) => {
-        console.log('reason: ', reason);
-        isLoading(false);
-      });
-  };
 
   useEffect(() => {
     // handle hotkeys
@@ -84,7 +51,7 @@ export const Main: React.FC = () => {
       pressed.delete(e.key);
     });
     getTheBookmarks();
-  }, [index]);
+  }, []);
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -113,10 +80,6 @@ export const Main: React.FC = () => {
     } else {
       setResults(posResult);
     }
-  };
-
-  const onItemUpdate = () => {
-    getTheBookmarks();
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -165,24 +128,21 @@ export const Main: React.FC = () => {
               <Box sx={{ width: '100%' }}>
                 <LinearProgress />
               </Box>
-            )}
-            <List sx={{ width: '100%' }}>
-              {results.length > 0
-                ? results.map((val) => (
-                    <LinkaItem
-                      item={bookmarks[Number(val.toString())]}
-                      key={bookmarks[Number(val.toString())].url + val}
-                      onItemUpdate={onItemUpdate}
-                    />
-                  ))
-                : bookmarks.map((val) => (
-                    <LinkaItem
-                      item={val}
-                      key={val.url + val.id}
-                      onItemUpdate={onItemUpdate}
-                    />
-                  ))}
-            </List>
+            )}{' '}
+            <Slide direction="up" in={!loading}>
+              <List sx={{ width: '100%' }}>
+                {results.length > 0
+                  ? results.map((val) => (
+                      <LinkaItem
+                        item={bookmarks[Number(val.toString())]}
+                        key={bookmarks[Number(val.toString())].url + val}
+                      />
+                    ))
+                  : bookmarks.map((val) => (
+                      <LinkaItem item={val} key={val.url + val.id} />
+                    ))}
+              </List>
+            </Slide>
           </Grid>
         </Grid>
       </Box>

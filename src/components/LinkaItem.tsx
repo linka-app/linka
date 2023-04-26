@@ -1,8 +1,8 @@
 import { doDelete, doUpdate, getBookmark } from '@/api/index';
 import { BookmarkForm } from '@/components/BookmarkForm';
 import { LoadingIcon } from '@/components/LoadingIcon';
-import { DrawerContext } from '@/contexts/DrawerContext';
-import { ToastContext } from '@/contexts/ToastContext';
+import { useBookmarks } from '@/hooks/useBookmarks';
+import { useContexts } from '@/hooks/useContexts';
 import { BookmarkItem } from '@/types';
 import { shortenURL } from '@/utils/url';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
@@ -21,12 +21,11 @@ import { FormContainer } from 'react-hook-form-mui';
 export const LinkaItem: React.FC<{
   item: BookmarkItem;
   key: string;
-  onItemUpdate: () => void;
 }> = (props) => {
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { doToast } = React.useContext(ToastContext);
-  const { doDrawer } = React.useContext(DrawerContext);
+  const { doToast, doDrawer } = useContexts();
+  const { getTheBookmarks } = useBookmarks();
 
   const getDrawerData = async () => {
     if (props.item.id != null) {
@@ -45,7 +44,7 @@ export const LinkaItem: React.FC<{
               children: <></>,
             });
 
-            props.onItemUpdate();
+            getTheBookmarks();
           })
           .catch((reason) => {
             doToast({
@@ -94,7 +93,7 @@ export const LinkaItem: React.FC<{
                         children: <></>,
                       });
 
-                      props.onItemUpdate();
+                      getTheBookmarks();
                     })
                     .catch((reason) => {
                       doToast({

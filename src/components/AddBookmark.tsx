@@ -1,7 +1,6 @@
 import { doCreate } from '@/api/doCreate';
 import { BookmarkForm } from '@/components/BookmarkForm';
-import { DrawerContext } from '@/contexts/DrawerContext';
-import { ToastContext } from '@/contexts/ToastContext';
+import { useContexts } from '@/hooks';
 import { BookmarkItem } from '@/types';
 import { Stack } from '@mui/material';
 import React, { useState } from 'react';
@@ -10,8 +9,8 @@ import { FormContainer } from 'react-hook-form-mui';
 export const AddBookmark: React.FC<{
   onItemUpdate: () => void;
 }> = (props) => {
-  const { doToast } = React.useContext(ToastContext);
-  const { doDrawer } = React.useContext(DrawerContext);
+  const { doDrawer, doToast } = useContexts();
+
   const [isLoading, setIsLoading] = useState(false);
 
   return (
