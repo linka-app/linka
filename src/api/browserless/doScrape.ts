@@ -33,24 +33,24 @@ export async function doScrape(args: { url: string }) {
             text?: string;
             attributes?: { name: string; value: string };
           }) => {
-            if (result.attributes) {
-              _.forEach(
-                result.attributes,
-                (attribute: { name: string; value: string }) => {
-                  if (attribute.name === 'content') {
-                    const text = attribute.value.replace(/(^[ \t]*\n)/gm, '');
-                    if (text.length > 0) {
-                      theReturn.push(text);
+            if (result.text) {
+              const text = result.text.trim().replace(/(^[ \t]*\n)/gm, '');
+              if (text.length > 0) {
+                theReturn.push(text);
+              }
+            } else {
+              if (result.attributes) {
+                _.forEach(
+                  result.attributes,
+                  (attribute: { name: string; value: string }) => {
+                    if (attribute.name === 'content') {
+                      const text = attribute.value.replace(/(^[ \t]*\n)/gm, '');
+                      if (text.length > 0) {
+                        theReturn.push(text);
+                      }
                     }
                   }
-                }
-              );
-            } else {
-              if (result.text) {
-                const text = result.text.trim().replace(/(^[ \t]*\n)/gm, '');
-                if (text.length > 0) {
-                  theReturn.push(text);
-                }
+                );
               }
             }
           }
