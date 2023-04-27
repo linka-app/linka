@@ -1,4 +1,5 @@
 import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
+import { useContexts } from '@/hooks';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { I18nLocals, i18n } from '@/i18n';
 import { getConfig } from '@/utils';
@@ -12,6 +13,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { IndexSearchResult } from 'flexsearch';
+import _ from 'lodash';
 import React, {
   ChangeEvent,
   KeyboardEvent,
@@ -34,6 +36,7 @@ const InnerComponent: React.FC = () => {
   const config = getConfig();
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
+  const { getDrawerState } = useContexts();
 
   const inputRef = useRef(null);
   const [query, setQuery] = useState('');
@@ -57,11 +60,18 @@ const InnerComponent: React.FC = () => {
       case 'decrement':
         return { count: state.count >= -1 ? state.count - 1 : -1 };
       case 'open':
-        if (action.results.length > 0) {
+        if (
+          state.count > -1 &&
+          _.get(
+            action,
+            `bookmarks.${Number(action.results[state.count])}.url`,
+            null
+          )
+        ) {
           window.open(
             action.bookmarks[Number(action.results[state.count])].url
           );
-        } else {
+        } else if (_.get(action, `bookmarks.${state.count}.url`, null)) {
           window.open(action.bookmarks[state.count].url);
         }
 
@@ -128,6 +138,7 @@ const InnerComponent: React.FC = () => {
           results: results,
         });
       }
+
       if (e.key === 'Enter') {
         e.preventDefault();
         bookmarkDispatch({
@@ -182,7 +193,7 @@ const InnerComponent: React.FC = () => {
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !getDrawerState()) {
       if (selectedBookmark.count === -1) {
         results.forEach((v) => {
           window.open(bookmarks[Number(v.toString())].url);
@@ -267,30 +278,32 @@ const InnerComponent: React.FC = () => {
             <List sx={{ width: '100%' }}>
               {bookmarks.length > 0 && results.length > 0
                 ? results.map((val, index) => (
-                    <div key={bookmarks[Number(val.toString())].url + val}>
-                      <Suspense fallback={<LinkaItemSkeleton />}>
-                        <LinkaItem
-                          item={bookmarks[Number(val.toString())]}
-                          key={
-                            bookmarks[Number(val.toString())].url +
-                            val +
-                            'inner'
-                          }
-                          selected={index === selectedBookmark.count}
-                        />
-                      </Suspense>
-                    </div>
+                    <Suspense
+                      fallback={<LinkaItemSkeleton />}
+                      key={
+                        bookmarks[Number(val.toString())].url +
+                        index +
+                        'Suspense'
+                      }
+                    >
+                      <LinkaItem
+                        item={bookmarks[Number(val.toString())]}
+                        key={bookmarks[Number(val.toString())].url + index}
+                        selected={index === selectedBookmark.count}
+                      />
+                    </Suspense>
                   ))
                 : bookmarks.map((val, index) => (
-                    <div key={val.url + val.id}>
-                      <Suspense fallback={<LinkaItemSkeleton />}>
-                        <LinkaItem
-                          item={val}
-                          key={val.url + val.id + 'inner'}
-                          selected={index === selectedBookmark.count}
-                        />
-                      </Suspense>
-                    </div>
+                    <Suspense
+                      fallback={<LinkaItemSkeleton />}
+                      key={val.url + val.id + 'Suspense'}
+                    >
+                      <LinkaItem
+                        item={val}
+                        key={val.url + val.id}
+                        selected={index === selectedBookmark.count}
+                      />
+                    </Suspense>
                   ))}
             </List>
           </Grid>

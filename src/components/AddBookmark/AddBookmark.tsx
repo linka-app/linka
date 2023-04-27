@@ -1,15 +1,14 @@
 import { doCreate } from '@/api/linkding/doCreate';
 import { BookmarkForm } from '@/components/BookmarkForm';
-import { useContexts } from '@/hooks';
+import { useBookmarks, useContexts } from '@/hooks';
 import { BookmarkItem } from '@/types';
 import { Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { FormContainer } from 'react-hook-form-mui';
 
-export const AddBookmark: React.FC<{
-  onItemUpdate: () => void;
-}> = (props) => {
+export const AddBookmark: React.FC = () => {
   const { doDrawer, doToast } = useContexts();
+  const { getTheBookmarks } = useBookmarks();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +39,7 @@ export const AddBookmark: React.FC<{
                 children: <></>,
               });
 
-              props.onItemUpdate();
+              getTheBookmarks();
             })
             .catch((reason) => {
               doToast({

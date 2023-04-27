@@ -8,10 +8,11 @@ import {
 import { DrawerContextProvider } from '@/contexts/DrawerContext';
 import LinearProgressContextProvider from '@/contexts/LinearProgressContext/LinearProgressContextProvider';
 import ToastContextProvider from '@/contexts/ToastContext/ToastContextProvider';
-import { useContexts } from '@/hooks';
+import { useBookmarks, useContexts } from '@/hooks';
 import LinkaLogo from '@/images/logo192.png';
 import { getConfig } from '@/utils/getConfig/getConfig';
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
+import CachedSharpIcon from '@mui/icons-material/CachedSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import {
@@ -35,6 +36,7 @@ export const InnerComponent: React.FC<{
   version: string;
   children: ReactNode;
 }> = (props) => {
+  const { loading, getTheBookmarks } = useBookmarks();
   const { doDrawer, doDrawerClose, getDrawerState } = useContexts();
 
   const handleAddBookmark = () => {
@@ -42,7 +44,7 @@ export const InnerComponent: React.FC<{
       open: true,
       children: (
         <Suspense fallback={<AddBookmarkSkeleton />}>
-          <AddBookmark onItemUpdate={doDrawerClose} />
+          <AddBookmark />
         </Suspense>
       ),
     });
@@ -78,6 +80,16 @@ export const InnerComponent: React.FC<{
             {getConfig().token && (
               <IconButton edge="end" onClick={handleAddBookmark}>
                 <AddCircleSharpIcon />
+              </IconButton>
+            )}
+            {getConfig().token && (
+              <IconButton
+                edge="end"
+                onClick={() => {
+                  getTheBookmarks();
+                }}
+              >
+                <CachedSharpIcon />
               </IconButton>
             )}
             <IconButton edge="end" onClick={handleViewSettings}>
