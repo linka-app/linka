@@ -9,7 +9,7 @@ import { DrawerContextProvider } from '@/contexts/DrawerContext';
 import LinearProgressContextProvider from '@/contexts/LinearProgressContext/LinearProgressContextProvider';
 import ToastContextProvider from '@/contexts/ToastContext/ToastContextProvider';
 import { useContexts } from '@/hooks';
-import LinkaLogo from '@/images/logo.svg';
+import LinkaLogo from '@/images/logo192.png';
 import { getConfig } from '@/utils/getConfig/getConfig';
 import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
 import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';

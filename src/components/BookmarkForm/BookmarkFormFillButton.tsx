@@ -11,14 +11,14 @@ import { useFormContext } from 'react-hook-form-mui'; // instead of react-hook-f
 export const BookmarkFormFillButton: React.FC = () => {
   const { watch, setValue } = useFormContext();
   const theUrl = watch('url', false);
-  const { doToast } = useContexts();
+  const { doToast, doLoading } = useContexts();
   const [loading, setLoading] = useState<boolean>(false);
 
   const config = getConfig();
 
   const doFill = () => {
-    console.log(theUrl);
     setLoading(true);
+    doLoading(true);
     if (theUrl != null) {
       browserlessDoScrape({ url: theUrl }).then((res: string) => {
         if (res.length > 0) {
@@ -33,6 +33,7 @@ export const BookmarkFormFillButton: React.FC = () => {
                 })
               );
               setLoading(false);
+              doLoading(false);
             })
             .catch((err: any) => {
               console.log(err);
@@ -42,6 +43,7 @@ export const BookmarkFormFillButton: React.FC = () => {
                 title: 'Failed',
               });
               setLoading(false);
+              doLoading(false);
             });
         }
       });
@@ -52,6 +54,7 @@ export const BookmarkFormFillButton: React.FC = () => {
         title: 'A URL is required.',
       });
       setLoading(false);
+      doLoading(false);
     }
   };
 

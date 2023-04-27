@@ -15,6 +15,7 @@ import {
   ListItemText,
   Stack,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { FormContainer } from 'react-hook-form-mui';
@@ -28,6 +29,7 @@ export const LinkaItem: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const { doToast, doDrawer } = useContexts();
   const { getTheBookmarks } = useBookmarks();
+  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   const getDrawerData = async () => {
     if (props.item.id != null) {
@@ -161,9 +163,11 @@ export const LinkaItem: React.FC<{
       }
     >
       <ListItemButton component="a" href={props.item.url} target="_blank" dense>
-        <ListItemAvatar>
-          {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
-        </ListItemAvatar>
+        {isDesktop && (
+          <ListItemAvatar>
+            {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
+          </ListItemAvatar>
+        )}
         <ListItemText
           primary={props.item.title || shortenURL(props.item.url)}
           primaryTypographyProps={{
