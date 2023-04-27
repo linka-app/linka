@@ -61,7 +61,7 @@ oc`,
           {
             role: ChatCompletionRequestMessageRoleEnum.Assistant,
             content: JSON.stringify({
-              title: translation.promptTags,
+              title: translation.promptTitle,
               desc: translation.promptDesc,
               tags: translation.promptTags,
             }),
