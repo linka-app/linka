@@ -1,15 +1,28 @@
 import { useContexts } from '@/hooks';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { Box, Button, useTheme } from '@mui/material';
+import ImageIcon from '@mui/icons-material/Image';
+import HideImageIcon from '@mui/icons-material/HideImage';
+import { Stack, Button, useTheme } from '@mui/material';
 import * as React from 'react';
+import { setConfig } from '@/utils/setConfig/setConfig';
+import { getConfig } from '@/utils/getConfig/getConfig';
 
-export const ColorModeSwitcher: React.FC = () => {
+export const PreferenceSwitcher: React.FC = () => {
+  const { showBookmarkAvatar } = getConfig();
   const theme = useTheme();
   const { toggleColorMode } = useContexts();
+  const [show, setShow] = React.useState(showBookmarkAvatar);
+
+  const toggleShowAvatar = React.useCallback(() => {
+    setShow((prev) => {
+      setConfig({ showBookmarkAvatar: !prev });
+      return !prev;
+    });
+  }, []);
 
   return (
-    <Box
+    <Stack
       sx={{
         display: 'flex',
         width: '100%',
@@ -17,6 +30,8 @@ export const ColorModeSwitcher: React.FC = () => {
         justifyContent: 'center',
         color: 'text.primary',
       }}
+      direction={'row'}
+      spacing={2}
     >
       <Button
         variant="outlined"
@@ -32,8 +47,16 @@ export const ColorModeSwitcher: React.FC = () => {
       >
         {theme.palette.mode} mode
       </Button>
-    </Box>
+      <Button
+        variant="outlined"
+        endIcon={show ? <ImageIcon /> : <HideImageIcon />}
+        onClick={toggleShowAvatar}
+        color="inherit"
+      >
+        bookmark favicon
+      </Button>
+    </Stack>
   );
 };
 
-export default ColorModeSwitcher;
+export default PreferenceSwitcher;

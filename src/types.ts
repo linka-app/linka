@@ -57,6 +57,7 @@ export type bookmarkArgs = {
 export interface LinkaSettings {
   language: string | null;
   theme: PaletteMode | null;
+  showBookmarkAvatar: boolean;
   token: string | null;
   url: string | null;
   openaiToken?: string | null;

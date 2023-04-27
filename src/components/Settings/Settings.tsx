@@ -1,6 +1,6 @@
 import { Divider, Stack } from '@mui/material';
 import * as React from 'react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { PreferenceSwitcher } from './ColorModeSwitcher';
 import { SettingsForm } from './SettingsForm';
 
 export const Settings: React.FC = () => {
@@ -10,7 +10,7 @@ export const Settings: React.FC = () => {
       spacing={2}
       divider={<Divider orientation="horizontal" flexItem />}
     >
-      <ColorModeSwitcher />
+      <PreferenceSwitcher />
       <SettingsForm />
     </Stack>
   );
