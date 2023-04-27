@@ -1,4 +1,4 @@
-import { LinkaItem } from '@/components/LinkaItem/LinkaItem';
+import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { I18nLocals, i18n } from '@/i18n';
 import { getConfig } from '@/utils';
@@ -8,7 +8,6 @@ import {
   Unstable_Grid2 as Grid,
   InputAdornment,
   List,
-  Slide,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -16,6 +15,8 @@ import { IndexSearchResult } from 'flexsearch';
 import React, {
   ChangeEvent,
   KeyboardEvent,
+  Suspense,
+  lazy,
   useEffect,
   useReducer,
   useRef,
@@ -26,6 +27,8 @@ import {
   ToggleButtonGroupElement,
   useFormContext,
 } from 'react-hook-form-mui';
+
+const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
 const InnerComponent: React.FC = () => {
   const config = getConfig();
@@ -249,25 +252,37 @@ const InnerComponent: React.FC = () => {
             />
           </Grid>
           <Grid xs={12}>
-            <Slide direction="up" in={!loading}>
+            {loading && (
               <List sx={{ width: '100%' }}>
-                {results.length > 0
-                  ? results.map((val, index) => (
+                <LinkaItemSkeleton />
+                <LinkaItemSkeleton />
+                <LinkaItemSkeleton />
+                <LinkaItemSkeleton />
+                <LinkaItemSkeleton />
+                <LinkaItemSkeleton />
+              </List>
+            )}
+            <List sx={{ width: '100%' }}>
+              {results.length > 0
+                ? results.map((val, index) => (
+                    <Suspense fallback={<LinkaItemSkeleton />}>
                       <LinkaItem
                         item={bookmarks[Number(val.toString())]}
                         key={bookmarks[Number(val.toString())].url + val}
                         selected={index === selectedBookmark.count}
                       />
-                    ))
-                  : bookmarks.map((val, index) => (
+                    </Suspense>
+                  ))
+                : bookmarks.map((val, index) => (
+                    <Suspense fallback={<LinkaItemSkeleton />}>
                       <LinkaItem
                         item={val}
                         key={val.url + val.id}
                         selected={index === selectedBookmark.count}
                       />
-                    ))}
-              </List>
-            </Slide>
+                    </Suspense>
+                  ))}
+            </List>
           </Grid>
         </Grid>
       </Box>
