@@ -36,6 +36,8 @@ Following configs are for testing:
 ### Hotkeys
 
 - `cmd+l` or `ctrl+l` to focus on the search box
+- `cmd+Down Arrow` or `ctrl+Down Arrow` / `cmd+Down Arrow` or `ctrl+Down Arrow` to navigate the results
+- `cmd+Enter` or `ctrl+Enter` with an item selected to open it as a new tab or open all bookmarks when no item is selected
 
 ## Development Guid
 

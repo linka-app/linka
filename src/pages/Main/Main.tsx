@@ -149,6 +149,7 @@ const InnerComponent: React.FC = () => {
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
+    bookmarkDispatch({ action: 'reset' });
 
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
@@ -178,15 +179,13 @@ const InnerComponent: React.FC = () => {
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
-    // if (e.key === 'Enter') {
-    //   if (selectedBookmark.count <= 0) {
-    //     window.open(bookmarks[selectedBookmark.count].url);
-    //   } else {
-    //     results.forEach((v) => {
-    //       window.open(bookmarks[Number(v.toString())].url);
-    //     });
-    //   }
-    // }
+    if (e.key === 'Enter') {
+      if (selectedBookmark.count === -1) {
+        results.forEach((v) => {
+          window.open(bookmarks[Number(v.toString())].url);
+        });
+      }
+    }
   };
 
   return (
