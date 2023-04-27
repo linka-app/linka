@@ -29,6 +29,7 @@ export const LinkaItem: React.FC<{
 }> = (props) => {
   const config = getConfig();
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
+  const { showBookmarkAvatar } = config;
 
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -175,7 +176,7 @@ export const LinkaItem: React.FC<{
       }
     >
       <ListItemButton component="a" href={props.item.url} target="_blank" dense>
-        {isDesktop && (
+        {isDesktop && showBookmarkAvatar && (
           <ListItemAvatar>
             {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
           </ListItemAvatar>
