@@ -14,5 +14,8 @@
   "mainSearchAdornmentTotal": "全部",
   "linkaItemDelete": "删除",
   "linkaItemOops": "Oops",
-  "linkaItemNotYourBookmark": "你无权编辑他人共享的书签"
+  "linkaItemNotYourBookmark": "你无权编辑他人共享的书签",
+  "bookmarkFormFillButton": "Fill with Chat GPT",
+  "bookmarkFormFillButtonURLRequired": "A URL is required",
+  "bookmarkFormFillButtonFillWithChatGPT": "Fill with Chat GPT"
 }
