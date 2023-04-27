@@ -1,6 +1,6 @@
-import { AddBookmark } from '@/components/AddBookmark/AddBookmark';
+import { AddBookmarkSkeleton } from '@/components/AddBookmark';
 import { Credits } from '@/components/Credits';
-import { Settings } from '@/components/Settings';
+import { SettingsSkeleton } from '@/components/Settings';
 import {
   ColorModeContext,
   ColorModeContextType,
@@ -26,7 +26,10 @@ import {
   Toolbar,
   createTheme,
 } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Suspense, lazy } from 'react';
+
+const AddBookmark = lazy(() => import('@/components/AddBookmark/AddBookmark'));
+const Settings = lazy(() => import('@/components/Settings/Settings'));
 
 export const InnerComponent: React.FC<{
   version: string;
@@ -37,14 +40,22 @@ export const InnerComponent: React.FC<{
   const handleAddBookmark = () => {
     doDrawer({
       open: true,
-      children: <AddBookmark onItemUpdate={doDrawerClose} />,
+      children: (
+        <Suspense fallback={<AddBookmarkSkeleton />}>
+          <AddBookmark onItemUpdate={doDrawerClose} />
+        </Suspense>
+      ),
     });
   };
 
   const handleViewSettings = () => {
     doDrawer({
       open: true,
-      children: <Settings />,
+      children: (
+        <Suspense fallback={<SettingsSkeleton />}>
+          <Settings />
+        </Suspense>
+      ),
     });
   };
 
