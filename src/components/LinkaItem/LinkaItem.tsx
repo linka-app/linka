@@ -3,7 +3,9 @@ import { BookmarkForm } from '@/components/BookmarkForm';
 import { LoadingIcon } from '@/components/LoadingIcon/LoadingIcon';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useContexts } from '@/hooks/useContexts';
+import { I18nLocals, i18n } from '@/i18n';
 import { BookmarkItem } from '@/types';
+import { getConfig } from '@/utils';
 import { shortenURL } from '@/utils/shortenURL/shortenURL';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import {
@@ -25,6 +27,9 @@ export const LinkaItem: React.FC<{
   key: string;
   selected: boolean;
 }> = (props) => {
+  const config = getConfig();
+  const translation = i18n[(config?.language as I18nLocals) || 'en'];
+
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { doToast, doDrawer } = useContexts();
@@ -40,7 +45,7 @@ export const LinkaItem: React.FC<{
           .then((res: any) => {
             doToast({
               open: true,
-              title: 'Success.',
+              title: translation.statusSuccess,
             });
 
             doDrawer({
@@ -54,7 +59,7 @@ export const LinkaItem: React.FC<{
             doToast({
               open: true,
               type: 'error',
-              title: 'Failed',
+              title: translation.statusFailed,
               description: reason,
             });
           })
@@ -89,7 +94,7 @@ export const LinkaItem: React.FC<{
                     .then((res: any) => {
                       doToast({
                         open: true,
-                        title: 'Success.',
+                        title: translation.statusSuccess,
                       });
 
                       doDrawer({
@@ -103,7 +108,7 @@ export const LinkaItem: React.FC<{
                       doToast({
                         open: true,
                         type: 'error',
-                        title: 'Failed',
+                        title: translation.statusFailed,
                         description: reason,
                       });
                     })
@@ -120,7 +125,7 @@ export const LinkaItem: React.FC<{
                       color="error"
                       onClick={deleteBookmark}
                     >
-                      Delete
+                      {translation.linkaItemDelete}
                     </Button>
                   }
                 />
@@ -130,6 +135,14 @@ export const LinkaItem: React.FC<{
         })
         .catch((reason) => {
           console.log('reason: ', reason);
+          return (
+            <Stack direction={'column'} spacing={2}>
+              <Typography variant="h6">{translation.linkaItemOops}</Typography>
+              <Typography variant="body1">
+                {translation.linkaItemNotYourBookmark}
+              </Typography>
+            </Stack>
+          );
         });
     }
   };
@@ -143,7 +156,6 @@ export const LinkaItem: React.FC<{
         <IconButton
           disabled={isDrawerLoading}
           edge="end"
-          aria-label="comments"
           onClick={() => {
             setIsDrawerLoading(true);
             getDrawerData().then((res) => {
