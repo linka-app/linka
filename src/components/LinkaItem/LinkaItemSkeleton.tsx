@@ -28,7 +28,11 @@ export const LinkaItemSkeleton: React.FC = () => {
           <Typography mr={1} variant="caption">
             <Stack direction={'row'} sx={{ width: '50%' }}>
               {[3, 2, 6, 4, 2].map((e, index) => (
-                <Skeleton width={3 * e + '%'} sx={{ marginRight: 1 }} />
+                <Skeleton
+                  key={index}
+                  width={3 * e + '%'}
+                  sx={{ marginRight: 1 }}
+                />
               ))}
             </Stack>
           </Typography>

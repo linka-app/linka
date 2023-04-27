@@ -82,6 +82,9 @@ const InnerComponent: React.FC = () => {
   const bookmarksToShow = watch('bookmarksToShow', false);
 
   useEffect(() => {
+    setQuery('');
+    setResults([]);
+    bookmarkDispatch({ action: 'reset' });
     getTheBookmarks(bookmarksToShow);
   }, [bookmarksToShow]);
 
@@ -262,24 +265,32 @@ const InnerComponent: React.FC = () => {
               </List>
             )}
             <List sx={{ width: '100%' }}>
-              {results.length > 0
+              {bookmarks.length > 0 && results.length > 0
                 ? results.map((val, index) => (
-                    <Suspense fallback={<LinkaItemSkeleton />}>
-                      <LinkaItem
-                        item={bookmarks[Number(val.toString())]}
-                        key={bookmarks[Number(val.toString())].url + val}
-                        selected={index === selectedBookmark.count}
-                      />
-                    </Suspense>
+                    <div key={bookmarks[Number(val.toString())].url + val}>
+                      <Suspense fallback={<LinkaItemSkeleton />}>
+                        <LinkaItem
+                          item={bookmarks[Number(val.toString())]}
+                          key={
+                            bookmarks[Number(val.toString())].url +
+                            val +
+                            'inner'
+                          }
+                          selected={index === selectedBookmark.count}
+                        />
+                      </Suspense>
+                    </div>
                   ))
                 : bookmarks.map((val, index) => (
-                    <Suspense fallback={<LinkaItemSkeleton />}>
-                      <LinkaItem
-                        item={val}
-                        key={val.url + val.id}
-                        selected={index === selectedBookmark.count}
-                      />
-                    </Suspense>
+                    <div key={val.url + val.id}>
+                      <Suspense fallback={<LinkaItemSkeleton />}>
+                        <LinkaItem
+                          item={val}
+                          key={val.url + val.id + 'inner'}
+                          selected={index === selectedBookmark.count}
+                        />
+                      </Suspense>
+                    </div>
                   ))}
             </List>
           </Grid>

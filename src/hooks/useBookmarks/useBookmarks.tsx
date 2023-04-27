@@ -15,6 +15,7 @@ export const useBookmarks = () => {
   const getTheBookmarks = async (bookmarksToShow: queryBookmarkToShow = '') => {
     isLoading(true);
     doLoading(true);
+    setBookmarks(defaultBookmarks);
     getBookmarks({}, bookmarksToShow ? bookmarksToShow : '')
       .then((res: Res) => {
         setBookmarks(res.results);
