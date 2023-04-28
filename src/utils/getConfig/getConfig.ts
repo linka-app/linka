@@ -10,6 +10,7 @@ function getConfig(): LinkaSettings {
       theme: 'light',
       openaiToken: null,
       browserlessToken: null,
+      showBookmarkAvatar: true,
     },
     localStorage.getItem('linkaConfig') != null
       ? JSON.parse(localStorage.getItem('linkaConfig') as string)
