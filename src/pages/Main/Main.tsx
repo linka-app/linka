@@ -31,9 +31,11 @@ import { FormContainer, useFormContext } from 'react-hook-form-mui';
 
 const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
-const config = getConfig();
-
 const InnerComponent: React.FC = () => {
+  // put into the component to hot reload configs, e.g. set `showBookmarkAvatar`
+  // TODO: put it into context and share with provider
+  const config = getConfig();
+
   const { showBookmarkAvatar } = config;
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
@@ -277,6 +279,8 @@ const InnerComponent: React.FC = () => {
 };
 
 export const Main: React.FC = () => {
+  const config = getConfig();
+
   return (
     <>
       <FormContainer defaultValues={config}>

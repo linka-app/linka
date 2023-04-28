@@ -1,6 +1,6 @@
 import { Divider, Stack } from '@mui/material';
 import * as React from 'react';
-import { PreferenceSwitcher } from './ColorModeSwitcher';
+import { PreferenceSwitcher } from './PreferenceSwitcher';
 import { SettingsForm } from './SettingsForm';
 
 export const Settings: React.FC = () => {
