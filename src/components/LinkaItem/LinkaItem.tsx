@@ -19,12 +19,12 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import _ from 'lodash';
 import React, { useState } from 'react';
 import { FormContainer } from 'react-hook-form-mui';
 
 export const LinkaItem: React.FC<{
   item: BookmarkItem;
-  key: string;
   selected: boolean;
 }> = (props) => {
   const config = getConfig();
@@ -36,6 +36,10 @@ export const LinkaItem: React.FC<{
   const { doToast, doDrawer } = useContexts();
   const { getTheBookmarks } = useBookmarks();
   const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
+
+  if (!_.get(props, 'item.url')) {
+    return <></>;
+  }
 
   const getDrawerData = async () => {
     if (props.item.id != null) {
@@ -150,7 +154,6 @@ export const LinkaItem: React.FC<{
 
   return (
     <ListItem
-      key={props.item.id}
       divider
       disablePadding
       secondaryAction={

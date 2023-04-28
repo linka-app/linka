@@ -1,6 +1,7 @@
 import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
 import { useContexts } from '@/hooks';
 import { useBookmarks } from '@/hooks/useBookmarks';
+import { ALL_BOOKMARKS } from '@/hooks/useBookmarks/useBookmarks';
 import { I18nLocals, i18n } from '@/i18n';
 import { getConfig } from '@/utils';
 import {
@@ -89,18 +90,23 @@ const InnerComponent: React.FC = () => {
   );
 
   const { watch } = useFormContext();
-  const bookmarksToShow = watch('bookmarksToShow', false);
+  const bookmarksToShow = watch('bookmarksToShow', '');
 
   useEffect(() => {
-    setQuery('');
-    setResults([]);
     bookmarkDispatch({ action: 'reset' });
+    setQuery('');
+
+    let positive: IndexSearchResult[] = [];
+    positive.push(index.search(ALL_BOOKMARKS, 10000));
+    let posResult = positive.reduce((prev, cur) => {
+      return prev.filter((v) => cur.includes(v));
+    });
+    setResults(posResult);
+  }, [index]);
+
+  useEffect(() => {
     getTheBookmarks(bookmarksToShow);
   }, [bookmarksToShow]);
-
-  useEffect(() => {
-    getTheBookmarks();
-  }, []);
 
   useEffect(() => {
     // handle hotkeys
@@ -169,15 +175,19 @@ const InnerComponent: React.FC = () => {
     let negative: IndexSearchResult[] = [];
     const segs = e.target.value.split(' ').filter((v) => v.length > 0);
     if (segs.length === 0) {
-      setResults([]);
+      positive.push(index.search(ALL_BOOKMARKS, 10000));
+      let posResult = positive.reduce((prev, cur) => {
+        return prev.filter((v) => cur.includes(v));
+      });
+      setResults(posResult);
       return;
     }
 
     segs.forEach((q) => {
       if (q.startsWith('!')) {
-        negative.push(index.search(q.replace('!', '')));
+        negative.push(index.search(q.replace('!', ''), 10000));
       } else {
-        positive.push(index.search(q));
+        positive.push(index.search(q, 10000));
       }
     });
     let posResult = positive.reduce((prev, cur) => {
@@ -189,7 +199,6 @@ const InnerComponent: React.FC = () => {
     } else {
       setResults(posResult);
     }
-    bookmarkDispatch({ action: 'reset' });
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -276,35 +285,19 @@ const InnerComponent: React.FC = () => {
               </List>
             )}
             <List sx={{ width: '100%' }}>
-              {bookmarks.length > 0 && results.length > 0
-                ? results.map((val, index) => (
-                    <Suspense
-                      fallback={<LinkaItemSkeleton />}
-                      key={
-                        bookmarks[Number(val.toString())].url +
-                        index +
-                        'Suspense'
-                      }
-                    >
-                      <LinkaItem
-                        item={bookmarks[Number(val.toString())]}
-                        key={bookmarks[Number(val.toString())].url + index}
-                        selected={index === selectedBookmark.count}
-                      />
-                    </Suspense>
-                  ))
-                : bookmarks.map((val, index) => (
-                    <Suspense
-                      fallback={<LinkaItemSkeleton />}
-                      key={val.url + val.id + 'Suspense'}
-                    >
-                      <LinkaItem
-                        item={val}
-                        key={val.url + val.id}
-                        selected={index === selectedBookmark.count}
-                      />
-                    </Suspense>
-                  ))}
+              {!loading &&
+                results.length > 0 &&
+                results.map((val, index) => (
+                  <Suspense
+                    fallback={<LinkaItemSkeleton />}
+                    key={index + 'Suspense'}
+                  >
+                    <LinkaItem
+                      item={bookmarks[Number(val.toString())]}
+                      selected={index === selectedBookmark.count}
+                    />
+                  </Suspense>
+                ))}
             </List>
           </Grid>
         </Grid>

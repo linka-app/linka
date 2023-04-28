@@ -4,6 +4,9 @@ import { BookmarkItem, Res, queryBookmarkToShow } from '@/types';
 import { Index } from 'flexsearch';
 import { useState } from 'react';
 
+//Hacky way to get all bookmarks when needed
+export const ALL_BOOKMARKS = 'ALL_BOOKMARKS';
+
 export const useBookmarks = () => {
   const [loading, isLoading] = useState(false);
   const { doLoading } = useContexts();
@@ -19,21 +22,23 @@ export const useBookmarks = () => {
     getBookmarks({}, bookmarksToShow ? bookmarksToShow : '')
       .then((res: Res) => {
         setBookmarks(res.results);
+        const searchIndex = new Index({ tokenize: 'full' });
         res.results.forEach((v, idx) => {
-          setIndex(
-            index.add(
-              idx,
-              [
-                v.title,
-                v.description,
-                v.website_title,
-                v.website_description,
-                v.url,
-                v.tag_names.join(' '),
-              ].join(' ')
-            )
+          searchIndex.add(
+            idx,
+            [
+              v.title,
+              v.description,
+              v.website_title,
+              v.website_description,
+              v.url,
+              v.tag_names.join(' '),
+              ALL_BOOKMARKS,
+            ].join(' ')
           );
         });
+
+        setIndex(searchIndex);
 
         isLoading(false);
         doLoading(false);
