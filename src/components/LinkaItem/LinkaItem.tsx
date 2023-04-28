@@ -8,6 +8,7 @@ import { BookmarkItem } from '@/types';
 import { getConfig } from '@/utils';
 import { shortenURL } from '@/utils/shortenURL/shortenURL';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import {
   Button,
   IconButton,
@@ -186,8 +187,8 @@ export const LinkaItem: React.FC<{
         dense
       >
         {isDesktop && props.showLeftAvatar && (
-          <ListItemAvatar>
-            {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
+          <ListItemAvatar sx={{ display: 'flex' }}>
+            {props.selected ? <OpenInNewOutlinedIcon /> : null}
           </ListItemAvatar>
         )}
         <ListItemText
