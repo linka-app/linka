@@ -238,7 +238,7 @@ const InnerComponent: React.FC = () => {
                       <Tooltip arrow title={translation.mainSearchAdornment}>
                         <Chip
                           label={
-                            results.length > 0
+                            results.length > 0 && query !== ''
                               ? `${results.length} ${translation.mainSearchAdornmentHits}`
                               : `${bookmarks.length} ${translation.mainSearchAdornmentTotal}`
                           }
