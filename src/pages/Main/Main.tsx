@@ -167,12 +167,18 @@ const InnerComponent: React.FC = () => {
   }, [bookmarks, results]);
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    const inputVal = e.target.value;
+    // avoid opening all bookmarks unexpectedly
+    if (inputVal.trim().length === 0) {
+      setQuery('');
+    } else {
+      setQuery(inputVal);
+    }
     bookmarkDispatch({ action: 'reset' });
 
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
-    const segs = e.target.value.split(' ').filter((v) => v.length > 0);
+    const segs = inputVal.split(' ').filter((v) => v.length > 0);
     if (segs.length === 0) {
       positive.push(index.search(ALL_BOOKMARKS, 10000));
       let posResult = positive.reduce((prev, cur) => {
@@ -202,7 +208,8 @@ const InnerComponent: React.FC = () => {
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !getDrawerState()) {
-      if (selectedBookmark.count === -1) {
+      // avoid opening all bookmarks unexpectedly
+      if (selectedBookmark.count === -1 && query !== '') {
         results.forEach((v) => {
           window.open(bookmarks[Number(v.toString())].url);
         });
