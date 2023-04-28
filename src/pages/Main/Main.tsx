@@ -35,6 +35,7 @@ const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
 const InnerComponent: React.FC = () => {
   const config = getConfig();
+  const { showBookmarkAvatar } = config;
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
   const { getDrawerState } = useContexts();
@@ -295,6 +296,7 @@ const InnerComponent: React.FC = () => {
                     <LinkaItem
                       item={bookmarks[Number(val.toString())]}
                       selected={index === selectedBookmark.count}
+                      showLeftAvatar={showBookmarkAvatar}
                     />
                   </Suspense>
                 ))}

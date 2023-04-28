@@ -26,10 +26,10 @@ import { FormContainer } from 'react-hook-form-mui';
 export const LinkaItem: React.FC<{
   item: BookmarkItem;
   selected: boolean;
+  showLeftAvatar: boolean;
 }> = (props) => {
   const config = getConfig();
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
-  const { showBookmarkAvatar } = config;
 
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -179,7 +179,7 @@ export const LinkaItem: React.FC<{
       }
     >
       <ListItemButton component="a" href={props.item.url} target="_blank" dense>
-        {isDesktop && showBookmarkAvatar && (
+        {isDesktop && props.showLeftAvatar && (
           <ListItemAvatar>
             {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
           </ListItemAvatar>

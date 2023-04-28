@@ -6,7 +6,7 @@
   "promptDesc": "OpenCommit is a GPT CLI tool that generates impressive commit messages in seconds, using OpenAI's ChatGPT model. It allows you to preface commits with emojis, postface them with descriptions of changes, and supports internationalization. It can also be used as a Git hook and ignores files to prevent uploading artifacts and large files.",
   "promptTags": ["opencommit", "gpt", "cli", "git", "commit messages"],
   "mainBookMarksToShowMine": "私有",
-  "mainBookMarksToShowIncludeShared": "全部",
+  "mainBookMarksToShowIncludeShared": "私有+共享",
   "mainBookMarksToShowArchived": "已归档",
   "mainSearch": "搜索",
   "mainSearchAdornment": "按 `Enter` 打开所有候选标签页. 在关键词前添加英文感叹号 ! 以排除",
