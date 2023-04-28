@@ -121,7 +121,7 @@ export const SettingsForm: React.FC = () => {
             name="browserlessToken"
             label="Browserless.io API Key"
             helperText={
-              'Browserless.io scrapes then content from provided URL before feeding it to OpenAi.'
+              'Browserless.io scrapes the content from provided URL before feeding it to OpenAi.'
             }
             fullWidth
           />
