@@ -50,16 +50,14 @@ const InnerComponent: React.FC = () => {
     state: { count: number },
     action: { action: string; bookmarks?: any; results?: any }
   ) {
+    let count: number;
     switch (action.action) {
       case 'increment':
-        return {
-          count:
-            state.count <= action.bookmarks.length - 1
-              ? state.count + 1
-              : bookmarks.length,
-        };
+        count = state.count + 1 <= results.length - 1 ? state.count + 1 : 0;
+        return { count };
       case 'decrement':
-        return { count: state.count >= -1 ? state.count - 1 : -1 };
+        count = state.count - 1 >= 0 ? state.count - 1 : results.length - 1;
+        return { count };
       case 'open':
         if (
           state.count > -1 &&
@@ -75,7 +73,6 @@ const InnerComponent: React.FC = () => {
         } else if (_.get(action, `bookmarks.${state.count}.url`, null)) {
           window.open(action.bookmarks[state.count].url);
         }
-
         return { count: state.count };
       case 'reset':
         return { count: -1 };
