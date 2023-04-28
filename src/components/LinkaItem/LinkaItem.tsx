@@ -178,7 +178,13 @@ export const LinkaItem: React.FC<{
         </IconButton>
       }
     >
-      <ListItemButton component="a" href={props.item.url} target="_blank" dense>
+      <ListItemButton
+        component="a"
+        href={props.item.url}
+        selected={props.selected}
+        target="_blank"
+        dense
+      >
         {isDesktop && props.showLeftAvatar && (
           <ListItemAvatar>
             {props.selected ? <KeyboardArrowRightOutlinedIcon /> : null}
