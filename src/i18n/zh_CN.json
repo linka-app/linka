@@ -17,5 +17,7 @@
   "linkaItemNotYourBookmark": "你无权编辑他人共享的书签",
   "bookmarkFormFillButton": "用ChatGPT自动填充",
   "bookmarkFormFillButtonURLRequired": "URL不能为空",
-  "bookmarkFormFillButtonFillWithChatGPT": "用ChatGPT自动填充"
+  "bookmarkFormFillButtonFillWithChatGPT": "用ChatGPT自动填充",
+  "settingsViewModeCondensed": "Condensed View",
+  "settingsViewModeExpanded": "Expanded View"
 }

@@ -1,4 +1,5 @@
 import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
+import { SearchMenu } from '@/components/SearchMenu';
 import { useContexts } from '@/hooks';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { ALL_BOOKMARKS } from '@/hooks/useBookmarks/useBookmarks';
@@ -10,6 +11,7 @@ import {
   Unstable_Grid2 as Grid,
   InputAdornment,
   List,
+  Stack,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -25,16 +27,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  FormContainer,
-  ToggleButtonGroupElement,
-  useFormContext,
-} from 'react-hook-form-mui';
+import { FormContainer, useFormContext } from 'react-hook-form-mui';
 
 const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
+const config = getConfig();
+
 const InnerComponent: React.FC = () => {
-  const config = getConfig();
   const { showBookmarkAvatar } = config;
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
@@ -91,7 +90,7 @@ const InnerComponent: React.FC = () => {
   );
 
   const { watch } = useFormContext();
-  const bookmarksToShow = watch('bookmarksToShow', '');
+  const defaultBookmarkQuery = watch('defaultBookmarkQuery', '');
 
   useEffect(() => {
     bookmarkDispatch({ action: 'reset' });
@@ -106,8 +105,8 @@ const InnerComponent: React.FC = () => {
   }, [index]);
 
   useEffect(() => {
-    getTheBookmarks(bookmarksToShow);
-  }, [bookmarksToShow]);
+    getTheBookmarks(defaultBookmarkQuery);
+  }, [defaultBookmarkQuery]);
 
   useEffect(() => {
     // handle hotkeys
@@ -216,63 +215,35 @@ const InnerComponent: React.FC = () => {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid
-            xs={12}
-            sx={{
-              '.MuiFormControl-root': {
-                width: '100%',
-              },
-            }}
-          >
-            <ToggleButtonGroupElement
-              exclusive
-              fullWidth
-              enforceAtLeastOneSelected
-              size="small"
-              sx={{ width: '100%' }}
-              name="bookmarksToShow"
-              options={[
-                {
-                  id: '',
-                  label: translation.mainBookMarksToShowMine,
-                },
-                {
-                  id: 'shared',
-                  label: translation.mainBookMarksToShowIncludeShared,
-                },
-                {
-                  id: 'archived',
-                  label: translation.mainBookMarksToShowArchived,
-                },
-              ]}
-            />
-          </Grid>
           <Grid xs={12}>
-            <TextField
-              autoComplete="off"
-              label={translation.mainSearch}
-              variant="outlined"
-              value={query}
-              onChange={onQueryUpdate}
-              onKeyDown={onEnterPressed}
-              inputRef={inputRef}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Tooltip arrow title={translation.mainSearchAdornment}>
-                      <Chip
-                        label={
-                          results.length > 0
-                            ? `${results.length} ${translation.mainSearchAdornmentHits}`
-                            : `${bookmarks.length} ${translation.mainSearchAdornmentTotal}`
-                        }
-                      />
-                    </Tooltip>
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <Stack direction={'row'} spacing={1}>
+              <TextField
+                autoComplete="off"
+                label={translation.mainSearch}
+                variant="outlined"
+                value={query}
+                onChange={onQueryUpdate}
+                onKeyDown={onEnterPressed}
+                inputRef={inputRef}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip arrow title={translation.mainSearchAdornment}>
+                        <Chip
+                          label={
+                            results.length > 0
+                              ? `${results.length} ${translation.mainSearchAdornmentHits}`
+                              : `${bookmarks.length} ${translation.mainSearchAdornmentTotal}`
+                          }
+                        />
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <SearchMenu />
+            </Stack>
           </Grid>
           <Grid xs={12}>
             {loading && (
@@ -311,7 +282,7 @@ const InnerComponent: React.FC = () => {
 export const Main: React.FC = () => {
   return (
     <>
-      <FormContainer defaultValues={{ bookmarksToShow: '' }}>
+      <FormContainer defaultValues={config}>
         <InnerComponent />
       </FormContainer>
     </>

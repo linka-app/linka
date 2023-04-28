@@ -43,7 +43,8 @@ export type queryBookmarkArgs = {
   offset?: number;
 };
 
-export type queryBookmarkToShow = '' | 'shared/' | 'archived/';
+export type QueryBookmarkMode = '' | 'shared/' | 'archived/';
+export type ViewMode = 'condensed' | 'expanded';
 
 export type doArgs = {
   id: number;
@@ -62,6 +63,8 @@ export interface LinkaSettings {
   url: string | null;
   openaiToken?: string | null;
   browserlessToken?: string | null;
+  defaultBookmarkQuery?: QueryBookmarkMode;
+  resultViewMode: ViewMode;
 }
 
 export interface LinkaPartialSettings extends Partial<LinkaSettings> {}

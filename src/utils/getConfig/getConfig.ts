@@ -11,6 +11,8 @@ function getConfig(): LinkaSettings {
       openaiToken: null,
       browserlessToken: null,
       showBookmarkAvatar: true,
+      defaultBookmarkQuery: '',
+      resultViewMode: 'condensed',
     },
     localStorage.getItem('linkaConfig') != null
       ? JSON.parse(localStorage.getItem('linkaConfig') as string)

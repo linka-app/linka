@@ -17,5 +17,7 @@
   "linkaItemNotYourBookmark": "This is not your bookmark. You can only edit your own bookmarks.",
   "bookmarkFormFillButton": "Fill with Chat GPT",
   "bookmarkFormFillButtonURLRequired": "A URL is required",
-  "bookmarkFormFillButtonFillWithChatGPT": "Fill with Chat GPT"
+  "bookmarkFormFillButtonFillWithChatGPT": "Fill with Chat GPT",
+  "settingsViewModeCondensed": "Condensed View",
+  "settingsViewModeExpanded": "Expanded View"
 }

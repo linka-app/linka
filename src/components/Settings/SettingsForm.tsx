@@ -2,6 +2,7 @@ import { browserlessDoAuth } from '@/api/browserless';
 import { doAuth } from '@/api/linkding/doAuth';
 import { openaiDoAuth } from '@/api/openai';
 import { useContexts } from '@/hooks';
+import { I18nLocals, i18n } from '@/i18n';
 import { LinkaSettings } from '@/types';
 import { getConfig, setConfig } from '@/utils';
 import { Box, Button, Stack, Typography } from '@mui/material';
@@ -16,6 +17,7 @@ import FormPartLinkdingSettings from './FormPartLinkdingSettings';
 
 export const SettingsForm: React.FC = () => {
   const config = getConfig();
+  const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const [validating, setValidating] = React.useState(false);
   const { doToast } = useContexts();
 
@@ -26,6 +28,7 @@ export const SettingsForm: React.FC = () => {
     if (data.language) {
       setConfig({
         language: _.get(data, 'language'),
+        defaultBookmarkQuery: _.get(data, 'defaultBookmarkQuery'),
       });
     }
     if (data.token && data.url) {
@@ -37,7 +40,7 @@ export const SettingsForm: React.FC = () => {
           doToast({
             open: true,
             type: 'error',
-            title: 'Failed to load bookmarks.',
+            title: translation.statusFailed,
             description: 'detail: ' + reason,
           });
         });
@@ -45,7 +48,8 @@ export const SettingsForm: React.FC = () => {
       doToast({
         open: true,
         type: 'error',
-        title: 'Failed URL and Token is required.',
+        title: translation.statusFailed,
+        description: 'Failed URL and Token is required.',
       });
       setValidating(false);
       return false;
@@ -62,8 +66,8 @@ export const SettingsForm: React.FC = () => {
           doToast({
             open: true,
             type: 'error',
-            title: 'Failed to autheticate Browserless.',
-            description: 'detail: ' + reason,
+            title: translation.statusFailed,
+            description: 'Browserless detail: ' + reason,
           });
           valid = false;
         });
@@ -78,15 +82,15 @@ export const SettingsForm: React.FC = () => {
           doToast({
             open: true,
             type: 'error',
-            title: 'Failed to autheticate Open AI.',
-            description: 'detail: ' + reason,
+            title: translation.statusFailed,
+            description: 'Open AI detail: ' + reason,
           });
           valid = false;
         });
     }
 
     if (valid) {
-      doToast({ title: 'Update success!' });
+      doToast({ title: translation.statusSuccess });
     }
     setValidating(false);
   };
@@ -99,6 +103,7 @@ export const SettingsForm: React.FC = () => {
     >
       <FormContainer defaultValues={config} onSuccess={validateSettings}>
         <Stack spacing={2}>
+          <Typography variant="h5">General Settings</Typography>
           <SelectElement
             name="language"
             label="Language"
@@ -110,6 +115,40 @@ export const SettingsForm: React.FC = () => {
               {
                 id: 'zh_CN',
                 label: 'Chinese',
+              },
+            ]}
+            fullWidth
+          />
+          <SelectElement
+            name="resultViewMode"
+            label="Default View Mode"
+            options={[
+              {
+                id: 'condensed',
+                label: translation.settingsViewModeCondensed,
+              },
+              {
+                id: 'expanded',
+                label: translation.settingsViewModeExpanded,
+              },
+            ]}
+            fullWidth
+          />
+          <SelectElement
+            name="defaultBookmarkQuery"
+            label="Default Bookmarks to show"
+            options={[
+              {
+                id: '',
+                label: translation.mainBookMarksToShowMine,
+              },
+              {
+                id: 'shared',
+                label: translation.mainBookMarksToShowIncludeShared,
+              },
+              {
+                id: 'archived',
+                label: translation.mainBookMarksToShowArchived,
               },
             ]}
             fullWidth

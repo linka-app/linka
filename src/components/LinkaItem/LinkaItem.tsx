@@ -6,37 +6,26 @@ import { useContexts } from '@/hooks/useContexts';
 import { I18nLocals, i18n } from '@/i18n';
 import { BookmarkItem } from '@/types';
 import { getConfig } from '@/utils';
-import { shortenURL } from '@/utils/shortenURL/shortenURL';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
-import {
-  Button,
-  IconButton,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Button, IconButton, ListItem, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import React, { useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
+import { FormContainer, useFormContext } from 'react-hook-form-mui';
+import CondensedItem from './CondensedItem';
+import ExpandedItem from './ExpandedItem';
+import LinkaItemProps from './LinkaItemProps';
 
-export const LinkaItem: React.FC<{
-  item: BookmarkItem;
-  selected: boolean;
-  showLeftAvatar: boolean;
-}> = (props) => {
+export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
   const config = getConfig();
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
+
+  const { watch } = useFormContext();
+  const resultViewMode = watch('resultViewMode', 'condensed');
 
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { doToast, doDrawer } = useContexts();
   const { getTheBookmarks } = useBookmarks();
-  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   if (!_.get(props, 'item.url')) {
     return <></>;
@@ -179,44 +168,11 @@ export const LinkaItem: React.FC<{
         </IconButton>
       }
     >
-      <ListItemButton
-        component="a"
-        href={props.item.url}
-        selected={props.selected}
-        target="_blank"
-        dense
-      >
-        {isDesktop && props.showLeftAvatar && (
-          <ListItemAvatar sx={{ display: 'flex' }}>
-            {props.selected ? <OpenInNewOutlinedIcon /> : null}
-          </ListItemAvatar>
-        )}
-        <ListItemText
-          primary={props.item.title || shortenURL(props.item.url)}
-          primaryTypographyProps={{
-            sx: {
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            },
-          }}
-          secondary={
-            props.item.tag_names &&
-            props.item.tag_names.map((e, index) => (
-              <Typography mr={1} variant="caption" key={index}>
-                #{e}
-              </Typography>
-            ))
-          }
-          secondaryTypographyProps={{
-            sx: {
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            },
-          }}
-        />
-      </ListItemButton>
+      {resultViewMode === 'condensed' ? (
+        <CondensedItem {...props} />
+      ) : (
+        <ExpandedItem {...props} />
+      )}
     </ListItem>
   );
 };
