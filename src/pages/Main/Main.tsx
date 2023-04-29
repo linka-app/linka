@@ -96,7 +96,7 @@ const InnerComponent: React.FC = () => {
     setQuery('');
 
     let positive: IndexSearchResult[] = [];
-    positive.push(index.search(ALL_BOOKMARKS, 10000));
+    positive.push(allSearchResult);
     let posResult = positive.reduce((prev, cur) => {
       return prev.filter((v) => cur.includes(v));
     });
@@ -166,6 +166,8 @@ const InnerComponent: React.FC = () => {
     };
   }, [bookmarks, results]);
 
+  const allSearchResult = index.search(ALL_BOOKMARKS, 10000);
+
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value;
     // avoid opening all bookmarks unexpectedly
@@ -180,11 +182,8 @@ const InnerComponent: React.FC = () => {
     let negative: IndexSearchResult[] = [];
     const segs = inputVal.split(' ').filter((v) => v.length > 0);
     if (segs.length === 0) {
-      positive.push(index.search(ALL_BOOKMARKS, 10000));
-      let posResult = positive.reduce((prev, cur) => {
-        return prev.filter((v) => cur.includes(v));
-      });
-      setResults(posResult);
+      positive.push(allSearchResult);
+      setResults(positive.reduce((prev, cur) => [...prev, ...cur]));
       return;
     }
 
@@ -195,12 +194,19 @@ const InnerComponent: React.FC = () => {
         positive.push(index.search(q, 10000));
       }
     });
-    let posResult = positive.reduce((prev, cur) => {
-      return prev.filter((v) => cur.includes(v));
-    });
+
+    let posResult: IndexSearchResult = [];
+    let negaResult: IndexSearchResult = [];
+    if (positive.length > 0) {
+      posResult = positive.reduce((prev, cur) => [...prev, ...cur]);
+    }
     if (negative.length > 0) {
-      let negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
-      setResults(posResult.filter((v) => !negaResult.includes(v)));
+      negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
+      setResults(
+        (posResult.length > 0 ? posResult : allSearchResult).filter(
+          (v) => !negaResult.includes(v)
+        )
+      );
     } else {
       setResults(posResult);
     }
