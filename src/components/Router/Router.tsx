@@ -12,13 +12,12 @@ const initConfigFromQuery = () => {
   const token = params.get('token');
   if (url && token) {
     setConfig({ url, token });
+    window.location.href = window.location.origin;
   }
 };
 
 export const Router: React.FC = () => {
-  useEffect(() => {
-    initConfigFromQuery();
-  });
+  initConfigFromQuery();
 
   const [ready, setReady] = useState(false);
 
