@@ -6,6 +6,7 @@ import { I18nLocals, i18n } from '@/i18n';
 import { LinkaSettings } from '@/types';
 import { getConfig, setConfig } from '@/utils';
 import { Box, Button, Stack, Typography } from '@mui/material';
+import ShareIcon from '@mui/icons-material/Share';
 import _ from 'lodash';
 import * as React from 'react';
 import {
@@ -14,12 +15,18 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui';
 import FormPartLinkdingSettings from './FormPartLinkdingSettings';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 export const SettingsForm: React.FC = () => {
   const config = getConfig();
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
   const [validating, setValidating] = React.useState(false);
   const { doToast } = useContexts();
+
+  const { url, token } = config;
+  let shareURL = new URL(window.location.href);
+  shareURL.searchParams.append('url', encodeURIComponent(url || ''));
+  shareURL.searchParams.append('token', token || '');
 
   const validateSettings = async (data: LinkaSettings) => {
     setValidating(true);
@@ -139,6 +146,8 @@ export const SettingsForm: React.FC = () => {
             label="Default Bookmarks to show"
             options={[
               {
+                // FIXME: dropdown select empty string does not match anything
+                // may decoupling the option id from Linkding query params types
                 id: '',
                 label: translation.mainBookMarksToShowMine,
               },
@@ -153,7 +162,23 @@ export const SettingsForm: React.FC = () => {
             ]}
             fullWidth
           />
-          <Typography variant="h5">Linkding Settings</Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
+            <Typography variant="h5">Linkding Settings</Typography>
+            <CopyToClipboard
+              text={shareURL.toString()}
+              onCopy={(_: string, __: boolean) =>
+                doToast({ title: 'Copied link to clipboard!' })
+              }
+            >
+              <Button endIcon={<ShareIcon />}>
+                {translation.settingsViewShareBasicAuth}
+              </Button>
+            </CopyToClipboard>
+          </Stack>
           <FormPartLinkdingSettings />
           <Typography variant="h5">Optional Settings</Typography>
           <TextFieldElement

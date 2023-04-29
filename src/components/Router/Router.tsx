@@ -1,9 +1,25 @@
 import Auth from '@/pages/Auth/Auth';
 import Main from '@/pages/Main/Main';
+// FIXME: reduce duplicate parts in path...
 import { getConfig } from '@/utils/getConfig/getConfig';
+import { setConfig } from '@/utils/setConfig/setConfig';
 import { useEffect, useState } from 'react';
 
+// read basic configs from shared url and set them
+const initConfigFromQuery = () => {
+  const params = new URLSearchParams(window.location.href);
+  const url = decodeURIComponent(params.get('url') || '');
+  const token = params.get('token');
+  if (url && token) {
+    setConfig({ url, token });
+  }
+};
+
 export const Router: React.FC = () => {
+  useEffect(() => {
+    initConfigFromQuery();
+  });
+
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
