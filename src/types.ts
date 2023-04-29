@@ -1,3 +1,5 @@
+import { PaletteMode } from '@mui/material';
+
 export interface BookmarkItem {
   title: string;
   id?: number;
@@ -31,11 +33,18 @@ export interface Props {
   version: string;
 }
 
+export interface ContextProviderProps {
+  children?: React.ReactNode;
+}
+
 export type queryBookmarkArgs = {
   q?: string;
   limit?: number;
   offset?: number;
 };
+
+export type QueryBookmarkMode = '' | 'shared/' | 'archived/';
+export type ViewMode = 'condensed' | 'expanded';
 
 export type doArgs = {
   id: number;
@@ -45,3 +54,17 @@ export type bookmarkArgs = {
   id: number;
   payload: BookmarkItem;
 };
+
+export interface LinkaSettings {
+  language: string | null;
+  theme: PaletteMode | null;
+  showBookmarkAvatar: boolean;
+  token: string | null;
+  url: string | null;
+  openaiToken?: string | null;
+  browserlessToken?: string | null;
+  defaultBookmarkQuery?: QueryBookmarkMode;
+  resultViewMode: ViewMode;
+}
+
+export interface LinkaPartialSettings extends Partial<LinkaSettings> {}

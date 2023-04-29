@@ -19,7 +19,10 @@ Currently it supports `linkding`, we are planning to make `Linka` a more flexibl
 
 ![demo](./screenshot/demo.gif)
 
-[Linka! demo web app](https://linka.unoiou.com)
+- [Stable Version](https://linka.unoiou.com)
+- [Development Version](https://linka-git-dev-cmsax.vercel.app/)
+
+Following configs are for testing:
 
 - `demo linkding base url`: https://link.unoiou.com
 - `demo token`(restricted): `a6816f654f87197545cd66bfd2f8e294c40f1ee4`
@@ -33,6 +36,8 @@ Currently it supports `linkding`, we are planning to make `Linka` a more flexibl
 ### Hotkeys
 
 - `cmd+l` or `ctrl+l` to focus on the search box
+- `cmd+Down Arrow` or `ctrl+Down Arrow` / `cmd+Down Arrow` or `ctrl+Down Arrow` to navigate the results
+- `cmd+Enter` or `ctrl+Enter` with an item selected to open it as a new tab or open all bookmarks when no item is selected
 
 ## Development Guid
 

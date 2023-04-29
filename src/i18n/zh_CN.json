@@ -1,0 +1,23 @@
+{
+  "localLanguage": "简体中文",
+  "statusSuccess": "成功",
+  "statusFailed": "出错",
+  "promptTitle": "OpenCommit: GPT CLI to Auto-Generate Impressive Commits in 1 Second",
+  "promptDesc": "OpenCommit is a GPT CLI tool that generates impressive commit messages in seconds, using OpenAI's ChatGPT model. It allows you to preface commits with emojis, postface them with descriptions of changes, and supports internationalization. It can also be used as a Git hook and ignores files to prevent uploading artifacts and large files.",
+  "promptTags": ["opencommit", "gpt", "cli", "git", "commit messages"],
+  "mainBookMarksToShowMine": "私有",
+  "mainBookMarksToShowIncludeShared": "私有+共享",
+  "mainBookMarksToShowArchived": "已归档",
+  "mainSearch": "搜索",
+  "mainSearchAdornment": "按 `Enter` 打开所有候选标签页. 在关键词前添加英文感叹号 ! 以排除",
+  "mainSearchAdornmentHits": "命中",
+  "mainSearchAdornmentTotal": "全部",
+  "linkaItemDelete": "删除",
+  "linkaItemOops": "Oops",
+  "linkaItemNotYourBookmark": "你无权编辑他人共享的书签",
+  "bookmarkFormFillButton": "用ChatGPT自动填充",
+  "bookmarkFormFillButtonURLRequired": "URL不能为空",
+  "bookmarkFormFillButtonFillWithChatGPT": "用ChatGPT自动填充",
+  "settingsViewModeCondensed": "Condensed View",
+  "settingsViewModeExpanded": "Expanded View"
+}

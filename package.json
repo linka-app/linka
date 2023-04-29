@@ -27,6 +27,8 @@
     "@vitejs/plugin-react": "^3.1.0",
     "flexsearch": "^0.7.21",
     "framer-motion": "^7.0.0",
+    "moment": "^2.29.4",
+    "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
@@ -62,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "vite-plugin-pwa": "^0.14.7"
   }
 }
