@@ -254,6 +254,7 @@ const InnerComponent: React.FC = () => {
                   ),
                 }}
               />
+              {/* FIXME: width of this button is weird */}
               <SearchMenu />
             </Stack>
           </Grid>

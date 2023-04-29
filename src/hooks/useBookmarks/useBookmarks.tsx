@@ -1,10 +1,12 @@
 import { getBookmarks } from '@/api/linkding';
 import { useContexts } from '@/hooks/useContexts';
+// FIXME
 import { BookmarkItem, Res, queryBookmarkToShow } from '@/types';
 import { Index } from 'flexsearch';
 import { useState } from 'react';
 
-//Hacky way to get all bookmarks when needed
+// add a constant suffix to each bookmark's full text
+// to be able search ALL bookmarks with single keyword
 export const ALL_BOOKMARKS = 'ALL_BOOKMARKS';
 
 export const useBookmarks = () => {
