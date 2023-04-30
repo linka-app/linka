@@ -1,7 +1,6 @@
 import { getBookmarks } from '@/api/linkding';
 import { useContexts } from '@/hooks/useContexts';
-// FIXME
-import { BookmarkItem, Res, queryBookmarkToShow } from '@/types';
+import { BookmarkItem, QueryBookmarkMode, Res } from '@/types';
 import { Index } from 'flexsearch';
 import { useState } from 'react';
 
@@ -17,7 +16,7 @@ export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
   const [index, setIndex] = useState(new Index({ tokenize: 'full' }));
 
-  const getTheBookmarks = async (bookmarksToShow: queryBookmarkToShow = '') => {
+  const getTheBookmarks = async (bookmarksToShow: QueryBookmarkMode = '') => {
     isLoading(true);
     doLoading(true);
     setBookmarks(defaultBookmarks);
