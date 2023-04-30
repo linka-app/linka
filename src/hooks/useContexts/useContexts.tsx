@@ -1,21 +1,24 @@
-import { ColorModeContextType } from '@/contexts/ColorModeContext';
-import ColorModeContext from '@/contexts/ColorModeContext/ColorModeContext';
-import { DrawerContext, DrawerContextType } from '@/contexts/DrawerContext';
-import {
-  LinearProgressContext,
-  LinearProgressContextType,
-} from '@/contexts/LinearProgressContext';
-import { ToastContext, ToastContextType } from '@/contexts/ToastContext';
-import React from 'react';
+import { ColorModeContextType } from "@/contexts/ColorModeContext";
+import ColorModeContext from "@/contexts/ColorModeContext/ColorModeContext";
+import React from "react";
+import { LinkaContext, LinkaContextType } from "@/contexts/LinkaContext";
 
 export const useContexts = () => {
-  const { doLoading, doLoadingToggle } = React.useContext(
-    LinearProgressContext
-  ) as LinearProgressContextType;
-  const { doToast } = React.useContext(ToastContext) as ToastContextType;
-  const { doDrawer, doDrawerClose, getDrawerState } = React.useContext(
-    DrawerContext
-  ) as DrawerContextType;
+  const {
+    doLoading,
+    doLoadingToggle,
+    doToast,
+    doDrawer,
+    doDrawerClose,
+    getDrawerState,
+    config,
+    setConfig,
+    bookmarks,
+  } = React.useContext(LinkaContext) as LinkaContextType;
+
+  const theBookmarks = () => {
+    return { ...bookmarks };
+  };
   const { toggleColorMode, colorMode } = React.useContext(
     ColorModeContext
   ) as ColorModeContextType;
@@ -29,6 +32,9 @@ export const useContexts = () => {
     getDrawerState,
     toggleColorMode,
     colorMode,
+    config,
+    setConfig,
+    theBookmarks,
   } as const;
 };
 
