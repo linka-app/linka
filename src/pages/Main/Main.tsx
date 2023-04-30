@@ -1,66 +1,66 @@
-import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
-import { SearchMenu } from '@/components/SearchMenu';
-import { useContexts } from '@/hooks';
-import { useBookmarks } from '@/hooks/useBookmarks';
-import { ALL_BOOKMARKS } from '@/hooks/useBookmarks/useBookmarks';
-import { I18nLocals, i18n } from '@/i18n';
-import { getConfig } from '@/utils';
+import LinkaItemSkeleton from "@/components/LinkaItem/LinkaItemSkeleton";
+import { SearchMenu } from "@/components/SearchMenu";
+import { useContexts } from "@/hooks";
+import { ALL_BOOKMARKS } from "@/hooks/useBookmarks/useBookmarks";
+import { i18n, I18nLocals } from "@/i18n";
+import { getConfig } from "@/utils";
 import {
   Box,
   Chip,
-  Unstable_Grid2 as Grid,
   InputAdornment,
   List,
   Stack,
   TextField,
   Tooltip,
-} from '@mui/material';
-import { IndexSearchResult } from 'flexsearch';
-import _ from 'lodash';
+  Unstable_Grid2 as Grid,
+} from "@mui/material";
+import { IndexSearchResult } from "flexsearch";
+import _ from "lodash";
 import React, {
   ChangeEvent,
   KeyboardEvent,
-  Suspense,
   lazy,
+  Suspense,
   useEffect,
   useReducer,
   useRef,
   useState,
-} from 'react';
-import { FormContainer, useFormContext } from 'react-hook-form-mui';
+} from "react";
+import { FormContainer, useFormContext } from "react-hook-form-mui";
 
-const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
+const LinkaItem = lazy(() => import("@/components/LinkaItem/LinkaItem"));
 
 const InnerComponent: React.FC = () => {
   // put into the component to hot reload configs, e.g. set `showBookmarkAvatar`
-  // TODO: put it into context and share with provider
-  const config = getConfig();
+
+  const { config, getDrawerState, theBookmarks } = useContexts();
 
   const { showBookmarkAvatar } = config;
-  const translation = i18n[(config?.language as I18nLocals) || 'en'];
-  const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
-  const { getDrawerState } = useContexts();
+  const translation = i18n[(config?.language as I18nLocals) || "en"];
+  const { loadingBookmarks, bookmarks, bookmarksIndex, getTheBookmarks } =
+    theBookmarks();
 
   const inputRef = useRef(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
 
   const initialState = { count: -1 };
+
   function reducer(
     state: { count: number },
     action: { action: string; bookmarks?: any; results?: any }
   ) {
     let count: number;
     switch (action.action) {
-      case 'increment':
+      case "increment":
         count = state.count + 1 <= results.length - 1 ? state.count + 1 : 0;
         return { count };
-      case 'decrement':
+      case "decrement":
         count = state.count - 1 >= 0 ? state.count - 1 : results.length - 1;
         return { count };
-      case 'open':
+      case "open":
         if (
           state.count > -1 &&
           _.get(
@@ -76,7 +76,7 @@ const InnerComponent: React.FC = () => {
           window.open(action.bookmarks[state.count].url);
         }
         return { count: state.count };
-      case 'reset':
+      case "reset":
         return { count: -1 };
       default:
         throw new Error();
@@ -89,11 +89,11 @@ const InnerComponent: React.FC = () => {
   );
 
   const { watch } = useFormContext();
-  const defaultBookmarkQuery = watch('defaultBookmarkQuery', '');
+  const defaultBookmarkQuery = watch("defaultBookmarkQuery", "");
 
   useEffect(() => {
-    bookmarkDispatch({ action: 'reset' });
-    setQuery('');
+    bookmarkDispatch({ action: "reset" });
+    setQuery("");
 
     let positive: IndexSearchResult[] = [];
     positive.push(allSearchResult);
@@ -101,7 +101,7 @@ const InnerComponent: React.FC = () => {
       return prev.filter((v) => cur.includes(v));
     });
     setResults(posResult);
-  }, [index]);
+  }, [bookmarksIndex]);
 
   useEffect(() => {
     getTheBookmarks(defaultBookmarkQuery);
@@ -113,11 +113,11 @@ const InnerComponent: React.FC = () => {
 
     const handleKeydown = (e) => {
       pressed.set(e.key, true);
-      if (!(pressed.has('Meta') || pressed.has('Control'))) {
+      if (!(pressed.has("Meta") || pressed.has("Control"))) {
         return;
       }
       // focus input
-      if (e.key === 'l') {
+      if (e.key === "l") {
         e.preventDefault();
         if (inputRef.current === null) {
           return;
@@ -127,27 +127,27 @@ const InnerComponent: React.FC = () => {
       }
 
       // Select the bookmark to open
-      if (e.key === 'ArrowDown') {
+      if (e.key === "ArrowDown") {
         e.preventDefault();
         bookmarkDispatch({
-          action: 'increment',
+          action: "increment",
           bookmarks: bookmarks,
           results: results,
         });
       }
-      if (e.key === 'ArrowUp') {
+      if (e.key === "ArrowUp") {
         e.preventDefault();
         bookmarkDispatch({
-          action: 'decrement',
+          action: "decrement",
           bookmarks: bookmarks,
           results: results,
         });
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         e.preventDefault();
         bookmarkDispatch({
-          action: 'open',
+          action: "open",
           bookmarks: bookmarks,
           results: results,
         });
@@ -158,29 +158,29 @@ const InnerComponent: React.FC = () => {
       pressed.delete(e.key);
     };
 
-    window.addEventListener('keydown', handleKeydown);
-    window.addEventListener('keyup', handleKeyup);
+    window.addEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeyup);
     return () => {
-      window.removeEventListener('keyup', handleKeyup);
-      window.removeEventListener('keydown', handleKeydown);
+      window.removeEventListener("keyup", handleKeyup);
+      window.removeEventListener("keydown", handleKeydown);
     };
   }, [bookmarks, results]);
 
-  const allSearchResult = index.search(ALL_BOOKMARKS, 10000);
+  const allSearchResult = bookmarksIndex.search(ALL_BOOKMARKS, 10000);
 
   const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value;
     // avoid opening all bookmarks unexpectedly
     if (inputVal.trim().length === 0) {
-      setQuery('');
+      setQuery("");
     } else {
       setQuery(inputVal);
     }
-    bookmarkDispatch({ action: 'reset' });
+    bookmarkDispatch({ action: "reset" });
 
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
-    const segs = inputVal.split(' ').filter((v) => v.length > 0);
+    const segs = inputVal.split(" ").filter((v) => v.length > 0);
     if (segs.length === 0) {
       positive.push(allSearchResult);
       setResults(positive.reduce((prev, cur) => [...prev, ...cur]));
@@ -188,10 +188,10 @@ const InnerComponent: React.FC = () => {
     }
 
     segs.forEach((q) => {
-      if (q.startsWith('!')) {
-        negative.push(index.search(q.replace('!', ''), 10000));
+      if (q.startsWith("!")) {
+        negative.push(bookmarksIndex.search(q.replace("!", ""), 10000));
       } else {
-        positive.push(index.search(q, 10000));
+        positive.push(bookmarksIndex.search(q, 10000));
       }
     });
 
@@ -213,9 +213,9 @@ const InnerComponent: React.FC = () => {
   };
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !getDrawerState()) {
+    if (e.key === "Enter" && !getDrawerState()) {
       // avoid opening all bookmarks unexpectedly
-      if (selectedBookmark.count === -1 && query !== '') {
+      if (selectedBookmark.count === -1 && query !== "") {
         results.forEach((v) => {
           window.open(bookmarks[Number(v.toString())].url);
         });
@@ -228,7 +228,7 @@ const InnerComponent: React.FC = () => {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid xs={12}>
-            <Stack direction={'row'} spacing={1}>
+            <Stack direction={"row"} spacing={1}>
               <TextField
                 autoComplete="off"
                 label={translation.mainSearch}
@@ -244,7 +244,7 @@ const InnerComponent: React.FC = () => {
                       <Tooltip arrow title={translation.mainSearchAdornment}>
                         <Chip
                           label={
-                            results.length > 0 && query !== ''
+                            results.length > 0 && query !== ""
                               ? `${results.length} ${translation.mainSearchAdornmentHits}`
                               : `${bookmarks.length} ${translation.mainSearchAdornmentTotal}`
                           }
@@ -259,8 +259,8 @@ const InnerComponent: React.FC = () => {
             </Stack>
           </Grid>
           <Grid xs={12}>
-            {loading && (
-              <List sx={{ width: '100%' }}>
+            {loadingBookmarks && (
+              <List sx={{ width: "100%" }}>
                 <LinkaItemSkeleton />
                 <LinkaItemSkeleton />
                 <LinkaItemSkeleton />
@@ -269,17 +269,17 @@ const InnerComponent: React.FC = () => {
                 <LinkaItemSkeleton />
               </List>
             )}
-            <List sx={{ width: '100%' }}>
-              {!loading &&
+            <List sx={{ width: "100%" }}>
+              {!loadingBookmarks &&
                 results.length > 0 &&
-                results.map((val, index) => (
+                results.map((val, bookmarksIndex) => (
                   <Suspense
                     fallback={<LinkaItemSkeleton />}
-                    key={index + 'Suspense'}
+                    key={bookmarksIndex + "Suspense"}
                   >
                     <LinkaItem
                       item={bookmarks[Number(val.toString())]}
-                      selected={index === selectedBookmark.count}
+                      selected={bookmarksIndex === selectedBookmark.count}
                       showLeftAvatar={showBookmarkAvatar}
                     />
                   </Suspense>
