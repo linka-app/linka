@@ -1,22 +1,22 @@
-import { doCreate } from '@/api/linkding/doCreate';
-import { BookmarkForm } from '@/components/BookmarkForm';
-import { useBookmarks, useContexts } from '@/hooks';
-import { BookmarkItem } from '@/types';
-import { Stack } from '@mui/material';
-import React, { useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
+import { doCreate } from "@/api/linkding/doCreate";
+import { BookmarkForm } from "@/components/BookmarkForm";
+import { useContexts } from "@/hooks";
+import { BookmarkItem } from "@/types";
+import { Stack } from "@mui/material";
+import React, { useState } from "react";
+import { FormContainer } from "react-hook-form-mui";
 
 export const AddBookmark: React.FC = () => {
-  const { doDrawer, doToast } = useContexts();
-  const { getTheBookmarks } = useBookmarks();
+  const { doDrawer, doToast, theBookmarks } = useContexts();
+  const { getTheBookmarks } = theBookmarks();
 
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <Stack direction={'column'} spacing={2}>
+    <Stack direction={"column"} spacing={2}>
       <FormContainer
         defaultValues={{
-          url: '',
+          url: "",
           title: undefined,
           description: undefined,
           tag_names: [],
@@ -31,7 +31,7 @@ export const AddBookmark: React.FC = () => {
             .then((res: any) => {
               doToast({
                 open: true,
-                title: 'Success.',
+                title: "Success.",
               });
 
               doDrawer({
@@ -44,8 +44,8 @@ export const AddBookmark: React.FC = () => {
             .catch((reason) => {
               doToast({
                 open: true,
-                type: 'error',
-                title: 'Failed',
+                type: "error",
+                title: "Failed",
                 description: reason,
               });
             })

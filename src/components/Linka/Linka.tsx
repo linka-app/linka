@@ -1,43 +1,42 @@
-import { AddBookmarkSkeleton } from '@/components/AddBookmark';
-import { Credits } from '@/components/Credits';
-import { SettingsSkeleton } from '@/components/Settings';
+import { AddBookmarkSkeleton } from "@/components/AddBookmark";
+import { Credits } from "@/components/Credits";
+import { SettingsSkeleton } from "@/components/Settings";
 import {
   ColorModeContext,
   ColorModeContextType,
-} from '@/contexts/ColorModeContext';
-import { DrawerContextProvider } from '@/contexts/DrawerContext';
-import LinearProgressContextProvider from '@/contexts/LinearProgressContext/LinearProgressContextProvider';
-import ToastContextProvider from '@/contexts/ToastContext/ToastContextProvider';
-import { useBookmarks, useContexts } from '@/hooks';
-import LinkaLogo from '@/images/logo192.png';
-import { getConfig } from '@/utils/getConfig/getConfig';
-import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
-import CachedSharpIcon from '@mui/icons-material/CachedSharp';
-import KeyboardArrowLeftSharpIcon from '@mui/icons-material/KeyboardArrowLeftSharp';
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
+} from "@/contexts/ColorModeContext";
+import { useContexts } from "@/hooks";
+import LinkaLogo from "@/images/logo192.png";
+import { getConfig } from "@/utils/getConfig/getConfig";
+import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
+import CachedSharpIcon from "@mui/icons-material/CachedSharp";
+import KeyboardArrowLeftSharpIcon from "@mui/icons-material/KeyboardArrowLeftSharp";
+import SettingsSharpIcon from "@mui/icons-material/SettingsSharp";
 import {
   AppBar,
   Avatar,
   Box,
   Container,
+  createTheme,
   CssBaseline,
   IconButton,
   Stack,
   ThemeProvider,
   Toolbar,
-  createTheme,
-} from '@mui/material';
-import React, { ReactNode, Suspense, lazy } from 'react';
+} from "@mui/material";
+import React, { lazy, ReactNode, Suspense } from "react";
+import LinkaContextProvider from "@/contexts/LinkaContext/LinkaContextProvider";
 
-const AddBookmark = lazy(() => import('@/components/AddBookmark/AddBookmark'));
-const Settings = lazy(() => import('@/components/Settings/Settings'));
+const AddBookmark = lazy(() => import("@/components/AddBookmark/AddBookmark"));
+const Settings = lazy(() => import("@/components/Settings/Settings"));
 
 export const InnerComponent: React.FC<{
   version: string;
   children: ReactNode;
 }> = (props) => {
-  const { loading, getTheBookmarks } = useBookmarks();
-  const { doDrawer, doDrawerClose, getDrawerState } = useContexts();
+  const { doDrawer, doDrawerClose, getDrawerState, theBookmarks, config } =
+    useContexts();
+  const { getTheBookmarks } = theBookmarks();
 
   const handleAddBookmark = () => {
     doDrawer({
@@ -76,30 +75,29 @@ export const InnerComponent: React.FC<{
             </IconButton>
           )}
           <Box sx={{ flexGrow: 1 }}></Box>
-          <Stack direction={'row'} spacing={2}>
+          <Stack direction={"row"} spacing={1}>
             {getConfig().token && (
-              <IconButton edge="end" onClick={handleAddBookmark}>
+              <IconButton onClick={handleAddBookmark}>
                 <AddCircleSharpIcon />
               </IconButton>
             )}
             {getConfig().token && (
               <IconButton
-                edge="end"
                 onClick={() => {
-                  getTheBookmarks();
+                  getTheBookmarks(config.defaultBookmarkQuery);
                 }}
               >
                 <CachedSharpIcon />
               </IconButton>
             )}
-            <IconButton edge="end" onClick={handleViewSettings}>
+            <IconButton onClick={handleViewSettings}>
               <SettingsSharpIcon />
             </IconButton>
           </Stack>
         </Toolbar>
       </AppBar>
       <Container fixed>
-        <Box mt={'75px'} mb={2}>
+        <Box mt={"75px"} mb={2}>
           {props.children}
           <Stack
             mb={2}
@@ -136,15 +134,11 @@ export const Linka: React.FC<{
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <LinearProgressContextProvider>
-        <ToastContextProvider>
-          <DrawerContextProvider>
-            <InnerComponent version={props.version}>
-              {props.children}
-            </InnerComponent>
-          </DrawerContextProvider>
-        </ToastContextProvider>
-      </LinearProgressContextProvider>
+      <LinkaContextProvider>
+        <InnerComponent version={props.version}>
+          {props.children}
+        </InnerComponent>
+      </LinkaContextProvider>
     </ThemeProvider>
   );
 };

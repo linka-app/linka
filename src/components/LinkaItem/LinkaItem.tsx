@@ -1,33 +1,33 @@
-import { doDelete, doUpdate, getBookmark } from '@/api/linkding';
-import { BookmarkForm } from '@/components/BookmarkForm';
-import { LoadingIcon } from '@/components/LoadingIcon/LoadingIcon';
-import { useBookmarks } from '@/hooks/useBookmarks';
-import { useContexts } from '@/hooks/useContexts';
-import { I18nLocals, i18n } from '@/i18n';
-import { BookmarkItem } from '@/types';
-import { getConfig } from '@/utils';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
-import { Button, IconButton, ListItem, Stack, Typography } from '@mui/material';
-import _ from 'lodash';
-import React, { useState } from 'react';
-import { FormContainer, useFormContext } from 'react-hook-form-mui';
-import CondensedItem from './CondensedItem';
-import ExpandedItem from './ExpandedItem';
-import LinkaItemProps from './LinkaItemProps';
+import { doDelete, doUpdate, getBookmark } from "@/api/linkding";
+import { BookmarkForm } from "@/components/BookmarkForm";
+import { LoadingIcon } from "@/components/LoadingIcon/LoadingIcon";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { useContexts } from "@/hooks/useContexts";
+import { i18n, I18nLocals } from "@/i18n";
+import { BookmarkItem } from "@/types";
+import { getConfig } from "@/utils";
+import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
+import { Button, IconButton, ListItem, Stack, Typography } from "@mui/material";
+import _ from "lodash";
+import React, { useState } from "react";
+import { FormContainer, useFormContext } from "react-hook-form-mui";
+import CondensedItem from "./CondensedItem";
+import ExpandedItem from "./ExpandedItem";
+import LinkaItemProps from "./LinkaItemProps";
 
 export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
   const config = getConfig();
-  const translation = i18n[(config?.language as I18nLocals) || 'en'];
+  const translation = i18n[(config?.language as I18nLocals) || "en"];
 
   const { watch } = useFormContext();
-  const resultViewMode = watch('resultViewMode', 'condensed');
+  const resultViewMode = watch("resultViewMode", "condensed");
 
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { doToast, doDrawer } = useContexts();
   const { getTheBookmarks } = useBookmarks();
 
-  if (!_.get(props, 'item.url')) {
+  if (!_.get(props, "item.url")) {
     return <></>;
   }
 
@@ -53,7 +53,7 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
           .catch((reason) => {
             doToast({
               open: true,
-              type: 'error',
+              type: "error",
               title: translation.statusFailed,
               description: reason,
             });
@@ -68,7 +68,7 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
       })
         .then((res: BookmarkItem) => {
           return (
-            <Stack direction={'column'} spacing={2}>
+            <Stack direction={"column"} spacing={2}>
               <FormContainer
                 defaultValues={{
                   url: res.url,
@@ -102,7 +102,7 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
                     .catch((reason) => {
                       doToast({
                         open: true,
-                        type: 'error',
+                        type: "error",
                         title: translation.statusFailed,
                         description: reason,
                       });
@@ -113,6 +113,7 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
                 }
               >
                 <BookmarkForm
+                  bookmarkId={props.item.id as number}
                   loading={isLoading}
                   actions={
                     <Button
@@ -129,9 +130,9 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
           );
         })
         .catch((reason) => {
-          console.log('reason: ', reason);
+          console.log("reason: ", reason);
           return (
-            <Stack direction={'column'} spacing={2}>
+            <Stack direction={"column"} spacing={2}>
               <Typography variant="h6">{translation.linkaItemOops}</Typography>
               <Typography variant="body1">
                 {translation.linkaItemNotYourBookmark}
@@ -168,7 +169,7 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
         </IconButton>
       }
     >
-      {resultViewMode === 'condensed' ? (
+      {resultViewMode === "condensed" ? (
         <CondensedItem {...props} />
       ) : (
         <ExpandedItem {...props} />
