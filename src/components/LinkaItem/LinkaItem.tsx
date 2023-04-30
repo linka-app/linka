@@ -5,7 +5,6 @@ import { useBookmarks } from "@/hooks/useBookmarks";
 import { useContexts } from "@/hooks/useContexts";
 import { i18n, I18nLocals } from "@/i18n";
 import { BookmarkItem } from "@/types";
-import { getConfig } from "@/utils";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import { Button, IconButton, ListItem, Stack, Typography } from "@mui/material";
 import _ from "lodash";
@@ -16,7 +15,8 @@ import ExpandedItem from "./ExpandedItem";
 import LinkaItemProps from "./LinkaItemProps";
 
 export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
-  const config = getConfig();
+  const { doToast, doDrawer, config } = useContexts();
+
   const translation = i18n[(config?.language as I18nLocals) || "en"];
 
   const { watch } = useFormContext();
@@ -24,7 +24,6 @@ export const LinkaItem: React.FC<LinkaItemProps> = (props) => {
 
   const [isDrawerLoading, setIsDrawerLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { doToast, doDrawer } = useContexts();
   const { getTheBookmarks } = useBookmarks();
 
   if (!_.get(props, "item.url")) {

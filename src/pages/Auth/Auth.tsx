@@ -1,17 +1,16 @@
-import { doAuth } from '@/api';
-import FormPartLinkdingSettings from '@/components/Settings/FormPartLinkdingSettings';
-import { useContexts } from '@/hooks/useContexts';
-import { LinkaPartialSettings } from '@/types';
-import { getConfig, setConfig } from '@/utils';
-import { LoadingButton } from '@mui/lab';
-import { Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
-import AuthProps from './AuthProps';
+import { doAuth } from "@/api";
+import FormPartLinkdingSettings from "@/components/Settings/FormPartLinkdingSettings";
+import { useContexts } from "@/hooks/useContexts";
+import { LinkaPartialSettings } from "@/types";
+import { setConfig } from "@/utils";
+import { LoadingButton } from "@mui/lab";
+import { Stack, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { FormContainer } from "react-hook-form-mui";
+import AuthProps from "./AuthProps";
 
 export const Auth: React.FC<AuthProps> = (props) => {
-  const { doToast } = useContexts();
-  const config = getConfig();
+  const { doToast, config } = useContexts();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSetToken = (data: LinkaPartialSettings) => {
@@ -26,9 +25,9 @@ export const Auth: React.FC<AuthProps> = (props) => {
         .catch((reason) => {
           doToast({
             open: true,
-            type: 'error',
-            title: 'Failed to load bookmarks.',
-            description: 'detail: ' + reason,
+            type: "error",
+            title: "Failed to load bookmarks.",
+            description: "detail: " + reason,
           });
           props.setReady(false);
           setSubmitting(false);

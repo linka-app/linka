@@ -32,7 +32,6 @@ const LinkaItem = lazy(() => import("@/components/LinkaItem/LinkaItem"));
 
 const InnerComponent: React.FC = () => {
   // put into the component to hot reload configs, e.g. set `showBookmarkAvatar`
-
   const { config, getDrawerState, theBookmarks } = useContexts();
 
   const { showBookmarkAvatar } = config;
