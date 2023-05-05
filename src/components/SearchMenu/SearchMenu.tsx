@@ -42,6 +42,7 @@ export const SearchMenu: React.FC = () => {
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleClick}
+        disableRipple
       >
         <MoreVertSharpIcon />
       </IconButton>
