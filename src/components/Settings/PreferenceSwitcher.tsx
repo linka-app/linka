@@ -8,7 +8,7 @@ import * as React from "react";
 
 export const PreferenceSwitcher: React.FC = () => {
   const { config, setConfig } = useContexts();
-  const { showBookmarkAvatar } = config();
+  const { showBookmarkAvatar } = config;
   const theme = useTheme();
   const { toggleColorMode } = useContexts();
   const [show, setShow] = React.useState(showBookmarkAvatar);
