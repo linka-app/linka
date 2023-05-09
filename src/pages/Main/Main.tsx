@@ -48,6 +48,7 @@ const InnerComponent: React.FC = () => {
   const [results, setResults] = useState(defaultSearchResults);
 
   const sortAndSetResults = (results: IndexSearchResult) => {
+    // TODO: sort search results in alphabetical order (parse indexes to characters)
     setResults(results);
   };
 
@@ -95,7 +96,7 @@ const InnerComponent: React.FC = () => {
 
   const { watch } = useFormContext();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const subscription = watch((value, { name, type }) => {
       if (name === "search") {
         debouncedResults(value.search);
@@ -195,7 +196,8 @@ const InnerComponent: React.FC = () => {
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
     const segs = inputVal.split(" ").filter((v) => v.length > 0);
-    if (inputVal.length === 0) {
+    // ignore prefix space
+    if (segs.length === 0) {
       sortAndSetResults(allSearchResult);
       return;
     }
@@ -212,6 +214,7 @@ const InnerComponent: React.FC = () => {
     });
 
     if (fullQueryPositive.length > 0) {
+      // flexsearch supports full text search, so we can just put all the keywords together
       positive.push(bookmarksIndex.search(fullQueryPositive.join(" "), 10000));
     }
 
@@ -238,7 +241,7 @@ const InnerComponent: React.FC = () => {
   };
 
   const debouncedResults = React.useMemo(() => {
-    return _.debounce(onQueryUpdate, 300);
+    return _.debounce(onQueryUpdate, 200);
   }, []);
 
   useEffect(() => {

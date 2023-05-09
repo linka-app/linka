@@ -39,7 +39,7 @@ Following configs are for testing:
 - `cmd+Down Arrow` or `ctrl+Down Arrow` / `cmd+Down Arrow` or `ctrl+Down Arrow` to navigate the results
 - `cmd+Enter` or `ctrl+Enter` with an item selected to open it as a new tab or open all bookmarks when no item is selected
 
-## Development Guid
+## Development Guide
 
 ### Prerequisite
 
