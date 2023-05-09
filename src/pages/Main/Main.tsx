@@ -291,7 +291,6 @@ const InnerComponent: React.FC = () => {
                   ),
                 }}
               />
-
               <SearchMenu />
             </Stack>
           </Grid>
