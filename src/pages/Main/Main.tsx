@@ -1,45 +1,45 @@
 import LinkaItemSkeleton from '@/components/LinkaItem/LinkaItemSkeleton';
 import { SearchMenu } from '@/components/SearchMenu';
 import { useContexts } from '@/hooks';
-import { useBookmarks } from '@/hooks/useBookmarks';
 import { ALL_BOOKMARKS } from '@/hooks/useBookmarks/useBookmarks';
-import { I18nLocals, i18n } from '@/i18n';
+import { i18n, I18nLocals } from '@/i18n';
 import { getConfig } from '@/utils';
 import {
   Box,
   Chip,
-  Unstable_Grid2 as Grid,
   InputAdornment,
   List,
   Stack,
-  TextField,
   Tooltip,
+  Unstable_Grid2 as Grid,
 } from '@mui/material';
 import { IndexSearchResult } from 'flexsearch';
 import _ from 'lodash';
 import React, {
-  ChangeEvent,
   KeyboardEvent,
-  Suspense,
   lazy,
+  Suspense,
   useEffect,
   useReducer,
   useRef,
   useState,
 } from 'react';
-import { FormContainer, useFormContext } from 'react-hook-form-mui';
+import {
+  FormContainer,
+  TextFieldElement,
+  useFormContext,
+} from 'react-hook-form-mui';
 
 const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
 const InnerComponent: React.FC = () => {
   // put into the component to hot reload configs, e.g. set `showBookmarkAvatar`
-  // TODO: put it into context and share with provider
-  const config = getConfig();
+  const { config, getDrawerState, theBookmarks } = useContexts();
 
   const { showBookmarkAvatar } = config;
   const translation = i18n[(config?.language as I18nLocals) || 'en'];
-  const { loading, bookmarks, index, getTheBookmarks } = useBookmarks();
-  const { getDrawerState } = useContexts();
+  const { loadingBookmarks, bookmarks, bookmarksIndex, getTheBookmarks } =
+    theBookmarks();
 
   const inputRef = useRef(null);
   const [query, setQuery] = useState('');
@@ -47,7 +47,13 @@ const InnerComponent: React.FC = () => {
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
 
+  const sortAndSetResults = (results: IndexSearchResult) => {
+    // TODO: sort search results in alphabetical order (parse indexes to characters)
+    setResults(results);
+  };
+
   const initialState = { count: -1 };
+
   function reducer(
     state: { count: number },
     action: { action: string; bookmarks?: any; results?: any }
@@ -89,6 +95,16 @@ const InnerComponent: React.FC = () => {
   );
 
   const { watch } = useFormContext();
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'search') {
+        debouncedResults(value.search);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   const defaultBookmarkQuery = watch('defaultBookmarkQuery', '');
 
   useEffect(() => {
@@ -96,12 +112,12 @@ const InnerComponent: React.FC = () => {
     setQuery('');
 
     let positive: IndexSearchResult[] = [];
-    positive.push(index.search(ALL_BOOKMARKS, 10000));
+    positive.push(allSearchResult);
     let posResult = positive.reduce((prev, cur) => {
       return prev.filter((v) => cur.includes(v));
     });
-    setResults(posResult);
-  }, [index]);
+    sortAndSetResults(posResult);
+  }, [bookmarksIndex]);
 
   useEffect(() => {
     getTheBookmarks(defaultBookmarkQuery);
@@ -111,7 +127,7 @@ const InnerComponent: React.FC = () => {
     // handle hotkeys
     const pressed = new Map<string, boolean>();
 
-    const handleKeydown = (e) => {
+    const handleKeydown = (e: any) => {
       pressed.set(e.key, true);
       if (!(pressed.has('Meta') || pressed.has('Control'))) {
         return;
@@ -154,7 +170,7 @@ const InnerComponent: React.FC = () => {
       }
     };
 
-    const handleKeyup = (e) => {
+    const handleKeyup = (e: any) => {
       pressed.delete(e.key);
     };
 
@@ -166,8 +182,9 @@ const InnerComponent: React.FC = () => {
     };
   }, [bookmarks, results]);
 
-  const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputVal = e.target.value;
+  const allSearchResult = bookmarksIndex.search(ALL_BOOKMARKS, 10000);
+
+  const onQueryUpdate = (inputVal: string) => {
     // avoid opening all bookmarks unexpectedly
     if (inputVal.trim().length === 0) {
       setQuery('');
@@ -179,32 +196,59 @@ const InnerComponent: React.FC = () => {
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
     const segs = inputVal.split(' ').filter((v) => v.length > 0);
+    // ignore prefix space
     if (segs.length === 0) {
-      positive.push(index.search(ALL_BOOKMARKS, 10000));
-      let posResult = positive.reduce((prev, cur) => {
-        return prev.filter((v) => cur.includes(v));
-      });
-      setResults(posResult);
+      sortAndSetResults(allSearchResult);
       return;
     }
 
+    let fullQueryPositive: string[] = [];
+    let fullQueryNegative: string[] = [];
+
     segs.forEach((q) => {
       if (q.startsWith('!')) {
-        negative.push(index.search(q.replace('!', ''), 10000));
+        fullQueryNegative.push(q.replace('!', '').trim());
       } else {
-        positive.push(index.search(q, 10000));
+        fullQueryPositive.push(q.trim());
       }
     });
-    let posResult = positive.reduce((prev, cur) => {
-      return prev.filter((v) => cur.includes(v));
-    });
+
+    if (fullQueryPositive.length > 0) {
+      // flexsearch supports full text search, so we can just put all the keywords together
+      positive.push(bookmarksIndex.search(fullQueryPositive.join(' '), 10000));
+    }
+
+    if (fullQueryNegative.length > 0) {
+      negative.push(bookmarksIndex.search(fullQueryNegative.join(' '), 10000));
+    }
+
+    let posResult: IndexSearchResult = [];
+    let negaResult: IndexSearchResult = [];
+    if (positive.length > 0) {
+      posResult = positive.reduce((prev, cur) => [...prev, ...cur]);
+    }
+
     if (negative.length > 0) {
-      let negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
-      setResults(posResult.filter((v) => !negaResult.includes(v)));
+      negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
+      sortAndSetResults(
+        (posResult.length > 0 ? posResult : allSearchResult).filter(
+          (v) => !negaResult.includes(v)
+        )
+      );
     } else {
-      setResults(posResult);
+      sortAndSetResults(posResult);
     }
   };
+
+  const debouncedResults = React.useMemo(() => {
+    return _.debounce(onQueryUpdate, 200);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      debouncedResults.cancel();
+    };
+  });
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !getDrawerState()) {
@@ -223,15 +267,14 @@ const InnerComponent: React.FC = () => {
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Stack direction={'row'} spacing={1}>
-              <TextField
+              <TextFieldElement
                 autoComplete="off"
+                name={'search'}
                 label={translation.mainSearch}
                 variant="outlined"
-                value={query}
-                onChange={onQueryUpdate}
                 onKeyDown={onEnterPressed}
-                inputRef={inputRef}
                 fullWidth
+                inputRef={inputRef}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -248,11 +291,12 @@ const InnerComponent: React.FC = () => {
                   ),
                 }}
               />
+
               <SearchMenu />
             </Stack>
           </Grid>
           <Grid xs={12}>
-            {loading && (
+            {loadingBookmarks && (
               <List sx={{ width: '100%' }}>
                 <LinkaItemSkeleton />
                 <LinkaItemSkeleton />
@@ -263,16 +307,16 @@ const InnerComponent: React.FC = () => {
               </List>
             )}
             <List sx={{ width: '100%' }}>
-              {!loading &&
+              {!loadingBookmarks &&
                 results.length > 0 &&
-                results.map((val, index) => (
+                results.map((val, bookmarksIndex) => (
                   <Suspense
                     fallback={<LinkaItemSkeleton />}
-                    key={index + 'Suspense'}
+                    key={bookmarksIndex + 'Suspense'}
                   >
                     <LinkaItem
                       item={bookmarks[Number(val.toString())]}
-                      selected={index === selectedBookmark.count}
+                      selected={bookmarksIndex === selectedBookmark.count}
                       showLeftAvatar={showBookmarkAvatar}
                     />
                   </Suspense>

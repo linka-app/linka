@@ -1,20 +1,29 @@
-import { getTags } from '@/api/linkding/getTags';
-import { BookmarkFormFillButton } from '@/components/BookmarkForm/BookmarkFormFillButton';
-import { TagItem, Tags } from '@/types';
-import { Button, Unstable_Grid2 as Grid, Stack } from '@mui/material';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { getTags } from "@/api/linkding/getTags";
+import { BookmarkFormFillButton } from "@/components/BookmarkForm/BookmarkFormFillButton";
+import { TagItem, Tags } from "@/types";
+import { Button, Stack, Unstable_Grid2 as Grid } from "@mui/material";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   AutocompleteElement,
   SwitchElement,
-  TextFieldElement,
   TextareaAutosizeElement,
-} from 'react-hook-form-mui';
+  TextFieldElement,
+  useFormContext,
+} from "react-hook-form-mui";
+import { useContexts } from "@/hooks";
 
 export const BookmarkForm: React.FC<{
+  bookmarkId?: number;
   loading: boolean;
   actions: ReactNode;
 }> = (props) => {
+  const { watch } = useFormContext();
+  const resultViewMode = watch("url");
   const [tags, setTags] = useState<string[]>([]);
+  const [hasBookmark, setHasBookmark] = useState<boolean>();
+
+  const { theBookmarks } = useContexts();
+  const { bookmarks } = theBookmarks();
 
   useEffect(() => {
     getTags().then((res: Tags) => {
@@ -25,11 +34,27 @@ export const BookmarkForm: React.FC<{
     });
   }, []);
 
+  useEffect(() => {
+    if (resultViewMode) {
+      const bookmark = bookmarks.find((bookmark) => {
+        if (props.bookmarkId && bookmark.id === props.bookmarkId) {
+          return false;
+        }
+        return bookmark.url === resultViewMode;
+      });
+      if (bookmark) {
+        setHasBookmark(true);
+      } else {
+        setHasBookmark(false);
+      }
+    }
+  }, [resultViewMode, bookmarks]);
+
   return (
     <Stack spacing={2} pb={2}>
       <Grid container spacing={0}>
         <Grid xs={8}>
-          <Stack direction={'row'} spacing={1}>
+          <Stack direction={"row"} spacing={1}>
             <SwitchElement
               label="Unread"
               labelPlacement="start"
@@ -51,8 +76,8 @@ export const BookmarkForm: React.FC<{
           xs={12}
           md={4}
           sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
+            display: "flex",
+            justifyContent: "flex-end",
           }}
         >
           {props.actions}
@@ -65,6 +90,7 @@ export const BookmarkForm: React.FC<{
         fullWidth
         required
         autoComplete="off"
+        helperText={hasBookmark ? "This bookmark already exists" : null}
       />
       <BookmarkFormFillButton />
       <TextFieldElement

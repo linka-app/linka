@@ -19,5 +19,6 @@
   "bookmarkFormFillButtonURLRequired": "A URL is required",
   "bookmarkFormFillButtonFillWithChatGPT": "Fill with Chat GPT",
   "settingsViewModeCondensed": "Condensed View",
-  "settingsViewModeExpanded": "Expanded View"
+  "settingsViewModeExpanded": "Expanded View",
+  "settingsViewShareBasicAuth": "Share With Others"
 }

@@ -1,14 +1,14 @@
-import { I18nLocals, i18n } from '@/i18n';
-import { QueryBookmarkMode, ViewMode } from '@/types';
-import { getConfig } from '@/utils';
-import MoreVertSharpIcon from '@mui/icons-material/MoreVertSharp';
-import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
-import React from 'react';
-import { useFormContext } from 'react-hook-form-mui';
+import { i18n, I18nLocals } from "@/i18n";
+import { QueryBookmarkMode, ViewMode } from "@/types";
+import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
+import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import React from "react";
+import { useFormContext } from "react-hook-form-mui";
+import { useContexts } from "@/hooks";
 
 export const SearchMenu: React.FC = () => {
-  const config = getConfig();
-  const translation = i18n[(config?.language as I18nLocals) || 'en'];
+  const { config } = useContexts();
+  const translation = i18n[(config?.language as I18nLocals) || "en"];
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -20,16 +20,16 @@ export const SearchMenu: React.FC = () => {
   };
 
   const { watch, setValue } = useFormContext();
-  const defaultBookmarkQuery = watch('defaultBookmarkQuery', '');
-  const resultViewMode = watch('resultViewMode', 'condensed');
+  const defaultBookmarkQuery = watch("defaultBookmarkQuery", "");
+  const resultViewMode = watch("resultViewMode", "condensed");
 
-  const handleSelect = (query: QueryBookmarkMode = '') => {
-    setValue('defaultBookmarkQuery', query);
+  const handleSelect = (query: QueryBookmarkMode = "") => {
+    setValue("defaultBookmarkQuery", query);
     setAnchorEl(null);
   };
 
   const handleViewModeSelect = (viewMode: ViewMode) => {
-    setValue('resultViewMode', viewMode);
+    setValue("resultViewMode", viewMode);
     setAnchorEl(null);
   };
 
@@ -38,59 +38,60 @@ export const SearchMenu: React.FC = () => {
       <IconButton
         aria-label="more"
         id="bookmark-query-select-menu-button"
-        aria-controls={open ? 'bookmark-query-select-menu-button' : undefined}
-        aria-expanded={open ? 'true' : undefined}
+        aria-controls={open ? "bookmark-query-select-menu-button" : undefined}
+        aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleClick}
+        disableRipple
       >
         <MoreVertSharpIcon />
       </IconButton>
       <Menu
         id="bookmark-query-select-menu-button"
         MenuListProps={{
-          'aria-labelledby': 'bookmark-query-select-menu-button',
+          "aria-labelledby": "bookmark-query-select-menu-button",
         }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
       >
         <MenuItem
-          selected={defaultBookmarkQuery === ''}
+          selected={defaultBookmarkQuery === ""}
           onClick={() => {
-            handleSelect('');
+            handleSelect("");
           }}
         >
           {translation.mainBookMarksToShowMine}
         </MenuItem>
         <MenuItem
-          selected={defaultBookmarkQuery === 'shared'}
+          selected={defaultBookmarkQuery === "shared"}
           onClick={() => {
-            handleSelect('shared/');
+            handleSelect("shared/");
           }}
         >
           {translation.mainBookMarksToShowIncludeShared}
         </MenuItem>
         <MenuItem
-          selected={defaultBookmarkQuery === 'archived'}
+          selected={defaultBookmarkQuery === "archived"}
           onClick={() => {
-            handleSelect('archived/');
+            handleSelect("archived/");
           }}
         >
           {translation.mainBookMarksToShowArchived}
         </MenuItem>
         <Divider />
         <MenuItem
-          selected={resultViewMode === 'condensed'}
+          selected={resultViewMode === "condensed"}
           onClick={() => {
-            handleViewModeSelect('condensed');
+            handleViewModeSelect("condensed");
           }}
         >
           {translation.settingsViewModeCondensed}
         </MenuItem>
         <MenuItem
-          selected={resultViewMode === 'expanded'}
+          selected={resultViewMode === "expanded"}
           onClick={() => {
-            handleViewModeSelect('expanded');
+            handleViewModeSelect("expanded");
           }}
         >
           {translation.settingsViewModeExpanded}

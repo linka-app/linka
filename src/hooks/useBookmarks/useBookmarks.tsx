@@ -1,28 +1,27 @@
-import { getBookmarks } from '@/api/linkding';
-import { useContexts } from '@/hooks/useContexts';
-import { BookmarkItem, Res, queryBookmarkToShow } from '@/types';
-import { Index } from 'flexsearch';
-import { useState } from 'react';
+import { getBookmarks } from "@/api/linkding";
+import { BookmarkItem, QueryBookmarkMode, Res } from "@/types";
+import { Index } from "flexsearch";
+import { useState } from "react";
 
-//Hacky way to get all bookmarks when needed
-export const ALL_BOOKMARKS = 'ALL_BOOKMARKS';
+// add a constant suffix to each bookmark's full text
+// to be able to search ALL bookmarks with single keyword
+export const ALL_BOOKMARKS = "ALL_BOOKMARKS";
 
 export const useBookmarks = () => {
-  const [loading, isLoading] = useState(false);
-  const { doLoading } = useContexts();
+  const [loadingBookmarks, isLoadingBookmarks] = useState(false);
 
   const defaultBookmarks: BookmarkItem[] = [];
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
-  const [index, setIndex] = useState(new Index({ tokenize: 'full' }));
-
-  const getTheBookmarks = async (bookmarksToShow: queryBookmarkToShow = '') => {
-    isLoading(true);
-    doLoading(true);
+  const [bookmarksIndex, setBookmarksIndex] = useState(
+    new Index({ tokenize: "full" })
+  );
+  const getTheBookmarks = async (bookmarksToShow: QueryBookmarkMode = "") => {
+    isLoadingBookmarks(true);
     setBookmarks(defaultBookmarks);
-    getBookmarks({}, bookmarksToShow ? bookmarksToShow : '')
+    getBookmarks({}, bookmarksToShow ? bookmarksToShow : "")
       .then((res: Res) => {
         setBookmarks(res.results);
-        const searchIndex = new Index({ tokenize: 'full' });
+        const searchIndex = new Index({ tokenize: "full" });
         res.results.forEach((v, idx) => {
           searchIndex.add(
             idx,
@@ -32,28 +31,26 @@ export const useBookmarks = () => {
               v.website_title,
               v.website_description,
               v.url,
-              v.tag_names.join(' '),
+              v.tag_names.join(" "),
               ALL_BOOKMARKS,
-            ].join(' ')
+            ].join(" ")
           );
         });
 
-        setIndex(searchIndex);
+        setBookmarksIndex(searchIndex);
 
-        isLoading(false);
-        doLoading(false);
+        isLoadingBookmarks(false);
       })
       .catch((reason) => {
-        console.log('reason: ', reason);
-        isLoading(false);
-        doLoading(false);
+        console.log("reason: ", reason);
+        isLoadingBookmarks(false);
       });
   };
 
   return {
-    loading,
+    loadingBookmarks,
     bookmarks,
-    index,
+    bookmarksIndex,
     getTheBookmarks,
   } as const;
 };

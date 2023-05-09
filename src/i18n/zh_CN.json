@@ -18,6 +18,7 @@
   "bookmarkFormFillButton": "用ChatGPT自动填充",
   "bookmarkFormFillButtonURLRequired": "URL不能为空",
   "bookmarkFormFillButtonFillWithChatGPT": "用ChatGPT自动填充",
-  "settingsViewModeCondensed": "Condensed View",
-  "settingsViewModeExpanded": "Expanded View"
+  "settingsViewModeCondensed": "紧凑模式",
+  "settingsViewModeExpanded": "宽松模式",
+  "settingsViewShareBasicAuth": "分享配置"
 }

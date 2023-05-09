@@ -1,25 +1,31 @@
-import { browserlessDoAuth } from '@/api/browserless';
-import { doAuth } from '@/api/linkding/doAuth';
-import { openaiDoAuth } from '@/api/openai';
-import { useContexts } from '@/hooks';
-import { I18nLocals, i18n } from '@/i18n';
-import { LinkaSettings } from '@/types';
-import { getConfig, setConfig } from '@/utils';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import _ from 'lodash';
-import * as React from 'react';
+import { browserlessDoAuth } from "@/api/browserless";
+import { doAuth } from "@/api/linkding/doAuth";
+import { openaiDoAuth } from "@/api/openai";
+import { useContexts } from "@/hooks";
+import { i18n, I18nLocals } from "@/i18n";
+import { LinkaSettings } from "@/types";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+import _ from "lodash";
+import * as React from "react";
 import {
   FormContainer,
   SelectElement,
   TextFieldElement,
-} from 'react-hook-form-mui';
-import FormPartLinkdingSettings from './FormPartLinkdingSettings';
+} from "react-hook-form-mui";
+import FormPartLinkdingSettings from "./FormPartLinkdingSettings";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export const SettingsForm: React.FC = () => {
-  const config = getConfig();
-  const translation = i18n[(config?.language as I18nLocals) || 'en'];
+  const { config, setConfig } = useContexts();
+  const translation = i18n[(config?.language as I18nLocals) || "en"];
   const [validating, setValidating] = React.useState(false);
   const { doToast } = useContexts();
+
+  const { url, token } = config;
+  let shareURL = new URL(window.location.href);
+  shareURL.searchParams.append("url", encodeURIComponent(url || ""));
+  shareURL.searchParams.append("token", token || "");
 
   const validateSettings = async (data: LinkaSettings) => {
     setValidating(true);
@@ -27,29 +33,29 @@ export const SettingsForm: React.FC = () => {
     // linkding settings
     if (data.language) {
       setConfig({
-        language: _.get(data, 'language'),
-        defaultBookmarkQuery: _.get(data, 'defaultBookmarkQuery'),
+        language: _.get(data, "language"),
+        defaultBookmarkQuery: _.get(data, "defaultBookmarkQuery"),
       });
     }
     if (data.token && data.url) {
       await doAuth({ token: data.token, url: data.url })
         .then((res) => {
-          setConfig({ token: _.get(data, 'token'), url: _.get(data, 'url') });
+          setConfig({ token: _.get(data, "token"), url: _.get(data, "url") });
         })
         .catch((reason) => {
           doToast({
             open: true,
-            type: 'error',
+            type: "error",
             title: translation.statusFailed,
-            description: 'detail: ' + reason,
+            description: "detail: " + reason,
           });
         });
     } else {
       doToast({
         open: true,
-        type: 'error',
+        type: "error",
         title: translation.statusFailed,
-        description: 'Failed URL and Token is required.',
+        description: "Failed URL and Token is required.",
       });
       setValidating(false);
       return false;
@@ -60,14 +66,14 @@ export const SettingsForm: React.FC = () => {
     if (data.browserlessToken) {
       await browserlessDoAuth({ token: data.browserlessToken })
         .then((res) => {
-          setConfig({ browserlessToken: _.get(data, 'browserlessToken') });
+          setConfig({ browserlessToken: _.get(data, "browserlessToken") });
         })
         .catch((reason) => {
           doToast({
             open: true,
-            type: 'error',
+            type: "error",
             title: translation.statusFailed,
-            description: 'Browserless detail: ' + reason,
+            description: "Browserless detail: " + reason,
           });
           valid = false;
         });
@@ -76,14 +82,14 @@ export const SettingsForm: React.FC = () => {
     if (data.openaiToken) {
       await openaiDoAuth({ token: data.openaiToken })
         .then((res) => {
-          setConfig({ openaiToken: _.get(data, 'openaiToken') });
+          setConfig({ openaiToken: _.get(data, "openaiToken") });
         })
         .catch((reason) => {
           doToast({
             open: true,
-            type: 'error',
+            type: "error",
             title: translation.statusFailed,
-            description: 'Open AI detail: ' + reason,
+            description: "Open AI detail: " + reason,
           });
           valid = false;
         });
@@ -98,7 +104,7 @@ export const SettingsForm: React.FC = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: "100%",
       }}
     >
       <FormContainer defaultValues={config} onSuccess={validateSettings}>
@@ -109,12 +115,12 @@ export const SettingsForm: React.FC = () => {
             label="Language"
             options={[
               {
-                id: 'en',
-                label: 'English',
+                id: "en",
+                label: "English",
               },
               {
-                id: 'zh_CN',
-                label: 'Chinese',
+                id: "zh_CN",
+                label: "Chinese",
               },
             ]}
             fullWidth
@@ -124,11 +130,11 @@ export const SettingsForm: React.FC = () => {
             label="Default View Mode"
             options={[
               {
-                id: 'condensed',
+                id: "condensed",
                 label: translation.settingsViewModeCondensed,
               },
               {
-                id: 'expanded',
+                id: "expanded",
                 label: translation.settingsViewModeExpanded,
               },
             ]}
@@ -139,35 +145,53 @@ export const SettingsForm: React.FC = () => {
             label="Default Bookmarks to show"
             options={[
               {
-                id: '',
+                // FIXME: dropdown select empty string does not match anything
+                // may decoupling the option id from Linkding query params types
+                id: "",
                 label: translation.mainBookMarksToShowMine,
               },
               {
-                id: 'shared',
+                id: "shared",
                 label: translation.mainBookMarksToShowIncludeShared,
               },
               {
-                id: 'archived',
+                id: "archived",
                 label: translation.mainBookMarksToShowArchived,
               },
             ]}
             fullWidth
           />
-          <Typography variant="h5">Linkding Settings</Typography>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h5">Linkding Settings</Typography>
+            <CopyToClipboard
+              text={shareURL.toString()}
+              onCopy={(_: string, __: boolean) =>
+                doToast({ title: "Copied link to clipboard!" })
+              }
+            >
+              <Button endIcon={<ShareIcon />}>
+                {translation.settingsViewShareBasicAuth}
+              </Button>
+            </CopyToClipboard>
+          </Stack>
           <FormPartLinkdingSettings />
           <Typography variant="h5">Optional Settings</Typography>
           <TextFieldElement
             name="browserlessToken"
             label="Browserless.io API Key"
             helperText={
-              'Browserless.io scrapes the content from provided URL before feeding it to OpenAi.'
+              "Browserless.io scrapes the content from provided URL before feeding it to OpenAi."
             }
             fullWidth
           />
           <TextFieldElement
             name="openaiToken"
             label="Open AI API Key"
-            helperText={'OpenAI token for AI integration.'}
+            helperText={"OpenAI token for AI integration."}
             fullWidth
           />
           <Button
