@@ -28,9 +28,10 @@ export const ExpandedItem: React.FC<LinkaItemProps> = (props) => {
   return (
     <ListItemButton
       component="a"
-      href={props.item.url}
+      onClick={() => {
+        window.open(props.item.url, '_blank');
+      }}
       selected={props.selected}
-      target="_blank"
       dense
     >
       {isDesktop && props.showLeftAvatar && (

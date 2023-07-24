@@ -16,9 +16,10 @@ export const CondensedItem: React.FC<LinkaItemProps> = (props) => {
   return (
     <ListItemButton
       component="a"
-      href={props.item.url}
       selected={props.selected}
-      target="_blank"
+      onClick={() => {
+        window.open(props.item.url, '_blank');
+      }}
       dense
     >
       {isDesktop && props.showLeftAvatar && (
