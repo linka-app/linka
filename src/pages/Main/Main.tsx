@@ -10,12 +10,14 @@ import {
   InputAdornment,
   List,
   Stack,
+  TextField,
   Tooltip,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
 import { IndexSearchResult } from 'flexsearch';
 import _ from 'lodash';
 import React, {
+  ChangeEvent,
   KeyboardEvent,
   lazy,
   Suspense,
@@ -24,11 +26,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  FormContainer,
-  TextFieldElement,
-  useFormContext,
-} from 'react-hook-form-mui';
+import { FormContainer, useFormContext } from 'react-hook-form-mui';
 
 const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
@@ -46,11 +44,6 @@ const InnerComponent: React.FC = () => {
 
   const defaultSearchResults: IndexSearchResult = [];
   const [results, setResults] = useState(defaultSearchResults);
-
-  const sortAndSetResults = (results: IndexSearchResult) => {
-    // TODO: sort search results in alphabetical order (parse indexes to characters)
-    setResults(results);
-  };
 
   const initialState = { count: -1 };
 
@@ -95,16 +88,6 @@ const InnerComponent: React.FC = () => {
   );
 
   const { watch } = useFormContext();
-
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (name === 'search') {
-        debouncedResults(value.search);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
   const defaultBookmarkQuery = watch('defaultBookmarkQuery', '');
 
   useEffect(() => {
@@ -116,7 +99,7 @@ const InnerComponent: React.FC = () => {
     let posResult = positive.reduce((prev, cur) => {
       return prev.filter((v) => cur.includes(v));
     });
-    sortAndSetResults(posResult);
+    setResults(posResult);
   }, [bookmarksIndex]);
 
   useEffect(() => {
@@ -127,7 +110,7 @@ const InnerComponent: React.FC = () => {
     // handle hotkeys
     const pressed = new Map<string, boolean>();
 
-    const handleKeydown = (e: any) => {
+    const handleKeydown = (e) => {
       pressed.set(e.key, true);
       if (!(pressed.has('Meta') || pressed.has('Control'))) {
         return;
@@ -170,7 +153,7 @@ const InnerComponent: React.FC = () => {
       }
     };
 
-    const handleKeyup = (e: any) => {
+    const handleKeyup = (e) => {
       pressed.delete(e.key);
     };
 
@@ -184,7 +167,8 @@ const InnerComponent: React.FC = () => {
 
   const allSearchResult = bookmarksIndex.search(ALL_BOOKMARKS, 10000);
 
-  const onQueryUpdate = (inputVal: string) => {
+  const onQueryUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputVal = e.target.value;
     // avoid opening all bookmarks unexpectedly
     if (inputVal.trim().length === 0) {
       setQuery('');
@@ -196,12 +180,13 @@ const InnerComponent: React.FC = () => {
     let positive: IndexSearchResult[] = [];
     let negative: IndexSearchResult[] = [];
     const segs = inputVal.split(' ').filter((v) => v.length > 0);
-    // ignore prefix space
     if (segs.length === 0) {
-      sortAndSetResults(allSearchResult);
+      positive.push(allSearchResult);
+      setResults(positive.reduce((prev, cur) => [...prev, ...cur]));
       return;
     }
 
+    // multi keywords produce a cut set
     let fullQueryPositive: string[] = [];
     let fullQueryNegative: string[] = [];
 
@@ -227,28 +212,17 @@ const InnerComponent: React.FC = () => {
     if (positive.length > 0) {
       posResult = positive.reduce((prev, cur) => [...prev, ...cur]);
     }
-
     if (negative.length > 0) {
       negaResult = negative.reduce((prev, cur) => [...prev, ...cur]);
-      sortAndSetResults(
+      setResults(
         (posResult.length > 0 ? posResult : allSearchResult).filter(
           (v) => !negaResult.includes(v)
         )
       );
     } else {
-      sortAndSetResults(posResult);
+      setResults(posResult);
     }
   };
-
-  const debouncedResults = React.useMemo(() => {
-    return _.debounce(onQueryUpdate, 200);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      debouncedResults.cancel();
-    };
-  });
 
   const onEnterPressed = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !getDrawerState()) {
@@ -267,14 +241,15 @@ const InnerComponent: React.FC = () => {
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Stack direction={'row'} spacing={1}>
-              <TextFieldElement
+              <TextField
                 autoComplete="off"
-                name={'search'}
                 label={translation.mainSearch}
                 variant="outlined"
+                value={query}
+                onChange={onQueryUpdate}
                 onKeyDown={onEnterPressed}
-                fullWidth
                 inputRef={inputRef}
+                fullWidth
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -291,7 +266,6 @@ const InnerComponent: React.FC = () => {
                   ),
                 }}
               />
-
               <SearchMenu />
             </Stack>
           </Grid>
