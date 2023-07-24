@@ -186,13 +186,26 @@ const InnerComponent: React.FC = () => {
       return;
     }
 
+    // multi keywords produce a cut set
+    let fullQueryPositive: string[] = [];
+    let fullQueryNegative: string[] = [];
+
     segs.forEach((q) => {
       if (q.startsWith('!')) {
-        negative.push(bookmarksIndex.search(q.replace('!', ''), 10000));
+        fullQueryNegative.push(q.replace('!', '').trim());
       } else {
-        positive.push(bookmarksIndex.search(q, 10000));
+        fullQueryPositive.push(q.trim());
       }
     });
+
+    if (fullQueryPositive.length > 0) {
+      // flexsearch supports full text search, so we can just put all the keywords together
+      positive.push(bookmarksIndex.search(fullQueryPositive.join(' '), 10000));
+    }
+
+    if (fullQueryNegative.length > 0) {
+      negative.push(bookmarksIndex.search(fullQueryNegative.join(' '), 10000));
+    }
 
     let posResult: IndexSearchResult = [];
     let negaResult: IndexSearchResult = [];
