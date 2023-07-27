@@ -11,6 +11,7 @@ import {
 import moment from 'moment';
 import React from 'react';
 import LinkaItemProps from './LinkaItemProps';
+import { openURLInDefaultBrowser } from '@/utils/openURL';
 
 export const ExpandedItem: React.FC<LinkaItemProps> = (props) => {
   const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
@@ -29,7 +30,7 @@ export const ExpandedItem: React.FC<LinkaItemProps> = (props) => {
     <ListItemButton
       component="a"
       onClick={() => {
-        window.open(props.item.url, '_blank');
+        openURLInDefaultBrowser(props.item.url);
       }}
       selected={props.selected}
       dense

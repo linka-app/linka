@@ -1,11 +1,11 @@
-import { getBookmarks } from "@/api/linkding";
-import { BookmarkItem, QueryBookmarkMode, Res } from "@/types";
-import { Index } from "flexsearch";
-import { useState } from "react";
+import { getBookmarks } from '@/api/linkding';
+import { BookmarkItem, QueryBookmarkMode, Res } from '@/types';
+import Index from 'flexsearch';
+import { useState } from 'react';
 
 // add a constant suffix to each bookmark's full text
 // to be able to search ALL bookmarks with single keyword
-export const ALL_BOOKMARKS = "ALL_BOOKMARKS";
+export const ALL_BOOKMARKS = 'ALL_BOOKMARKS';
 
 export const useBookmarks = () => {
   const [loadingBookmarks, isLoadingBookmarks] = useState(false);
@@ -13,15 +13,15 @@ export const useBookmarks = () => {
   const defaultBookmarks: BookmarkItem[] = [];
   const [bookmarks, setBookmarks] = useState(defaultBookmarks);
   const [bookmarksIndex, setBookmarksIndex] = useState(
-    new Index({ tokenize: "full" })
+    new Index({ tokenize: 'full' })
   );
-  const getTheBookmarks = async (bookmarksToShow: QueryBookmarkMode = "") => {
+  const getTheBookmarks = async (bookmarksToShow: QueryBookmarkMode = '') => {
     isLoadingBookmarks(true);
     setBookmarks(defaultBookmarks);
-    getBookmarks({}, bookmarksToShow ? bookmarksToShow : "")
+    getBookmarks({}, bookmarksToShow ? bookmarksToShow : '')
       .then((res: Res) => {
         setBookmarks(res.results);
-        const searchIndex = new Index({ tokenize: "full" });
+        const searchIndex = new Index({ tokenize: 'full' });
         res.results.forEach((v, idx) => {
           searchIndex.add(
             idx,
@@ -31,9 +31,9 @@ export const useBookmarks = () => {
               v.website_title,
               v.website_description,
               v.url,
-              v.tag_names.join(" "),
+              v.tag_names.join(' '),
               ALL_BOOKMARKS,
-            ].join(" ")
+            ].join(' ')
           );
         });
 
@@ -42,7 +42,7 @@ export const useBookmarks = () => {
         isLoadingBookmarks(false);
       })
       .catch((reason) => {
-        console.log("reason: ", reason);
+        console.log('reason: ', reason);
         isLoadingBookmarks(false);
       });
   };
