@@ -27,6 +27,7 @@ import React, {
   useState,
 } from 'react';
 import { FormContainer, useFormContext } from 'react-hook-form-mui';
+import { openURLInDefaultBrowser } from '@/utils/openURL';
 
 const LinkaItem = lazy(() => import('@/components/LinkaItem/LinkaItem'));
 
@@ -68,11 +69,11 @@ const InnerComponent: React.FC = () => {
             null
           )
         ) {
-          window.open(
+          openURLInDefaultBrowser(
             action.bookmarks[Number(action.results[state.count])].url
           );
         } else if (_.get(action, `bookmarks.${state.count}.url`, null)) {
-          window.open(action.bookmarks[state.count].url);
+          openURLInDefaultBrowser(action.bookmarks[state.count].url);
         }
         return { count: state.count };
       case 'reset':
@@ -229,7 +230,7 @@ const InnerComponent: React.FC = () => {
       // avoid opening all bookmarks unexpectedly
       if (selectedBookmark.count === -1 && query !== '') {
         results.forEach((v) => {
-          window.open(bookmarks[Number(v.toString())].url);
+          openURLInDefaultBrowser(bookmarks[Number(v.toString())].url);
         });
       }
     }
