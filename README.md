@@ -19,6 +19,10 @@ Currently it supports `linkding`, we are planning to make `Linka` a more flexibl
     - [Option 1: Deploy With Static HTTP Server (e.g. Nginx)](#option-1-deploy-with-static-http-server-eg-nginx)
     - [Option 2: Deploy with Docker](#option-2-deploy-with-docker)
 
+## About the Logo
+
+❤️ The logo was copied from the project [Benthos](https://www.benthos.dev/) in this [commit](https://github.com/linka-app/linka/commit/2521264d1e6cbb166066d1d3ad42908daf7c356a).
+
 ## Features
 
 - full text search
