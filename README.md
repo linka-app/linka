@@ -113,3 +113,7 @@ Build on your own:
 docker build -t my/linka:latest .
 docker run --name my-own-linka -p 80:80 -d my/linka:latest
 ```
+
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/linka-app/linka.svg?variant=adaptive)](https://starchart.cc/linka-app/linka)
+
