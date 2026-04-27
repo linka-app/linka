@@ -17,6 +17,7 @@ export default defineConfig({
     viteTsconfigPaths(),
     svgrPlugin(),
     VitePWA({
+      includeAssets: ["logo512.png", "logo192.png"],
       manifest: {
         name: 'Linka! Quick search and open your bookmarks!',
         short_name: 'Linka!',

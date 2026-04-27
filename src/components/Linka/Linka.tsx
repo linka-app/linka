@@ -6,7 +6,6 @@ import {
   ColorModeContextType,
 } from "@/contexts/ColorModeContext";
 import { useContexts } from "@/hooks";
-import LinkaLogo from "@/images/logo192.png";
 import { getConfig } from "@/utils/getConfig/getConfig";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import CachedSharpIcon from "@mui/icons-material/CachedSharp";
@@ -68,7 +67,7 @@ export const InnerComponent: React.FC<{
       >
         <Toolbar>
           {!getDrawerState() ? (
-            <Avatar src={LinkaLogo} alt="linka!" />
+            <Avatar src="/logo192.png" alt="linka!" />
           ) : (
             <IconButton edge="end" onClick={doDrawerClose}>
               <KeyboardArrowLeftSharpIcon />
